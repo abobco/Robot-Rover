@@ -1,8 +1,8 @@
 **/old_code/**
 **/CMakeFiles/**
 **.dir
-build/Debug
+windows/build/Debug
 **.obj
 **/.vs
-build/validation_layers.txt
-build/Release/opencv_world451d.dll
+windows/build/validation_layers.txt
+windows/build/Release/opencv_world451d.dll
