@@ -15,7 +15,7 @@ Basic steps of the rover's navigation/localization algorithm
 
 1. A lidar scan of the area around the rover is performed by rotating the lidar sensor in small steps, storing its angle and distance measurement at each step. 
 2. Each distance measurement is then treated as a 3D vector pointing straight forward, and rotated by the sensor's angle at the time of measurement to form a 3D pointcloud of the area around the rover.
-3. This pointcloud is then converted into a coarser resolution, 2D grid representing a topdown map of the area. This is done with a simple "marching squares" algorithm. 
+3. This pointcloud is then converted into a coarse 2D grid representing a topdown map of the area. This is done with a simple "marching squares" algorithm. 
     - This map defines the areas that are accessible to the rover
 4. This map is sent to a windows laptop to be displayed in a desktop application 
 5. The application user can click on a square of the map to automatically solve for a path to that square and send instructions to the rover to move along that path
@@ -32,12 +32,14 @@ To perform error and drift correction, multiple lidar scans are performed as the
 
 Note that this algorithm makes the assumption that there will always be some shared points between 2 subsequent lidar scans. If the scans do not share any points, it will blindly solve for some incorrect transformation that makes the scans overlap!
 
-## Pictures/videos
+## More pictures/videos
 
-Robot Arm prototype
+#### Robot Arm prototype
+
 ![arm](pictures/arm.gif)
 
-Desktop application
+#### Desktop application
+
 ![app](pictures/app.PNG)
 
 ![rover](pictures/app_rover.jpg)
