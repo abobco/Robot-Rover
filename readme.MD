@@ -15,7 +15,7 @@ The arm consists of 6 servo motors and a camera, which are controlled with a ras
 
 The rover is driven by 2 DC motors, 2 quadrature rotary encoders, a TFMini lidar sensor, and pan/tilt servos to rotate the camera, which are all controlled by an ESP32 microcontroller. 
 
-#### navigation, localization, and mapping
+#### Navigation, localization, and mapping
 
 Basic steps of the rover's navigation/localization algorithm
 
@@ -28,7 +28,7 @@ Basic steps of the rover's navigation/localization algorithm
     - Pathfinding is implemented with the A* algorithm, using manhattan distance as a cost function
 6. The laptop sends instructions to the rover to move along that path
 
-#### correcting drift
+#### Correcting drift
 
 To perform error and drift correction, multiple lidar scans are performed as the rover moves along a path. I implemented a simple "hill-climbing" algorithm to correct the error between subsequent lidar scans down to a local minimum. Here's a basic overview of that algorithm
 
