@@ -1,0 +1,1 @@
+sudo ./yolo --config=/home/pi/shared/RaspberryPi/darknet/cfg/yolov2-tiny.cfg --model=/home/pi/shared/RaspberryPi/darknet/yolov2-tiny.weights --classes=./object_detection_classes_yolov3.txt --width=416 --height=416 --scale=0.00392 --input=test.jpg --rgb 
