@@ -1,0 +1,55 @@
+{
+    "SceneName": "Robocar Sim",
+    "Resolution": [
+        1200,
+        800
+    ],
+    "RenderTree": {
+        "Root": {
+            "graph": {
+                "Shader": "../shaders/camera",
+                "Uniforms": {
+                    "color": [
+                        0.5,
+                        0.5,
+                        0.5,
+                        1.0
+                    ]
+                }
+            },
+            "scan": {
+                "Shader": "../shaders/camera",
+                "Uniforms": {
+                    "color": [
+                        1.0,
+                        0.5,
+                        0.2,
+                        1.0
+                    ]
+                }
+            },
+            "grid": {
+                "Shader": "../shaders/camera",
+                "Uniforms": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        0.6
+                    ]
+                }
+            },
+            "car": {
+                "Shader": "../shaders/camera",
+                "Uniforms": {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.2,
+                        1.0
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,251 @@
+hellosupls
+ls -l
+hello
+test
+again
+what
+hello
+what
+hello
+ls -l
+hello
+echo hello
+ls
+pwd
+ls
+pwd
+pwd
+hello
+ls
+cd OCV_Projects
+ls
+pwd
+cd ../
+cd OCV_Projects/build
+pwd
+cd ../../
+sudo OCV_Projects/build/arm_controller_main
+ls
+sudo ./OCV_Projects/build/arm_controller_main
+hello
+sudo ./OCV_Projects/build/arm_controller_main
+ls
+sudo ./OCV_Projects/build/arm_controller_main
+ls
+ls
+ls
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+ls
+ls
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ifconfig
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+ls
+cd
+cd
+ls
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+test
+hello
+gssjlgsfg
+ajlefhuaav
+fafasgas'
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main
+sudo ./OCV_Projects/build/arm_controller_main

@@ -1,0 +1,52 @@
+{
+    "asset_path": "C:/Code/opengl-es/robot-host-app/assets",
+    "cam_intrinsics": "./out_camera_data.xml",
+    "cam_servo_width": [
+        1510,
+        1300
+    ],
+    "cam_target": "bottle",
+    "debug_file": "validation_layers.txt",
+    "motor_cpr": 4320,
+    "resolution": [
+        1124,
+        760
+    ],
+    "shaders": {
+        "color": {
+            "frag": "shaders/spv/basic",
+            "vert": "shaders/spv/basic"
+        },
+        "color_lit": {
+            "frag": "shaders/spv/color_lit",
+            "vert": "shaders/spv/color_lit"
+        },
+        "lit": {
+            "frag": "shaders/spv/lit",
+            "vert": "shaders/spv/lit"
+        },
+        "textured": {
+            "frag": "shaders/spv/basic_uv",
+            "vert": "shaders/spv/basic_uv"
+        }
+    },
+    "ssh_host": "raspberrypi",
+    "ssh_password": "xabnab19",
+    "ssh_user": "pi",
+    "textures": {
+        "brick": "images/bricks.jpg",
+        "brick_color": "materials/brick/Brick_Wall_019_basecolor.jpg",
+        "brick_normal": "materials/brick/Brick_Wall_019_normal.jpg",
+        "xabnab": "images/xabnab.png"
+    },
+    "title": "Vulkan/GLFW",
+    "wheel_diameter": 10.0,
+    "wheel_separation": 24.0,
+    "window_position": [
+        -1428,
+        -371
+    ],
+    "yolo_classfile": "../object_detection_classes_yolov3.txt",
+    "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",
+    "yolo_model": "C:/Code/opengl-es/darknet/yolov4.weights"
+}
