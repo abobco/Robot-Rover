@@ -2,7 +2,7 @@
 
 Autonomous, robotic rover and arm controlled with computer vision and SLAM algorithms.
 
-[rover](pictures/rover.jpg)
+![rover](pictures/rover.jpg)
 
 The arm consists of 6 servo motors and a camera, which are controlled with a raspberry pi zero W.
 - Using a convolutional neural network, the position of objects visible to the camera is estimated
@@ -35,11 +35,11 @@ Note that this algorithm makes the assumption that there will always be some sha
 ## Pictures/videos
 
 Robot Arm prototype
-[arm](pictures/arm.gif)
+![arm](pictures/arm.gif)
 
 Desktop application
-[app](pictures/app.PNG)
+![app](pictures/app.PNG)
 
-[rover](pictures/app_rover.jpg)
+![rover](pictures/app_rover.jpg)
 
 
