@@ -4,16 +4,16 @@
     <ClCompile Include="C:\Code\opengl-es\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\opengl\stb_image_impl.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\opengl\stb_image_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Code\opengl-es\robot-host-app\CMakeLists.txt" />
+    <CustomBuild Include="C:\Code\opengl-es\robot-host-app\windows\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{53CAA8B0-39FC-3022-9954-D98CB4AB8FA1}</UniqueIdentifier>
+      <UniqueIdentifier>{E683421D-B687-3401-B462-4E8687CA79C9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

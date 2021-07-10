@@ -1,6 +1,6 @@
-^C:\CODE\OPENGL-ES\ROBOT-HOST-APP\BUILD\CMAKEFILES\64280CE60DBE0D38D5F553D6BDCC2BED\GENERATE.STAMP.RULE
+^C:\CODE\OPENGL-ES\ROBOT-HOST-APP\WINDOWS\BUILD\CMAKEFILES\412335733314DB66F0F476B93F8C8743\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Code/opengl-es/robot-host-app -BC:/Code/opengl-es/robot-host-app/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Code/opengl-es/robot-host-app/build/lidar_vk.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Code/opengl-es/robot-host-app/windows -BC:/Code/opengl-es/robot-host-app/windows/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Code/opengl-es/robot-host-app/windows/build/lidar_vk.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

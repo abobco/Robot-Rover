@@ -14,7 +14,7 @@
 using namespace xn;
 
 static const std::string DEFAULT_SETTINGS_FILE_PATH =
-    "C:/Code/opengl-es/robot-host-app/assets/config/vk_config.json";
+    "C:/Code/opengl-es/robot-host-app/windows/assets/config/vk_config.json";
 
 std::string settings_filepath = DEFAULT_SETTINGS_FILE_PATH;
 json settings;
@@ -98,7 +98,8 @@ public:
 
     initVulkan();
 
-    PointCloud::read_pointclouds("../dickbutt.pc", PointCloud::all);
+    PointCloud::read_pointclouds(buildAssetPath("pointcloud/livingroom.pc"),
+                                 PointCloud::all);
     if (PointCloud::all.size() > 0) {
       PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
                                 robot->position, navgraph.cells,

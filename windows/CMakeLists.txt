@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi") 
 
-set(PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/../)
-set(BUILD_DIR ${PROJ_DIR}/robot-host-app/build/Release)
+set(PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/Release)
 set(XNLIB_DIR ${PROJ_DIR}/xnlib)
 set(IMGUI_DIR ${XNLIB_DIR}/external/imgui)
 set(GLM_DIR ${XNLIB_DIR}/external/glm )
@@ -16,7 +16,9 @@ set(OPENVINO_DIR "C:/Program Files (x86)/Intel/openvino_2021/opencv/cmake")
 set(GLFW_DIR ${PROJ_DIR}/glfw-3.3.3.bin.WIN64)
 set(GLAD_DIR ${PROJ_DIR}/glad)
 set(XN_VK_DIR ${XNLIB_DIR}/graphics/vulkan)
+
 set(libssh_DIR C:/Code/vcpkg/packages/libssh_x64-windows/share/libssh)
+set(OpenCV_DIR ${OPENVINO_DIR})
 
 set(COMMON_INCLUDE_DIRS
     ${GLFW_DIR}/include

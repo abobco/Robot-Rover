@@ -4,55 +4,55 @@
     <ClCompile Include="C:\Code\opengl-es\xnlib\util\xn_json.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\util\xn_vec.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\util\xn_vec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\util\xn_math.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\util\xn_math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_pointcloud.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_pointcloud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_ik.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_ik.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_search.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_yolo.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_yolo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_ssh.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_ssh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_log.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_net.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_homo.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_homo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_car_virtual.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_car_virtual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\app\app_threads_shared.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\app\app_threads_shared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\app\app_state.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\app\app_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Code\opengl-es\robot-host-app\src\robo\xn_console.cpp">
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Code\opengl-es\robot-host-app\CMakeLists.txt" />
+    <CustomBuild Include="C:\Code\opengl-es\robot-host-app\windows\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{53CAA8B0-39FC-3022-9954-D98CB4AB8FA1}</UniqueIdentifier>
+      <UniqueIdentifier>{E683421D-B687-3401-B462-4E8687CA79C9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

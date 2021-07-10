@@ -1,5 +1,5 @@
 {
-    "asset_path": "C:/Code/opengl-es/robot-host-app/assets",
+    "asset_path": "C:/Code/opengl-es/robot-host-app/windows/assets",
     "cam_intrinsics": "./out_camera_data.xml",
     "cam_servo_width": [
         1510,
