@@ -16,7 +16,7 @@ public:
     this->userCallback = userCallback;
   }
 
-  void draw(RobotWorldInfo &robot, void *userCallbackData = NULL) {
+  void draw(RobotController &robot, void *userCallbackData = NULL) {
     if (AppState::get().gui_windows_need_update)
       ImGui::SetNextWindowPos(
           ImVec2(ImGui::GetMainViewport()->GetCenter().x * 2, 20), 0,
@@ -34,8 +34,10 @@ public:
     }
 
     if (ImGui::TreeNode("TFMini Lidar")) {
-      ImGui::SliderInt("Scan Range X", (int *)&(robot.scan_range.x), 0, 200);
-      ImGui::SliderInt("Scan Range Y", (int *)&(robot.scan_range.y), 750, 1400);
+      ImGui::SliderInt("Scan Range X", (int *)&(robot.rover.scan_range.x), 0,
+                       200);
+      ImGui::SliderInt("Scan Range Y", (int *)&(robot.rover.scan_range.y), 750,
+                       1400);
       if (ImGui::Button("Force Scan"))
         AppState::get().should_scan = true;
 
@@ -44,7 +46,7 @@ public:
 
     if (ImGui::TreeNode("Servo Arm")) {
 
-      ImGui::SliderFloat3("target", (float *)&robot.arm_target, -4.0, 4.0,
+      ImGui::SliderFloat3("target", (float *)&robot.armInfo.target, -4.0, 4.0,
                           "%.2f", 0);
 
       ImGui::TreePop();
@@ -58,7 +60,7 @@ public:
 
 struct TextureWindow {
   static void draw(ImTextureID id, ImVec2 texture_dimensions,
-                   RobotWorldInfo &robot) {
+                   RobotController &robot) {
     static int car_angle_deg = 0;
     static int car_angle_deg_prev = 0;
     static bool needs_update = false;
@@ -101,7 +103,8 @@ struct TextureWindow {
         AppState::get().grab_trigger = true;
     }
 
-    ImGui::SliderFloat3("arm_target", (float *)&robot.arm_target, -1.0, 1.0);
+    ImGui::SliderFloat3("arm_target", (float *)&robot.armInfo.target, -1.0,
+                        1.0);
     ImGui::End();
   }
 };

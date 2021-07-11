@@ -84,6 +84,7 @@ add_library(xnlib STATIC
     src/app/app_threads_shared.cpp
     src/app/app_state.cpp
     src/robo/xn_console.cpp
+    src/robo/xn_rover.cpp
 )
 
 project(xn_vk)

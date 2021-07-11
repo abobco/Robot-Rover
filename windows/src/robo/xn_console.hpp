@@ -7,7 +7,7 @@
 namespace xn {
 
 class AppState;
-struct RobotWorldInfo;
+struct RobotController;
 
 // simple console window with scrolling, filtering, completion and history.
 struct SshConsole {
@@ -28,8 +28,8 @@ struct SshConsole {
   std::string history_filepath;
 
   enum SOCKET_INDEX {
-    SOCKET_RPI_ARM,
     SOCKET_RPI_CAM,
+    SOCKET_RPI_ARM,
     SOCKET_ESP_LOG,
     SOCKET_ESP_DATA,
 
@@ -67,7 +67,7 @@ struct SshConsole {
   void ClearLog();
   void AddLog(const char *fmt, ...) IM_FMTARGS(2);
 
-  void Draw(const char *title, bool *p_open, RobotWorldInfo &robot);
+  void Draw(const char *title, bool *p_open, RobotController &robot);
 
   void ExecCommand(const char *command_line) {
     AddLog("# %s\n", command_line);

@@ -283,6 +283,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\app\app_threads_shared.cpp" />
     <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\app\app_state.cpp" />
     <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_console.cpp" />
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_rover.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Code\opengl-es\robot-host-app\windows\build\ZERO_CHECK.vcxproj">

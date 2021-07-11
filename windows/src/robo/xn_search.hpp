@@ -62,6 +62,14 @@ struct GridNode {
   bool operator==(const GridNode &p) const { return x == p.x && y == p.y; }
 };
 
+struct GridGraph {
+  std::vector<GridNode> graph; // replaces AppState::get().graph
+  std::vector<GridNode> path;  // replaces AppState::get().path
+  std_vec2d<bool> cells;       // replaces AppState::get().gridgraph
+  glm::vec3 offset;            // replaces AppState::get().grid_offset
+  float boxSize = 0.25;        // replaces AppState::get().gridbox_size
+};
+
 struct GridNodeCompare {
   bool reverse;
   GridNodeCompare(const bool &revparam = true) { reverse = revparam; }
@@ -70,14 +78,6 @@ struct GridNodeCompare {
 
 struct GridHash {
   std::size_t operator()(const GridNode &node) const;
-};
-
-struct GridGraph {
-  std::vector<GridNode> graph; // replaces AppState::get().graph
-  std::vector<GridNode> path;  // replaces AppState::get().path
-  std_vec2d<bool> cells;       // replaces AppState::get().gridgraph
-  glm::vec3 offset;            // replaces AppState::get().grid_offset
-  float boxSize = 0.25;        // replaces AppState::get().gridbox_size
 };
 
 // access underlying container of an std::priority_queue for iteration

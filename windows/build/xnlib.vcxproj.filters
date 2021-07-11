@@ -46,6 +46,9 @@
     <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Code\opengl-es\robot-host-app\windows\src\robo\xn_rover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Code\opengl-es\robot-host-app\windows\CMakeLists.txt" />

@@ -8,9 +8,9 @@ static ik::ServoChain *armptr;
 ik::ServoChain *getArm() { return armptr; }
 // AppState *getAppState() { return &app_state; }
 
-void car_sim_thread(GridGraph &navgraph, RobotWorldInfo &robot) {
-  CarInfo info{robot.position,  robot.rotation, navgraph.boxSize,
-               navgraph.offset, navgraph.graph, robot.target_world};
+void car_sim_thread(GridGraph &navgraph, RobotController &robot) {
+  CarInfo info{robot.rover.position, robot.rover.rotation, navgraph.boxSize,
+               navgraph.offset,      navgraph.graph,       robot.rover.target};
   while (AppState::get().run) {
     while (navgraph.path.size() < 1 && AppState::get().run) {
       time_sleep(0.1);
@@ -22,7 +22,7 @@ void car_sim_thread(GridGraph &navgraph, RobotWorldInfo &robot) {
     car_follow_path_sim(info, navgraph.path);
     AppState::get().path_mut.unlock();
     navgraph.path.clear();
-    robot.position = info.pos;
+    robot.rover.position = info.pos;
   }
 }
 
@@ -74,7 +74,7 @@ void cam_io_thread(SOCKET &pi_cam, Jpeg &cam_pic,
 }
 
 void cam_servo_ctl_thread(const json &settings, SOCKET &pi_cam,
-                          RobotWorldInfo &robot) {
+                          RobotController &robot) {
   int x_prev = 0, y_prev = 0;
   robot.cam_servo_width.x = settings["cam_servo_width"][0];
   robot.cam_servo_width.y = settings["cam_servo_width"][1];
@@ -139,7 +139,7 @@ void arm_update(double wristlen, vec3 &arm_target) {
   armptr->grab_safe(wristlen, arm_target);
 }
 
-void ik_sim_thread(RobotWorldInfo &robot) {
+void ik_sim_thread(RobotController &robot) {
   AppState::get().arm_mut.lock();
   float arm_len = 104;
   int mode = 0;
@@ -169,13 +169,13 @@ void ik_sim_thread(RobotWorldInfo &robot) {
   // xn::pio::SmoothServo wrist(xn::pio::ServoAngular(6, 500, 2500));
   // wrist.tid = std::thread(xn::ik::move_servo_thread, std::ref(wrist));
 
-  robot.wrist = new pio::SmoothServo(pio::ServoAngular(6, 500, 2500));
+  robot.armInfo.wrist = new pio::SmoothServo(pio::ServoAngular(6, 500, 2500));
   start_bone_lengths[0] =
       vec3::dist(phys_arm.positions[0], phys_arm.positions[1]);
   start_bone_lengths[1] =
       vec3::dist(phys_arm.positions[1], phys_arm.positions[2]);
 
-  std::thread update_thread(arm_update_thread, *robot.wrist);
+  std::thread update_thread(arm_update_thread, *robot.armInfo.wrist);
 
   float tot_err = 0;
   float avg_err = 0;
@@ -198,20 +198,20 @@ void ik_sim_thread(RobotWorldInfo &robot) {
     }
 
     // align arm to target
-    // robot.arm_target = {-v_target.x + 90, -8, -v_target.y};
-    DUMP(robot.arm_target);
-    robot.wristlen = 30 / robot.arm_base_len;
+    // robot.armInfo.target = {-v_target.x + 90, -8, -v_target.y};
+    DUMP(robot.armInfo.target);
+    robot.armInfo.wristlen = 30 / robot.armInfo.base_len;
     // AppState::get().move_to_target = true;
-    arm_update(robot.wristlen, robot.arm_target);
-    arm_update(robot.wristlen, robot.arm_target);
+    arm_update(robot.armInfo.wristlen, robot.armInfo.target);
+    arm_update(robot.armInfo.wristlen, robot.armInfo.target);
     time_sleep(1.0);
     // arm_wait_action_complete();
 
     // move to target
-    robot.wrist->t_max = armptr->servos[0][1].t_max * 1.5f;
-    robot.wristlen = -50 / robot.arm_base_len;
-    arm_update(robot.wristlen, robot.arm_target);
-    arm_update(robot.wristlen, robot.arm_target);
+    robot.armInfo.wrist->t_max = armptr->servos[0][1].t_max * 1.5f;
+    robot.armInfo.wristlen = -50 / robot.armInfo.base_len;
+    arm_update(robot.armInfo.wristlen, robot.armInfo.target);
+    arm_update(robot.armInfo.wristlen, robot.armInfo.target);
     time_sleep(1.0);
     // arm_wait_action_complete();
 
@@ -220,8 +220,8 @@ void ik_sim_thread(RobotWorldInfo &robot) {
 
     // move to neutral position
     // AppState::get().move_to_target = false;
-    robot.wrist->t_max = armptr->servos[0][1].t_max / 2;
-    arm_update(robot.wristlen, robot.arm_target);
+    robot.armInfo.wrist->t_max = armptr->servos[0][1].t_max / 2;
+    arm_update(robot.armInfo.wristlen, robot.armInfo.target);
     // time_sleep(2.0);
     armptr->stiffy();
     // armptr->reset();
@@ -413,7 +413,7 @@ void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
   // return NULL;
 }
 
-void arm_ctl_thread(vec3 &arm_target, RobotWorldInfo &robot) {
+void arm_ctl_thread(vec3 &arm_target, RobotController &robot) {
   bool first = true;
   while (AppState::get().run) {
     // vec3 v_target = AppState::get().arm_target;
@@ -434,13 +434,13 @@ void arm_ctl_thread(vec3 &arm_target, RobotWorldInfo &robot) {
     // align arm to target
     // AppState::get().arm_target = {-v_target.x + 90, -8, -v_target.y};
     DUMP(arm_target);
-    robot.wristlen = 30;
+    robot.armInfo.wristlen = 30;
     AppState::get().move_to_target = true;
     arm_wait_action_complete();
 
     // move to target
-    robot.wrist->t_max = armptr->servos[0][1].t_max * 1.5f;
-    robot.wristlen = -50;
+    robot.armInfo.wrist->t_max = armptr->servos[0][1].t_max * 1.5f;
+    robot.armInfo.wristlen = -50;
     arm_wait_action_complete();
 
     // grab
@@ -448,7 +448,7 @@ void arm_ctl_thread(vec3 &arm_target, RobotWorldInfo &robot) {
 
     // move to neutral position
     AppState::get().move_to_target = false;
-    robot.wrist->t_max = armptr->servos[0][1].t_max / 2;
+    robot.armInfo.wrist->t_max = armptr->servos[0][1].t_max / 2;
     armptr->stiffy();
     arm_wait_action_complete();
 
@@ -456,5 +456,52 @@ void arm_ctl_thread(vec3 &arm_target, RobotWorldInfo &robot) {
     // set_claw_target(claw_ctl, CLAW_OPEN);
   }
 }
+
+// void robot_io_thread(SOCKET &esp_data, RobotWorldInfo &robot,
+//                      GridGraph &navgraph, float wheel_diameter,
+//                      float wheel_separation, unsigned motor_cpr) {
+//   while (AppState::get().run) {
+//     // car_turn(AppState::get().console->sockets.esp_data, 90);
+//     // time_sleep(1);
+//     // car_turn(AppState::get().console->sockets.esp_data, -90);
+//     // time_sleep(1);
+//     // continue;
+
+//     while (!AppState::get().should_scan) {
+//       time_sleep(0.1);
+//     }
+//     lidar_scan(esp_data, wheel_diameter, wheel_separation, motor_cpr,
+//                robot.position, robot.rotation);
+//     AppState::get().should_scan = false;
+
+//     float t = 0;
+//     while (navgraph.path.size() < 1) {
+//       t += (float)time_sleep(0.5);
+//       if (t >= 1.0f) {
+//         closesocket(esp_data);
+//         esp_data = accept_connection_blocking(5002 + 3);
+//         if (AppState::get().should_scan) {
+//           lidar_scan(esp_data, wheel_diameter, wheel_separation, motor_cpr,
+//                      robot.position, robot.rotation);
+//           AppState::get().should_scan = false;
+//         }
+
+//         if (AppState::get().should_restart_esp) {
+//           RestartEspInstruction r;
+//           send_pack(esp_data, r);
+//           AppState::get().should_restart_esp = false;
+//         }
+//         t = 0;
+//       }
+//     }
+
+//     car_follow_path(esp_data, navgraph.path, wheel_diameter,
+//     wheel_separation,
+//                     motor_cpr);
+//     navgraph.path.clear();
+//     AppState::get().should_scan = true;
+//   }
+//   // return NULL;
+// }
 
 } // namespace xn

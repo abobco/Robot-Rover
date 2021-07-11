@@ -41,6 +41,8 @@ To perform error and drift correction, multiple lidar scans are performed as the
 
 Note that this algorithm makes the assumption that there will always be some shared points between 2 subsequent lidar scans. If the scans do not share any points, it will blindly solve for some incorrect transformation that makes the scans overlap!
 
+The source code for these algorithms can be found in [xn_rover.hpp](windows/src/robo/xn_rover.hpp) & [xn_rover.cpp](windows/src/robo/xn_rover.cpp)
+
 ## More pictures/videos
 
 #### Robot Arm prototype

@@ -58,7 +58,7 @@ public:
   vulkan::Image camImage;
   ImTextureID camImageId;
 
-  RobotWorldInfo *robot;
+  RobotController *robot;
 
   Scene scene;
   std::vector<std::vector<glm::vec3>> nav_verts;
@@ -90,7 +90,7 @@ public:
 
   void run() {
     console = new SshConsole(settings);
-    robot = new RobotWorldInfo();
+    robot = new RobotController();
     threads.push_back(std::thread(console_update_thread, console));
     threads.push_back(std::thread(ik_sim_thread, std::ref(*robot)));
     threads.push_back(
@@ -102,7 +102,7 @@ public:
                                  PointCloud::all);
     if (PointCloud::all.size() > 0) {
       PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
-                                robot->position, navgraph.cells,
+                                robot->rover.position, navgraph.cells,
                                 navgraph.offset);
       navgraph.graph = preprocess_graph(navgraph.cells);
     }
@@ -195,7 +195,7 @@ private:
 
     scene.drawMap["target"] = scene.drawMap["arm"]->addChild(
         new DrawNode(&gp, &cubeMesh),
-        PushConstColor(robot->arm_target.toGLM(), glm::vec3(0.1f),
+        PushConstColor(robot->armInfo.target.toGLM(), glm::vec3(0.1f),
                        glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
     // create car mesh
@@ -349,15 +349,16 @@ private:
     model = rotate_eulers(rotScaled, model);
     scene.drawMap["cube"]->setModel(model);
 
-    glm::vec3 car_pos_3d(robot->position.x, 0.1, robot->position.y);
-    float car_ang_corrected = (float)-M_PI_2 + robot->rotation;
+    glm::vec3 car_pos_3d(robot->rover.position.x, 0.1, robot->rover.position.y);
+    float car_ang_corrected = (float)-M_PI_2 + robot->rover.rotation;
     model = transform_model(car_pos_3d, glm::vec3(0.25));
     model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
     PushConstColor pcc{model, glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)};
     scene.drawMap["car"]->setPushConstant(pcc);
     model = transform_model(car_pos_3d);
     model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-    model = transform_model(robot->arm_target.toGLM(), glm::vec3(0.1f), model);
+    model =
+        transform_model(robot->armInfo.target.toGLM(), glm::vec3(0.1f), model);
     scene.drawMap["target"]->setPushConstant(
         PushConstColor(model, glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
@@ -419,7 +420,8 @@ private:
 
     if (navgraph.graph.size() > 0 && AppState::get().path_mut.try_lock()) {
       glm::ivec2 target;
-      glm::vec3 start_world(robot->position.x, 0, robot->position.y);
+      glm::vec3 start_world(robot->rover.position.x, 0,
+                            robot->rover.position.y);
       glm::ivec2 start =
           world_to_grid(start_world, navgraph.boxSize, navgraph.offset);
       Plane p{0, vulkan::axes.y};
@@ -427,7 +429,7 @@ private:
       scene.mainCamera.get_pixelray(cursor, winsize, ray_a, ray_b);
       float t = 0;
       if (collision_segment_plane(ray_a, ray_b, p, t, q)) {
-        robot->target_world = q;
+        robot->rover.target = q;
         target = world_to_grid(q, navgraph.boxSize, navgraph.offset);
       }
       target.x = clamp(target.x, 0, (int)navgraph.cells.size());
@@ -517,8 +519,8 @@ private:
     glm::vec3 arm_color(0.2, 0.2, 0.9);
     std::vector<vulkan::Vertex> arm_verts(n);
     std::vector<uint16_t> arm_indices;
-    glm::vec3 car_pos_3d(robot->position.x, 0.1, robot->position.y);
-    float car_ang_corrected = (float)-M_PI_2 + robot->rotation;
+    glm::vec3 car_pos_3d(robot->rover.position.x, 0.1, robot->rover.position.y);
+    float car_ang_corrected = (float)-M_PI_2 + robot->rover.rotation;
     for (auto i = 0; i < n; i++) {
       glm::vec3 pos = getArm()->positions[i].toGLM();
       glm::mat4 model = transform_model(car_pos_3d);

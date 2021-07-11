@@ -96,7 +96,7 @@ void SshConsole::AddLog(const char *fmt, ...) IM_FMTARGS(2) {
   Items.push_back(Strdup(buf));
 }
 
-void SshConsole::Draw(const char *title, bool *p_open, RobotWorldInfo &robot) {
+void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
   if (AppState::get().gui_windows_need_update) {
     ImVec2 win_center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(ImVec2(win_center.x * 2, win_center.y * 2), 0,
@@ -151,6 +151,20 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotWorldInfo &robot) {
       sockets[SOCKET_ESP_LOG] = accept_connection_blocking(BASE_PORT + 2, true);
       if (sockets[SOCKET_ESP_LOG] < 0)
         error("ERROR on accept");
+      sockets[SOCKET_ESP_DATA] =
+          accept_connection_blocking(BASE_PORT + 3, true);
+      if (sockets[SOCKET_ESP_LOG] < 0)
+        error("ERROR on accept");
+
+      std::thread connection_jobs[SOCKET_COUNT];
+      for (unsigned i = 0; i < SOCKET_COUNT; i++) {
+        connection_jobs[i] = std::thread([&]() {
+          closesocket(sockets[i]);
+          sockets[i] = accept_connection_blocking(BASE_PORT + i);
+          if (sockets[i] < 0)
+            error("ERROR on accept");
+        });
+      }
 
       // connect esp
       // esp_sock = accept_connection_blocking(4001);
@@ -167,7 +181,7 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotWorldInfo &robot) {
                                  std::ref(robot)));
       jobs.push_back(
           std::thread(yolo_thread, settings, std::ref(sockets[SOCKET_RPI_ARM]),
-                      std::ref(robot.arm_target), std::ref(robot.cam_pic),
+                      std::ref(robot.armInfo.target), std::ref(robot.cam_pic),
                       std::ref(robot.cam_outframe)));
       // threads.push_back(std::thread(robot_io_thread,
       //                               (float)settings["wheel_diameter"],
