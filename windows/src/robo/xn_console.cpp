@@ -96,7 +96,8 @@ void SshConsole::AddLog(const char *fmt, ...) IM_FMTARGS(2) {
   Items.push_back(Strdup(buf));
 }
 
-void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
+void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
+                      GridGraph &navgraph) {
   if (AppState::get().gui_windows_need_update) {
     ImVec2 win_center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(ImVec2(win_center.x * 2, win_center.y * 2), 0,
@@ -120,7 +121,7 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
 
   // TODO: display items starting from the bottom
 
-  if (ImGui::SmallButton("Reconnect")) {
+  if (ImGui::SmallButton("ssh rapi")) {
     xn_printf("sup\n");
     threads.push_back(std::thread([&]() {
       int r = ssh_login(sesh, settings["ssh_host"], settings["ssh_user"],
@@ -137,27 +138,10 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
                                  std::ref(ostream), std::ref(istream),
                                  std::ref(AppState::get().conn_accepted)));
 
-      // connect raspi
-      static const int BASE_PORT = 5002;
-      closesocket(sockets[SOCKET_RPI_CAM]);
-      closesocket(sockets[SOCKET_RPI_ARM]);
-      closesocket(sockets[SOCKET_ESP_LOG]);
-      sockets[SOCKET_RPI_CAM] = accept_connection_blocking(BASE_PORT, true);
-      if (sockets[SOCKET_RPI_CAM] < 0)
-        error("ERROR on accept");
-      sockets[SOCKET_RPI_ARM] = accept_connection_blocking(BASE_PORT + 1, true);
-      if (sockets[SOCKET_RPI_ARM] < 0)
-        error("ERROR on accept");
-      sockets[SOCKET_ESP_LOG] = accept_connection_blocking(BASE_PORT + 2, true);
-      if (sockets[SOCKET_ESP_LOG] < 0)
-        error("ERROR on accept");
-      sockets[SOCKET_ESP_DATA] =
-          accept_connection_blocking(BASE_PORT + 3, true);
-      if (sockets[SOCKET_ESP_LOG] < 0)
-        error("ERROR on accept");
-
       std::thread connection_jobs[SOCKET_COUNT];
       for (unsigned i = 0; i < SOCKET_COUNT; i++) {
+        if (i == SOCKET_ESP_DATA)
+          continue;
         connection_jobs[i] = std::thread([&]() {
           closesocket(sockets[i]);
           sockets[i] = accept_connection_blocking(BASE_PORT + i);
@@ -166,10 +150,6 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
         });
       }
 
-      // connect esp
-      // esp_sock = accept_connection_blocking(4001);
-      // if (esp_sock < 0)
-      //   error("ERROR on accept");
       jobs.push_back(
           std::thread(esp_log_thread, std::ref(sockets[SOCKET_ESP_LOG])));
       jobs.push_back(
@@ -183,9 +163,6 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
           std::thread(yolo_thread, settings, std::ref(sockets[SOCKET_RPI_ARM]),
                       std::ref(robot.armInfo.target), std::ref(robot.cam_pic),
                       std::ref(robot.cam_outframe)));
-      // threads.push_back(std::thread(robot_io_thread,
-      //                               (float)settings["wheel_diameter"],
-      //                               (unsigned)settings["motor_cpr"]));
       int i = 0;
       for (auto &j : jobs) {
         j.join();
@@ -197,6 +174,20 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot) {
     }));
   }
   ImGui::SameLine();
+
+  if (ImGui::SmallButton("connect esp32")) {
+    threads.push_back(std::thread([&]() {
+      closesocket(sockets[SOCKET_ESP_DATA]);
+      sockets[SOCKET_ESP_DATA] =
+          accept_connection_blocking(BASE_PORT + SOCKET_ESP_DATA);
+      robot.rover.esp32 = sockets[SOCKET_ESP_DATA];
+      robot.rover.wheelDiameter = 200 * (float)settings["wheel_diameter"];
+      robot.rover.wheelSeparation = 200 * (float)settings["wheel_separation"];
+      robot.rover.motorCpr = settings["motor_cpr"];
+      rover_ctl_thread(robot.rover, navgraph);
+    }));
+  }
+  // ImGui::SameLine();
   if (ImGui::SmallButton("Add Debug Error")) {
     AddLog("[error] something went wrong");
   }

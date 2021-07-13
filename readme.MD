@@ -55,4 +55,8 @@ The source code for these algorithms can be found in [xn_rover.hpp](windows/src/
 
 ![rover](pictures/app_rover.jpg)
 
+#### Circuit
+
+![circuit](pictures/breadboard.jpg)
+
 

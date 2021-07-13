@@ -3,7 +3,6 @@
 #include "../robo/xn_homo.hpp"
 #include "../robo/xn_ik.hpp"
 #include "../robo/xn_rover.hpp"
-#include "../robo/xn_search.hpp"
 #include "../robo/xn_yolo.hpp"
 #include "app_state.hpp"
 #include <opencv2/opencv.hpp>
@@ -25,6 +24,7 @@ struct ArmInfo {
   double wristlen = 150;
   vec3 target{0, 0, 0};
   pio::SmoothServo *wrist;
+  ik::ServoChain joints;
 };
 
 struct RobotController {
@@ -82,7 +82,7 @@ private:
   std::mutex mutex;
 };
 
-ik::ServoChain *getArm();
+// ik::ServoChain *getArm();
 
 void car_sim_thread(GridGraph &navgraph, RobotController &robot);
 
@@ -94,21 +94,19 @@ void cam_servo_ctl_thread(const json &settings, SOCKET &pi_cam,
 
 void esp_log_thread(SOCKET &esp_log);
 
-void arm_wait_action_complete(double timeout = 10);
+void arm_wait_action_complete(ArmInfo &arm, double timeout = 10);
 
-void arm_update_thread(pio::SmoothServo &wrist);
+void arm_update(ArmInfo &arm);
 
-void arm_update(double wristlen, vec3 &arm_target);
+void arm_update_thread(ArmInfo &arm);
 
-void ik_sim_thread(RobotController &robot);
+void arm_ctl_thread(ArmInfo &arm);
 
-void robot_io_thread(SOCKET &esp_data, RobotController &robot,
-                     float wheel_diameter, float wheel_separation,
-                     unsigned motor_cpr);
+void ik_sim_thread(ArmInfo &armInfo);
+
+void rover_ctl_thread(Rover &rover, GridGraph &navgraph);
 
 void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
                  Jpeg &cam_pic, std::vector<uint8_t> &cam_outframe);
-
-void arm_ctl_thread(vec3 &arm_target, RobotController &robot);
 
 } // namespace xn

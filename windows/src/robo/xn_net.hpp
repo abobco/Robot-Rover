@@ -131,7 +131,7 @@ void wserror(const char *msg);
 
 SOCKET accept_connection_blocking(unsigned port, bool verbose = true);
 
-int read_buf(SOCKET sock, char *buf, uint32_t len, float timeout = 1);
+int read_buf(SOCKET sock, char *buf, uint32_t len, float timeout = 5);
 
 int wait_ack(SOCKET &sock, float timeout = 1);
 

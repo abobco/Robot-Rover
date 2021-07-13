@@ -73,7 +73,7 @@ void i2c_thread() {
     uint8_t buf[n];
     buf[0] = '?';
     float v = cur_sens.getVolts();
-    Serial.println(v);
+    // Serial.println(v);
     memcpy(&buf[1], &v, sizeof(v));
 
     buf[n - 1] = checksum_LRC(buf, n - 1);
@@ -114,8 +114,8 @@ int tf_read_frame(HardwareSerial SerialTF) {
 void setup() {
   Serial.begin(115200);
 
-  wheels[0] = WheelMotor(5, 18, 33, 25);
-  wheels[1] = WheelMotor(0, 4, 26, 27);
+  wheels[0] = WheelMotor(5, 18, 26, 27);
+  wheels[1] = WheelMotor(0, 4, 33, 25);
 
   ESP32PWM::allocateTimer(2);
   pinMode(pin_servo, OUTPUT);
@@ -192,10 +192,15 @@ void loop() {
   send_buf(client, (char *)&ack, sizeof(ack));
 
   int8_t type = msg.buf[0];
-  printf("type=%d\n", type);
+  printf("type=");
+  print_msg_type(type);
+  printf("\n");
   switch (type) {
   case INSTR_MOTOR: {
     MotorInstruction instr = *(MotorInstruction *)msg.buf;
+    DUMP(instr.length_pulses);
+    DUMP(instr.dir_left);
+    DUMP(instr.dir_right);
     WheelMotor::move_motors(instr, wheels);
   } break;
   case INSTR_SENSOR_EX: {

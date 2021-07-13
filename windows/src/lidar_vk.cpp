@@ -92,7 +92,7 @@ public:
     console = new SshConsole(settings);
     robot = new RobotController();
     threads.push_back(std::thread(console_update_thread, console));
-    threads.push_back(std::thread(ik_sim_thread, std::ref(*robot)));
+    threads.push_back(std::thread(ik_sim_thread, std::ref(robot->armInfo)));
     threads.push_back(
         std::thread(car_sim_thread, std::ref(navgraph), std::ref(*robot)));
 
@@ -186,11 +186,11 @@ private:
     scene.drawMap["arm"] = scene.root.addChild(new DrawNode());
     vulkan::GraphicsPipeline &gp = scene.pipelineMap["color_lit"];
     AppState::get().arm_mut.lock();
-    for (int i = 0; i < getArm()->numJoints; i++)
+    for (int i = 0; i < robot->armInfo.joints.numJoints; i++)
       scene.drawMap["arm"]->addChild(
           new DrawNode(&gp, &cubeMesh),
-          PushConstColor(getArm()->positions[i].toGLM(), glm::vec3(0.1f),
-                         vulkan::sample_colors[2]));
+          PushConstColor(robot->armInfo.joints.positions[i].toGLM(),
+                         glm::vec3(0.1f), vulkan::sample_colors[2]));
     AppState::get().arm_mut.unlock();
 
     scene.drawMap["target"] = scene.drawMap["arm"]->addChild(
@@ -254,7 +254,7 @@ private:
 
     settingsWindow.draw(*robot, (void *)&scene);
     bool t = true;
-    console->Draw("Ssh: Console", &t, *robot);
+    console->Draw("Ssh: Console", &t, *robot, navgraph);
 
     // Rendering
     ImGui::Render();
@@ -362,11 +362,11 @@ private:
     scene.drawMap["target"]->setPushConstant(
         PushConstColor(model, glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
-    for (auto i = 0; i < getArm()->numJoints; i++) {
+    for (auto i = 0; i < robot->armInfo.joints.numJoints; i++) {
       model = transform_model(car_pos_3d);
       model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-      model = transform_model(getArm()->positions[i].toGLM(), glm::vec3(0.1f),
-                              model);
+      model = transform_model(robot->armInfo.joints.positions[i].toGLM(),
+                              glm::vec3(0.1f), model);
       scene.drawMap["arm"]->children[i]->setPushConstant(
           PushConstColor(model, vulkan::sample_colors[2]));
     }
@@ -515,18 +515,18 @@ private:
   }
 
   void createArmMesh() {
-    int n = getArm()->numJoints;
+    int n = robot->armInfo.joints.numJoints;
     glm::vec3 arm_color(0.2, 0.2, 0.9);
     std::vector<vulkan::Vertex> arm_verts(n);
     std::vector<uint16_t> arm_indices;
     glm::vec3 car_pos_3d(robot->rover.position.x, 0.1, robot->rover.position.y);
     float car_ang_corrected = (float)-M_PI_2 + robot->rover.rotation;
     for (auto i = 0; i < n; i++) {
-      glm::vec3 pos = getArm()->positions[i].toGLM();
+      glm::vec3 pos = robot->armInfo.joints.positions[i].toGLM();
       glm::mat4 model = transform_model(car_pos_3d);
       model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-      model =
-          transform_model(getArm()->positions[i].toGLM(), glm::vec3(1), model);
+      model = transform_model(robot->armInfo.joints.positions[i].toGLM(),
+                              glm::vec3(1), model);
       arm_verts[i] = {model * glm::vec4(0, 0, 0, 1), arm_color, glm::vec2(1),
                       glm::vec3(0, 1, 0)};
       arm_indices.push_back(i);

@@ -1,4 +1,3 @@
-// #include "../app/app_threads_shared.hpp"
 #pragma once
 #include "xn_net.hpp"
 #include "xn_pointcloud.hpp"
@@ -7,7 +6,7 @@
 namespace xn {
 
 struct Rover {
-  SOCKET *esp32 = NULL;
+  SOCKET esp32;
 
   float wheelSeparation;
   float wheelDiameter;

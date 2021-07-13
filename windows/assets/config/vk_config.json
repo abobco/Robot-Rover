@@ -9,8 +9,8 @@
     "debug_file": "validation_layers.txt",
     "motor_cpr": 4320,
     "resolution": [
-        1124,
-        760
+        1200,
+        800
     ],
     "shaders": {
         "color": {
@@ -43,8 +43,8 @@
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        -1424,
-        -409
+        -1343,
+        -482
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",

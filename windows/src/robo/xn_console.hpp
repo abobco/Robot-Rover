@@ -8,6 +8,7 @@ namespace xn {
 
 class AppState;
 struct RobotController;
+struct GridGraph;
 
 // simple console window with scrolling, filtering, completion and history.
 struct SshConsole {
@@ -27,6 +28,7 @@ struct SshConsole {
 
   std::string history_filepath;
 
+  static const unsigned BASE_PORT = 5002;
   enum SOCKET_INDEX {
     SOCKET_RPI_CAM,
     SOCKET_RPI_ARM,
@@ -35,6 +37,7 @@ struct SshConsole {
 
     SOCKET_COUNT
   };
+
   SOCKET sockets[SOCKET_COUNT];
 
   // struct Sockets {
@@ -67,7 +70,8 @@ struct SshConsole {
   void ClearLog();
   void AddLog(const char *fmt, ...) IM_FMTARGS(2);
 
-  void Draw(const char *title, bool *p_open, RobotController &robot);
+  void Draw(const char *title, bool *p_open, RobotController &robot,
+            GridGraph &navgraph);
 
   void ExecCommand(const char *command_line) {
     AddLog("# %s\n", command_line);

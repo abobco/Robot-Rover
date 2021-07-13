@@ -72,7 +72,7 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
   x_step.dir = 0;
   LidarServoInstruction servo_ctl;
   servo_ctl.width = scan_range.x;
-  send_pack(*esp32, servo_ctl);
+  send_pack(esp32, servo_ctl);
 
   int burst_size = 50;
   int pack_size = burst_size * sizeof(LidarReadInstruction) +
@@ -91,7 +91,7 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
       step_incr *= -1;
       x_step.dir = !x_step.dir;
       servo_ctl.width += servo_step;
-      send_pack(*esp32, servo_ctl);
+      send_pack(esp32, servo_ctl);
       bpos = 0;
       for (int i = 0; i < burst_size; i++) {
         bpos += pack_instruction(x_step, &(bbuf[bpos]));
@@ -100,13 +100,13 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
       continue;
     }
 
-    send(*esp32, bbuf, pack_size, 0);
+    send(esp32, bbuf, pack_size, 0);
     for (int i = 0; i < burst_size; i++) { // read lidar
       uint16_t d = 0;
       int acks = 0;
-      acks += wait_ack(*esp32);
+      acks += wait_ack(esp32);
       // printf("ack1 ");
-      acks += wait_ack(*esp32);
+      acks += wait_ack(esp32);
       // printf("ack2\n");
       if (acks < 2) {
         printf("resending remaining instructions\n");
@@ -114,11 +114,11 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
             i * (sizeof(LidarReadInstruction) + sizeof(LidarStepInstruction) +
                  2 * sizeof(uint32_t));
         printf("%ld sent, %ld remaining\n", bsent, pack_size - bsent);
-        send(*esp32, &bbuf[bsent], pack_size - bsent, 0);
+        send(esp32, &bbuf[bsent], pack_size - bsent, 0);
         --i;
         continue;
       }
-      read_int<uint16_t>(*esp32, d, false);
+      read_int<uint16_t>(esp32, d, false);
 
       step += step_incr;
       // DUMP(step);
@@ -151,7 +151,7 @@ int Rover::move_forward(float gridsquares, float gridbox_size) {
 
   printf("sending motor instruction\n");
   // DUMP(cmd_m_forward.length_pulses);
-  return send_pack(*esp32, cmd_m_forward);
+  return send_pack(esp32, cmd_m_forward);
 }
 
 int Rover::turn(int deg) {
@@ -170,7 +170,7 @@ int Rover::turn(int deg) {
     cmd_m_right.dir_right = 1;
   }
   printf("sending motor instruction\n");
-  int status = send_pack(*esp32, cmd_m_right);
+  int status = send_pack(esp32, cmd_m_right);
   if (!status)
     return 0;
   time_sleep(2 * (float)abs(deg) / 90);
