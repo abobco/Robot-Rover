@@ -1,13 +1,14 @@
 #pragma once
 
 #include "robot_instructions.h"
+#include "robot_ipconfig.h"
 #include <WiFi.h>
 
 namespace xn {
 bool run = true;
 // control pc info
-IPAddress laptop_ip(192, 168, 0, 100);
-const int laptop_port = 5005;
+IPAddress laptop_ip;
+const int laptop_port = PORT_ESP_DATA;
 
 void print_msg_type(int8_t type) {
 #define printcase(a)                                                           \

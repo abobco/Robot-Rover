@@ -1,3 +1,11 @@
+
+/**
+ * This file defines rover instructions that are sent from the windows control
+ * computer to the esp32. The networking code for both the esp32 and the windows
+ * computer will #include this file, and then implement functions to
+ * send/receive/execute these instructions
+ * */
+
 #pragma once
 #include <cstdint>
 

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/abobco/RaspberryPi/OCV_Projects
+CMAKE_SOURCE_DIR = /mnt/c/Code/opengl-es/robot-host-app/raspberrypi
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/abobco/RaspberryPi/OCV_Projects/build
+CMAKE_BINARY_DIR = /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -92,7 +92,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/abobco/RaspberryPi/OCV_Projects/build/CPackSourceConfig.cmake
+	/usr/bin/cpack --config ./CPackSourceConfig.cmake /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -148,9 +148,9 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/abobco/RaspberryPi/OCV_Projects/build/CMakeFiles /home/abobco/RaspberryPi/OCV_Projects/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/abobco/RaspberryPi/OCV_Projects/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -516,113 +516,113 @@ test-lejp/fast:
 	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/test-lejp.dir/build.make _deps/libwebsockets-build/CMakeFiles/test-lejp.dir/build
 .PHONY : test-lejp/fast
 
-SPI_Camera/src/ArduCAM.o: SPI_Camera/src/ArduCAM.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o
 
-.PHONY : SPI_Camera/src/ArduCAM.o
-
-# target to build an object file
-SPI_Camera/src/ArduCAM.c.o:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/ArduCAM.c.o
-.PHONY : SPI_Camera/src/ArduCAM.c.o
-
-SPI_Camera/src/ArduCAM.i: SPI_Camera/src/ArduCAM.c.i
-
-.PHONY : SPI_Camera/src/ArduCAM.i
-
-# target to preprocess a source file
-SPI_Camera/src/ArduCAM.c.i:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/ArduCAM.c.i
-.PHONY : SPI_Camera/src/ArduCAM.c.i
-
-SPI_Camera/src/ArduCAM.s: SPI_Camera/src/ArduCAM.c.s
-
-.PHONY : SPI_Camera/src/ArduCAM.s
-
-# target to generate assembly for a file
-SPI_Camera/src/ArduCAM.c.s:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/ArduCAM.c.s
-.PHONY : SPI_Camera/src/ArduCAM.c.s
-
-SPI_Camera/src/EZCAM.o: SPI_Camera/src/EZCAM.c.o
-
-.PHONY : SPI_Camera/src/EZCAM.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o
 
 # target to build an object file
-SPI_Camera/src/EZCAM.c.o:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/EZCAM.c.o
-.PHONY : SPI_Camera/src/EZCAM.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o
 
-SPI_Camera/src/EZCAM.i: SPI_Camera/src/EZCAM.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.i: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.i
 
-.PHONY : SPI_Camera/src/EZCAM.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.i
 
 # target to preprocess a source file
-SPI_Camera/src/EZCAM.c.i:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/EZCAM.c.i
-.PHONY : SPI_Camera/src/EZCAM.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.i:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.i
 
-SPI_Camera/src/EZCAM.s: SPI_Camera/src/EZCAM.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.s: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.s
 
-.PHONY : SPI_Camera/src/EZCAM.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.s
 
 # target to generate assembly for a file
-SPI_Camera/src/EZCAM.c.s:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/EZCAM.c.s
-.PHONY : SPI_Camera/src/EZCAM.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.s:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.s
 
-SPI_Camera/src/bcm283x_board_driver.o: SPI_Camera/src/bcm283x_board_driver.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.o
 
-.PHONY : SPI_Camera/src/bcm283x_board_driver.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.o
 
 # target to build an object file
-SPI_Camera/src/bcm283x_board_driver.c.o:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/bcm283x_board_driver.c.o
-.PHONY : SPI_Camera/src/bcm283x_board_driver.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.o:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.o
 
-SPI_Camera/src/bcm283x_board_driver.i: SPI_Camera/src/bcm283x_board_driver.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.i: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.i
 
-.PHONY : SPI_Camera/src/bcm283x_board_driver.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.i
 
 # target to preprocess a source file
-SPI_Camera/src/bcm283x_board_driver.c.i:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/bcm283x_board_driver.c.i
-.PHONY : SPI_Camera/src/bcm283x_board_driver.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.i:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.i
 
-SPI_Camera/src/bcm283x_board_driver.s: SPI_Camera/src/bcm283x_board_driver.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.s: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.s
 
-.PHONY : SPI_Camera/src/bcm283x_board_driver.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.s
 
 # target to generate assembly for a file
-SPI_Camera/src/bcm283x_board_driver.c.s:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/bcm283x_board_driver.c.s
-.PHONY : SPI_Camera/src/bcm283x_board_driver.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.s:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.c.s
 
-SPI_Camera/src/sccb_bus.o: SPI_Camera/src/sccb_bus.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.o
 
-.PHONY : SPI_Camera/src/sccb_bus.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.o
 
 # target to build an object file
-SPI_Camera/src/sccb_bus.c.o:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/sccb_bus.c.o
-.PHONY : SPI_Camera/src/sccb_bus.c.o
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.o:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.o
 
-SPI_Camera/src/sccb_bus.i: SPI_Camera/src/sccb_bus.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.i: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.i
 
-.PHONY : SPI_Camera/src/sccb_bus.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.i
 
 # target to preprocess a source file
-SPI_Camera/src/sccb_bus.c.i:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/sccb_bus.c.i
-.PHONY : SPI_Camera/src/sccb_bus.c.i
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.i:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.i
 
-SPI_Camera/src/sccb_bus.s: SPI_Camera/src/sccb_bus.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.s: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.s
 
-.PHONY : SPI_Camera/src/sccb_bus.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.s
 
 # target to generate assembly for a file
-SPI_Camera/src/sccb_bus.c.s:
-	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/SPI_Camera/src/sccb_bus.c.s
-.PHONY : SPI_Camera/src/sccb_bus.c.s
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.s:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.c.s
+
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.o
+
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.o
+
+# target to build an object file
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.o:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.o
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.o
+
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.i: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.i
+
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.i:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.i
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.i
+
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.s: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s
+
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s:
+	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s
+.PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s
 
 src/arducam_minimal.o: src/arducam_minimal.cpp.o
 
@@ -1177,18 +1177,18 @@ help:
 	@echo "... test-server-extpoll"
 	@echo "... test-client"
 	@echo "... test-lejp"
-	@echo "... SPI_Camera/src/ArduCAM.o"
-	@echo "... SPI_Camera/src/ArduCAM.i"
-	@echo "... SPI_Camera/src/ArduCAM.s"
-	@echo "... SPI_Camera/src/EZCAM.o"
-	@echo "... SPI_Camera/src/EZCAM.i"
-	@echo "... SPI_Camera/src/EZCAM.s"
-	@echo "... SPI_Camera/src/bcm283x_board_driver.o"
-	@echo "... SPI_Camera/src/bcm283x_board_driver.i"
-	@echo "... SPI_Camera/src/bcm283x_board_driver.s"
-	@echo "... SPI_Camera/src/sccb_bus.o"
-	@echo "... SPI_Camera/src/sccb_bus.i"
-	@echo "... SPI_Camera/src/sccb_bus.s"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.i"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.s"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.o"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.i"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/EZCAM.s"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.o"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.i"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/bcm283x_board_driver.s"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.o"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.i"
+	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.s"
 	@echo "... src/arducam_minimal.o"
 	@echo "... src/arducam_minimal.i"
 	@echo "... src/arducam_minimal.s"

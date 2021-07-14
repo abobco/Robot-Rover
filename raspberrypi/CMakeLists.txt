@@ -2,42 +2,9 @@ cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
 include(FetchContent)
 include(armhf-toolchain.cmake)
 set(CMAKE_BUILD_TYPE Debug)
-# raspi libraries for threading & gpu
-# include_directories( ${CMAKE_SYSROOT}/opt/vc/include ${CMAKE_SYSROOT}/opt/vc/include/interface/vmcs_host/linux ${CMAKE_SYSROOT}/opt/vc/include/interface/vcos/pthreads ${CMAKE_SYSROOT}/opt/vc/include/interface/vcos/generic)
-# link_directories(${CMAKE_SYSROOT}/opt/vc/lib)
 
-# ========================== Build libwebsockets ========================================
-
-project(lws)
-
-# LWS config
-set(OPENSSL_ROOT_DIR ${CMAKE_SYSROOT}/usr/lib/arm-linux-gnueabihf/)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 set(CMAKE_TOOLCHAIN_FILE armhf-toolchain.cmake)
-set(LWS_WITH_TLS ON)
-
- # build a debug symbol table for gdb
-set(CMAKE_BUILD_TYPE Debug)
-
-# fetch & build libwebsockets
-FetchContent_Declare(
-    libwebsockets
-    GIT_REPOSITORY https://github.com/warmcat/libwebsockets.git
-    GIT_TAG v4.0.10
-    )
-  FetchContent_GetProperties(libwebsockets)
-  if(NOT libwebsockets_POPULATED)
-    set(FETCHCONTENT_QUIET NO)
-    FetchContent_Populate(libwebsockets)
-    add_subdirectory(${libwebsockets_SOURCE_DIR} ${libwebsockets_BINARY_DIR})
-  endif()
-  
-  # libwebsockets build dependencies
-  include_directories(build/_deps/libwebsockets-build/include ${CMAKE_SYSROOT}/usr/include/arm-linux-gnueabihf)
-  link_directories(build/_deps/libwebsockets-build/lib ${CMAKE_SYSROOT}/usr/lib/arm-linux-gnueabihf/openssl-1.0.2)
-
-# =======================================================================================
-
 # ================================ Helper Library ========================================
 
 project(robolib_build)
@@ -100,7 +67,7 @@ macro(Robo_Build project_name src_file)
                            ${PIG} ${PIGD} 
                            pthread rt 
                            robolib 
-                           websockets dl 
+                            dl 
                            ${l_vcos}  ${l_GLES} ${l_bcm_host} ${l_vchiq_arm} 
                            ${l_mmal_core} ${l_mmal} ${l_mmal_util}
                            /home/abobco/RaspberryPi/OCV_Projects/raspicam/build/src/libraspicam.a  

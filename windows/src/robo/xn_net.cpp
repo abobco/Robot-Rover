@@ -106,13 +106,13 @@ int read_buf(SOCKET sock, char *buf, uint32_t len, float timeout) {
   return 0;
 }
 
-int wait_ack(SOCKET &sock, float timeout) {
+int wait_ack(SOCKET &sock, float timeout, unsigned reconnectPort) {
   int32_t ack = 0;
   if (read_int<int32_t>(sock, ack, false, timeout) < 0) {
     closesocket(sock);
     // shutdown(sock, SHUT_WR);
-    xn_printf("reconnecting\n");
-    sock = accept_connection_blocking(4001);
+    printf("reconnecting\n");
+    sock = accept_connection_blocking(reconnectPort);
     return 0;
   }
   return 1;

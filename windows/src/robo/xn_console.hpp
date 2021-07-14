@@ -28,7 +28,7 @@ struct SshConsole {
 
   std::string history_filepath;
 
-  static const unsigned BASE_PORT = 5002;
+  static const unsigned BASE_PORT = PORT_RPI_CAM;
   enum SOCKET_INDEX {
     SOCKET_RPI_CAM,
     SOCKET_RPI_ARM,

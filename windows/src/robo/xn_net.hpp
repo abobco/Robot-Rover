@@ -58,6 +58,7 @@
 #include <type_traits>
 // #include <unistd.h>
 #include <esp32/rover/robot_instructions.h>
+#include <esp32/rover/robot_ipconfig.h>
 
 #ifndef bzero
 #define bzero(b, len) (memset((b), '\0', (len)), (void)0)
@@ -74,9 +75,10 @@ void wserror(const char *msg);
 
 SOCKET accept_connection_blocking(unsigned port, bool verbose = true);
 
-int read_buf(SOCKET sock, char *buf, uint32_t len, float timeout = 5);
+int read_buf(SOCKET sock, char *buf, uint32_t len, float timeout = 1);
 
-int wait_ack(SOCKET &sock, float timeout = 1);
+int wait_ack(SOCKET &sock, float timeout = 1,
+             unsigned reconnet_port = PORT_ESP_DATA);
 
 MessageRaw read_message(int sock);
 
@@ -85,12 +87,10 @@ int read_int(SOCKET sock, IntGeneric &val,
              bool convert_from_net_byte_order = true, float timeout = 1) {
 
   int res = read_buf(sock, (char *)&val, sizeof(val), timeout);
-  if (res == -1)
-    return res;
 
   if (convert_from_net_byte_order)
     val = (IntGeneric)ntohl((u_long)val);
-  return 1;
+  return res;
 }
 
 template <class IntGeneric>

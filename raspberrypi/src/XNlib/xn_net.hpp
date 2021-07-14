@@ -47,6 +47,7 @@
 #include <assert.h>
 #include <cstring>
 #include <esp32/rover/robot_instructions.h>
+#include <esp32/rover/robot_ipconfig.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,9 +55,9 @@
 #include <type_traits>
 #include <unistd.h>
 
-#define laptop_port 5002
+// #define laptop_port 5002
 // #define laptop_ip "192.168.0.102"
-#define laptop_ip "192.168.0.100"
+// #define laptop_ip "192.168.0.100"
 
 // #define bzero(b, len) (memset((b), '\0', (len)), (void)0)
 
@@ -106,7 +107,7 @@ int connect_socket_blocking(int port) {
   }
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(port);
-  if (inet_pton(AF_INET, laptop_ip, &serv_addr.sin_addr) <= 0) {
+  if (inet_pton(AF_INET, LAPTOP_IP_STRING, &serv_addr.sin_addr) <= 0) {
     printf("Invalid address\n");
     return -1;
   }

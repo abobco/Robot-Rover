@@ -144,6 +144,8 @@ void setup() {
   }
   WiFi.setSleep(false);
 
+  laptop_ip.fromString(LAPTOP_IP_STRING);
+
   OTA_init();
   tid[1] = std::thread(OTA_update_thread);
 
