@@ -26,6 +26,7 @@ set(COMMON_INCLUDE_DIRS
     ${GLAD_DIR}/include 
     ${IMGUI_DIR} ${IMGUI_DIR}/backends
     ${GLM_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
 )
 
 set(PRECOMPILED_HEADERS

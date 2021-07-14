@@ -66,7 +66,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Code\opengl-es\robot-host-app\windows\..;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Code\opengl-es\robot-host-app\windows\..;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -86,7 +86,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Code\opengl-es\robot-host-app\windows\..;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -96,7 +96,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Code\opengl-es\robot-host-app\windows\..\..\glfw-3.3.3.bin.WIN64\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib;C:\Code\opengl-es\robot-host-app\windows\..\..\glad\include;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\imgui\backends;C:\Code\opengl-es\robot-host-app\windows\..\..\xnlib\external\glm;C:\Code\opengl-es\robot-host-app\windows\..;C:\Program Files (x86)\Intel\openvino_2021\opencv\include;C:\Code\vcpkg\packages\libssh_x64-windows\share\libssh\..\..\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>

@@ -70,12 +70,12 @@ struct MotorInstruction {
     int8_t dir_left;
 };
 
-struct SensorInstruction360 {
+struct LidarInstruction360 {
     const int8_t type = INSTR_SENSOR_360;
     int8_t y_degrees_per_step;
 };
 
-struct SensorInstructionEx {
+struct LidarInstructionEx {
     const int8_t type = INSTR_SENSOR_EX;
     int16_t x_degrees_min;
     int16_t x_degrees_max;

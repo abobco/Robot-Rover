@@ -57,6 +57,7 @@
 #include <sys/types.h>
 #include <type_traits>
 // #include <unistd.h>
+#include <esp32/rover/robot_instructions.h>
 
 #ifndef bzero
 #define bzero(b, len) (memset((b), '\0', (len)), (void)0)
@@ -66,64 +67,6 @@
 #endif
 
 namespace xn {
-enum InstructionType {
-  INSTR_MOTOR,
-  INSTR_SENSOR_EX,
-  INSTR_SENSOR_360,
-  INSTR_LIDAR_STEP,
-  INSTR_LIDAR_SERVO,
-  INSTR_LIDAR_READ,
-  INSTR_RESTART_ESP
-};
-
-struct MotorInstruction {
-  const int8_t type = INSTR_MOTOR;
-  uint32_t length_pulses;
-  int8_t dir_right;
-  int8_t dir_left;
-};
-
-struct SensorInstruction360 {
-  const int8_t type = INSTR_SENSOR_360;
-  int8_t y_degrees_per_step;
-};
-
-struct SensorInstructionEx {
-  const int8_t type = INSTR_SENSOR_EX;
-  int16_t x_degrees_min;
-  int16_t x_degrees_max;
-  int16_t y_degrees_min;
-  int16_t y_degrees_max;
-  int8_t y_degrees_per_step;
-};
-
-struct LidarStepInstruction {
-  const int8_t type = INSTR_LIDAR_STEP;
-  int8_t dir;
-};
-
-struct LidarServoInstruction {
-  const int8_t type = INSTR_LIDAR_SERVO;
-  uint16_t width;
-};
-
-struct LidarReadInstruction {
-  const int8_t type = INSTR_LIDAR_READ;
-};
-
-struct RestartEspInstruction {
-  const int8_t type = INSTR_RESTART_ESP;
-};
-
-template <class T> struct InstructionPacket {
-  size_t size;
-  T instr;
-};
-
-struct MessageRaw {
-  size_t size;
-  char *buf;
-};
 
 void error(const char *msg);
 

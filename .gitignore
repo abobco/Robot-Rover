@@ -4,5 +4,6 @@
 windows/build/Debug
 **.obj
 **/.vs
+**.vcxproj
 windows/build/validation_layers.txt
 windows/build/Release/opencv_world451d.dll
