@@ -150,6 +150,12 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
         });
       }
 
+      for (unsigned i = 0; i < SOCKET_COUNT; i++) {
+        if (i == SOCKET_ESP_DATA)
+          continue;
+        connection_jobs[i].join();
+      }
+
       jobs.push_back(
           std::thread(esp_log_thread, std::ref(sockets[SOCKET_ESP_LOG])));
       jobs.push_back(

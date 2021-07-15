@@ -1,0 +1,12 @@
+#pragma once
+
+#ifndef LAPTOP_IP_STRING
+#define LAPTOP_IP_STRING "192.168.0.100"
+#endif
+
+enum ROBOT_SOCKET_PORTS {
+  PORT_RPI_CAM = 5002,
+  PORT_RPI_ARM,
+  PORT_ESP_LOG,
+  PORT_ESP_DATA,
+};
