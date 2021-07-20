@@ -192,7 +192,7 @@ void ik_sim_thread(ArmInfo &armInfo) {
 
     if (first) {
       // set_claw_target(claw_ctl, CLAW_OPEN);
-      armInfo.joints.stiffy();
+      armInfo.joints.straighten();
       arm_wait_action_complete(armInfo);
       first = false;
     }
@@ -223,7 +223,8 @@ void ik_sim_thread(ArmInfo &armInfo) {
     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
     arm_update(armInfo);
     // time_sleep(2.0);
-    armInfo.joints.stiffy();
+    armInfo.joints.straighten();
+    armInfo.joints.straighten();
     // arm.joints.reset();
     // arm.joints.ideal_chain.reset();
     // arm_wait_action_complete(armInfo);
@@ -426,7 +427,7 @@ void arm_ctl_thread(ArmInfo &armInfo) {
 
     if (first) {
       // set_claw_target(claw_ctl, CLAW_OPEN);
-      armInfo.joints.stiffy();
+      armInfo.joints.straighten();
       arm_wait_action_complete(armInfo);
       first = false;
     }
@@ -449,7 +450,7 @@ void arm_ctl_thread(ArmInfo &armInfo) {
     // move to neutral position
     AppState::get().move_to_target = false;
     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
-    armInfo.joints.stiffy();
+    armInfo.joints.straighten();
     arm_wait_action_complete(armInfo);
 
     // release

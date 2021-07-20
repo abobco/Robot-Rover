@@ -51,4 +51,3 @@
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",
     "yolo_model": "C:/Code/opengl-es/darknet/yolov4.weights"
 }
-}
