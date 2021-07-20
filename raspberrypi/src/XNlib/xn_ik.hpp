@@ -293,17 +293,21 @@ class ServoChain {
         servos[2][0].target_angle = M_PI;
     }
 
-    void stiffy() {
+    void prepGrab() {
         curl();
-        time_sleep(servos[0][0].t_max);
+        // time_sleep(servos[0][0].t_max);
         straighten();
         for (int i = 0; i < ideal_chain.bone_count; i++) {
             for (pio::SmoothServo &s : servos[i]) {
                 s.target_angle = M_PI / 2;
             }
         }
-        time_sleep(servos[0][0].t_max / 2);
-        reset();
+        // time_sleep(servos[0][0].t_max / 2);
+        // reset();
+        ideal_chain.reset();
+        for (unsigned i = 0; i < ideal_chain.bone_count; i++) {
+            positions[i] = ideal_chain.positions[i];
+        }
     }
 
     void straighten() {
@@ -312,9 +316,29 @@ class ServoChain {
                 s.target_angle = M_PI / 2;
             }
         }
-        time_sleep(servos[0][0].t_max / 2);
-        reset();
     }
+
+    // void updatePositions() {
+    //     for (int i = 0; i < ideal_chain.bone_count; i++) {
+    //         for (int j = 0; j < servos) {
+    //             // rotate servos in child joints
+    //             for (int k = i + 1; k < ideal_chain.bone_count; k++) {
+    //                 vec3 relpos = positions[k] - positions[i];
+    //                 positions[k] = positions[i] + vec3::rotate_axis(relpos, ax, ang);
+    //                 for (int l = 0; l < servos[k].size(); l++) {
+    //                     servos[k][l].axis = vec3::rotate_axis(servos[k][l].axis, ax, ang);
+    //                     servos[k][l].axis.normalize();
+    //                 }
+    //             }
+
+    //             // rotate servos axes in current joint
+    //             for (int k = j + 1; k < servos[i].size(); k++) {
+    //                 servos[i][k].axis = vec3::rotate_axis(servos[i][k].axis, ax, ang);
+    //                 servos[i][k].axis.normalize();
+    //             }
+    //         }
+    //     }
+    // }
 
     // void update_positions() {
     //     for (int i = 0; i < ideal_chain.bone_count - 1; i++) {
@@ -325,8 +349,8 @@ class ServoChain {
     //                 vec3 relpos = positions[k] - positions[i];
     //                 positions[k] = positions[i] + vec3::rotate_axis(relpos, ax, ang);
     //                 for (int l = 0; l < servos[k].size(); l++) {
-    //                     servos[k][l].axis = vec3::rotate_axis(servos[k][l].axis, ax, ang);
-    //                     servos[k][l].axis.normalize();
+    //                     servos[k][l].axis = vec3::rotate_axis(servos[k][l].axis, ax,
+    //                     ang); servos[k][l].axis.normalize();
     //                 }
     //             }
 
@@ -372,6 +396,17 @@ class ServoChain {
         }
 
         wrist.target_angle = M_PI - ac;
+    }
+
+    void saveResetPosition() {
+        for (auto i = 0; i < servos_orig.size(); i++) {
+            std::vector<pio::SmoothServo> &joint = servos_orig[i];
+            for (auto j = 0; j < joint.size(); j++) {
+                joint[j].position = servos[i][j].position;
+                joint[j].axis = servos[i][j].axis;
+                joint[j].target_angle = servos[i][j].target_angle;
+            }
+        }
     }
 
     void reset() {

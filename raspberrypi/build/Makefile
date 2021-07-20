@@ -48,35 +48,13 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Code/opengl-es/robot-host-app/raspberrypi
+CMAKE_SOURCE_DIR = /home/abobco/RaspberryPi/Robot-Rover/raspberrypi
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build
+CMAKE_BINARY_DIR = /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\" \"dev\" \"dev_headers\" \"examples\" \"libraries\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -92,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CPackSourceConfig.cmake
+	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -122,35 +100,11 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CMakeFiles /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Code/opengl-es/robot-host-app/raspberrypi/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -424,97 +378,6 @@ picam_cv_minimal: cmake_check_build_system
 picam_cv_minimal/fast:
 	$(MAKE) -f CMakeFiles/picam_cv_minimal.dir/build.make CMakeFiles/picam_cv_minimal.dir/build
 .PHONY : picam_cv_minimal/fast
-
-#=============================================================================
-# Target rules for targets named dist
-
-# Build rule for target.
-dist: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 dist
-.PHONY : dist
-
-# fast build rule for target.
-dist/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/dist.dir/build.make _deps/libwebsockets-build/CMakeFiles/dist.dir/build
-.PHONY : dist/fast
-
-#=============================================================================
-# Target rules for targets named websockets_shared
-
-# Build rule for target.
-websockets_shared: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 websockets_shared
-.PHONY : websockets_shared
-
-# fast build rule for target.
-websockets_shared/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/websockets_shared.dir/build.make _deps/libwebsockets-build/CMakeFiles/websockets_shared.dir/build
-.PHONY : websockets_shared/fast
-
-#=============================================================================
-# Target rules for targets named websockets
-
-# Build rule for target.
-websockets: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 websockets
-.PHONY : websockets
-
-# fast build rule for target.
-websockets/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/websockets.dir/build.make _deps/libwebsockets-build/CMakeFiles/websockets.dir/build
-.PHONY : websockets/fast
-
-#=============================================================================
-# Target rules for targets named test-server
-
-# Build rule for target.
-test-server: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-server
-.PHONY : test-server
-
-# fast build rule for target.
-test-server/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/test-server.dir/build.make _deps/libwebsockets-build/CMakeFiles/test-server.dir/build
-.PHONY : test-server/fast
-
-#=============================================================================
-# Target rules for targets named test-server-extpoll
-
-# Build rule for target.
-test-server-extpoll: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-server-extpoll
-.PHONY : test-server-extpoll
-
-# fast build rule for target.
-test-server-extpoll/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/test-server-extpoll.dir/build.make _deps/libwebsockets-build/CMakeFiles/test-server-extpoll.dir/build
-.PHONY : test-server-extpoll/fast
-
-#=============================================================================
-# Target rules for targets named test-client
-
-# Build rule for target.
-test-client: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-client
-.PHONY : test-client
-
-# fast build rule for target.
-test-client/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/test-client.dir/build.make _deps/libwebsockets-build/CMakeFiles/test-client.dir/build
-.PHONY : test-client/fast
-
-#=============================================================================
-# Target rules for targets named test-lejp
-
-# Build rule for target.
-test-lejp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-lejp
-.PHONY : test-lejp
-
-# fast build rule for target.
-test-lejp/fast:
-	$(MAKE) -f _deps/libwebsockets-build/CMakeFiles/test-lejp.dir/build.make _deps/libwebsockets-build/CMakeFiles/test-lejp.dir/build
-.PHONY : test-lejp/fast
 
 home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o
 
@@ -1143,8 +1006,6 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/local"
-	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... package_source"
 	@echo "... led_pwm"
@@ -1157,7 +1018,6 @@ help:
 	@echo "... picam_minimal"
 	@echo "... servo"
 	@echo "... robolib"
-	@echo "... install/strip"
 	@echo "... arm_controller_main"
 	@echo "... i2c_ctl"
 	@echo "... red"
@@ -1167,16 +1027,8 @@ help:
 	@echo "... sock_client"
 	@echo "... picam_cv_stream_lossless"
 	@echo "... arducam_minimal"
-	@echo "... install"
 	@echo "... sonar"
 	@echo "... picam_cv_minimal"
-	@echo "... dist"
-	@echo "... websockets_shared"
-	@echo "... websockets"
-	@echo "... test-server"
-	@echo "... test-server-extpoll"
-	@echo "... test-client"
-	@echo "... test-lejp"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.i"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.s"
