@@ -101,6 +101,9 @@ add_library(xn_vk STATIC
     ${XN_VK_DIR}/core/xn_vk_vertex.cpp
     ${XN_VK_DIR}/window/xn_vk_swapchain.cpp
     ${XN_VK_DIR}/window/xn_glfw.cpp
+    ${XN_VK_DIR}/xn_vulkan_renderer.cpp
+    ${XN_VK_DIR}/xn_vk_vertex_arrays.cpp
+
 )
 
 # build macros

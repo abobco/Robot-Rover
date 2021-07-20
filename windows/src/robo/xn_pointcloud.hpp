@@ -63,4 +63,5 @@ public:
                             const float distance_cutoff = 10,
                             unsigned points_per_square_threshold = 1);
 };
+
 } // namespace xn

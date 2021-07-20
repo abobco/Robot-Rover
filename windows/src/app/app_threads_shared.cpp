@@ -11,11 +11,11 @@ namespace xn {
 void car_sim_thread(GridGraph &navgraph, RobotController &robot) {
   CarInfo info{robot.rover.position, robot.rover.rotation, navgraph.boxSize,
                navgraph.offset,      navgraph.graph,       robot.rover.target};
-  while (AppState::get().run) {
+  while (AppState::get().run && AppState::get().sim_rover) {
     while (navgraph.path.size() < 1 && AppState::get().run) {
       time_sleep(0.1);
     }
-    if (!AppState::get().run)
+    if (!AppState::get().run || !AppState::get().sim_rover)
       return;
 
     AppState::get().path_mut.lock();
@@ -459,15 +459,16 @@ void arm_ctl_thread(ArmInfo &armInfo) {
 
 void rover_ctl_thread(Rover &rover, GridGraph &navgraph) {
   std::vector<std::vector<glm::vec3>> nav_verts;
+  AppState::get().sim_rover = false;
 
   // rover.lidar_scan(nav_verts, navgraph);
   while (AppState::get().run) {
 
-    while (!AppState::get().should_scan) {
-      time_sleep(0.1);
-    }
-    rover.lidar_scan(nav_verts, navgraph);
-    AppState::get().should_scan = false;
+    // while (!AppState::get().should_scan) {
+    //   time_sleep(0.1);
+    // }
+    // rover.lidar_scan(nav_verts, navgraph);
+    // AppState::get().should_scan = false;
 
     float t = 0;
     while (navgraph.path.size() < 1) {
@@ -489,10 +490,8 @@ void rover_ctl_thread(Rover &rover, GridGraph &navgraph) {
       }
     }
 
+    printf("following path");
     rover.follow_path(nav_verts, navgraph);
-    // car_follow_path(esp_data, navgraph.path, wheel_diameter,
-    // wheel_separation,
-    //                 motor_cpr);
     navgraph.path.clear();
     AppState::get().should_scan = true;
   }
