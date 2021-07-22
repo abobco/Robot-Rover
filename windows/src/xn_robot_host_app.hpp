@@ -10,12 +10,14 @@
 #include "app/app_threads_shared.hpp"
 #include "opengl/xn_gl.hpp"
 #include "opengl/xn_renderer.hpp"
-#include "robo/xn_gpio.hpp"
+// #include "robo/xn_gpio.hpp"
 #include "robo/xn_ik.hpp"
 #include "robo/xn_log.hpp"
 #include "robo/xn_pointcloud.hpp"
 #include "util/xn_vec.hpp"
+#include <arm/xn_gpio.hpp>
 #include <unordered_map>
+
 
 namespace xn {
 

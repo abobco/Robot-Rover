@@ -167,7 +167,7 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
                                  std::ref(robot)));
       jobs.push_back(
           std::thread(yolo_thread, settings, std::ref(sockets[SOCKET_RPI_ARM]),
-                      std::ref(robot.armInfo.target), std::ref(robot.cam_pic),
+                      std::ref(robot.arm.target), std::ref(robot.cam_pic),
                       std::ref(robot.cam_outframe)));
       int i = 0;
       for (auto &j : jobs) {

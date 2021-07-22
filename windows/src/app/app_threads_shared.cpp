@@ -2,12 +2,6 @@
 
 namespace xn {
 
-// static ik::ServoChain *armptr;
-// static AppState app_state;
-
-// ik::ServoChain *getArm() { return armptr; }
-// AppState *getAppState() { return &app_state; }
-
 void car_sim_thread(GridGraph &navgraph, RobotController &robot) {
   CarInfo info{robot.rover.position, robot.rover.rotation, navgraph.boxSize,
                navgraph.offset,      navgraph.graph,       robot.rover.target};
@@ -30,8 +24,8 @@ void cam_io_thread(SOCKET &pi_cam, Jpeg &cam_pic,
                    std::vector<uint8_t> &cam_outframe) {
   AppState::get().received_pic = false;
   while (true) {
-    int32_t pic_buflen = 0;
-    read_int<int32_t>(pi_cam, pic_buflen, true, 5);
+    int64_t pic_buflen = 0;
+    read_int<int64_t>(pi_cam, pic_buflen, true, 5);
     if (pic_buflen == 0) {
       if (AppState::get().received_pic) {
 
@@ -108,164 +102,104 @@ void esp_log_thread(SOCKET &esp_log) {
   }
 }
 
-void arm_wait_action_complete(ArmInfo &arm, double timeout) {
-  const float MAX_DISTANCE = 0.01f;
-  const double wait_interval = 0.1;
-  auto t1 = pio::get_time();
-  time_sleep(0.5);
-  while (pio::time_diff_seconds(t1, pio::get_time()) < timeout) {
-    bool finished = true;
-    for (auto i = 0; i < arm.joints.ideal_chain.bone_count; i++) {
-      for (pio::SmoothServo &s : arm.joints.servos[i]) {
-        if (s.servo.getWidth() != s.targetw) {
-          finished = false;
-          break;
-        }
-      }
-    }
-    if (finished)
-      break;
-    time_sleep(wait_interval);
-  }
-}
+// void arm_wait_action_complete(ArmInfo &arm, double timeout) {
+//   const float MAX_DISTANCE = 0.01f;
+//   const double wait_interval = 0.1;
+//   auto t1 = pio::get_time();
+//   time_sleep(0.5);
+//   while (pio::time_diff_seconds(t1, pio::get_time()) < timeout) {
+//     bool finished = true;
+//     for (auto i = 0; i < arm.joints.ideal_chain.bone_count; i++) {
+//       for (pio::SmoothServo &s : arm.joints.servos[i]) {
+//         if (s.servo.getWidth() != s.targetw) {
+//           finished = false;
+//           break;
+//         }
+//       }
+//     }
+//     if (finished)
+//       break;
+//     time_sleep(wait_interval);
+//   }
+// }
 
-void arm_update_thread(ArmInfo &arm) {
-  while (AppState::get().run) {
-    arm.joints.move_wrist(*arm.wrist);
-  }
-}
+// void arm_update_thread(ArmInfo &arm) {
+//   while (AppState::get().run) {
+//     arm.joints.move_wrist(*arm.wrist);
+//   }
+// }
 
-void arm_update(ArmInfo &arm) {
-  arm.joints.grab_safe(arm.wristlen, arm.target);
-}
+// void arm_update(ArmInfo &arm) {
+//   arm.joints.grab_safe(arm.wristlen, arm.target);
+// }
 
-void ik_sim_thread(ArmInfo &armInfo) {
-  AppState::get().arm_mut.lock();
-  float arm_len = 104;
-  int mode = 0;
-  vec3 pole = {0, 0, 1};
-  vec3 bonechain[] = {vec3{0, 0, 0}, vec3{0, 1, 0}, vec3{0, 1 + 7.5f / 18, 0},
-                      vec3{0, 1 + 15.0f / 18, 0}};
-  float start_bone_lengths[] = {vec3::dist(bonechain[0], bonechain[1]),
-                                vec3::dist(bonechain[1], bonechain[2])};
-
-  ik::IkChain arm(4, bonechain, pole);
-
-  std::vector<xn::pio::SmoothServo> servos[4];
-  servos[0].push_back(xn::pio::SmoothServo(xn::pio::ServoAngular(12, 500, 2500),
-                                           {0, -1, 0}, bonechain[0], 1500));
-  servos[0].push_back(xn::pio::SmoothServo(xn::pio::ServoAngular(13, 500, 2500),
-                                           {1, 0, 0}, bonechain[0], 1570));
-  servos[1].push_back(xn::pio::SmoothServo(xn::pio::ServoAngular(26, 500, 2500),
-                                           {1, 0, 0}, bonechain[1], 1420));
-  servos[2].push_back(xn::pio::SmoothServo(xn::pio::ServoAngular(16, 500, 2500),
-                                           {1, 0, 0}, bonechain[2], 1500));
-
-  armInfo.joints = ik::ServoChain(arm, servos, &AppState::get().run);
-  // armptr = &phys_arm;
-  AppState::get().arm_mut.unlock();
-  armInfo.joints.reset();
-
-  // xn::pio::SmoothServo wrist(xn::pio::ServoAngular(6, 500, 2500));
-  // wrist.tid = std::thread(xn::ik::move_servo_thread, std::ref(wrist));
-
-  armInfo.wrist = new pio::SmoothServo(pio::ServoAngular(6, 500, 2500));
-  start_bone_lengths[0] =
-      vec3::dist(armInfo.joints.positions[0], armInfo.joints.positions[1]);
-  start_bone_lengths[1] =
-      vec3::dist(armInfo.joints.positions[1], armInfo.joints.positions[2]);
-
-  std::thread update_thread(arm_update_thread, armInfo);
-
+void ik_sim_thread(RobotArm &arm) {
   float tot_err = 0;
   float avg_err = 0;
   int iters = 0;
   bool first = true;
+  arm.createThreads();
+
   while (AppState::get().run) {
-    // vec3 v_target = AppState::get().arm_target;
-    // read_vec3(arm_ctl_sock, v_target);
     if (!AppState::get().grab_trigger) {
       time_sleep(0.1);
       continue;
     }
     AppState::get().grab_trigger = false;
 
-    if (first) {
-      // set_claw_target(claw_ctl, CLAW_OPEN);
-      armInfo.joints.straighten();
-      arm_wait_action_complete(armInfo);
-      first = false;
-    }
+    arm.joints.straighten();
+    arm.waitActionComplete();
+    DUMP(arm.target);
 
-    // align arm to target
-    // robot.armInfo.target = {-v_target.x + 90, -8, -v_target.y};
-    DUMP(armInfo.target);
-    armInfo.wristlen = 30 / armInfo.base_len;
-    // AppState::get().move_to_target = true;
-    arm_update(armInfo);
-    arm_update(armInfo);
+    arm.updateJoints(30 / arm.base_len);
+    arm.updateJoints(30 / arm.base_len);
     time_sleep(1.0);
-    // arm_wait_action_complete(armInfo);
 
-    // move to target
-    armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max * 1.5f;
-    armInfo.wristlen = -50 / armInfo.base_len;
-    arm_update(armInfo);
-    arm_update(armInfo);
+    arm.updateJoints(-50 / arm.base_len);
+    arm.updateJoints(-50 / arm.base_len);
     time_sleep(1.0);
-    // arm_wait_action_complete(armInfo);
 
-    // grab
-    // set_claw_target(claw_ctl, CLAW_CLOSE);
-
-    // move to neutral position
-    // AppState::get().move_to_target = false;
-    armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
-    arm_update(armInfo);
-    // time_sleep(2.0);
-    armInfo.joints.straighten();
-    armInfo.joints.straighten();
-    // arm.joints.reset();
-    // arm.joints.ideal_chain.reset();
-    // arm_wait_action_complete(armInfo);
-
-    // release
-    // set_claw_target(claw_ctl, CLAW_OPEN);
+    arm.joints.straighten();
   }
+}
 
-  // DUMP(avg_err);
-  // wrist.tid.join();
+static void find_chessboard_thread(cv::Mat &frame,
+                                   homo::ChessBoardSolver &solver) {
+  while (AppState::get().run && AppState::get().conn_accepted) {
+    if (frame.empty())
+      continue;
 
-  update_thread.join();
+    if (solver.getTransform(frame)) {
+      AppState::get().found_chessboard = true;
+    }
+  }
 }
 
 void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
                  Jpeg &cam_pic, std::vector<uint8_t> &cam_outframe) {
+  cv::Point2i clickpt(0, 0);
+  cv::Point3d worldpt;
+  homo::ChessBoardSolver homographySolver;
+
   std::string yoloclasses = jsettings["yolo_classfile"];
   std::string yolomodel = jsettings["yolo_model"];
   std::string yoloconfig = jsettings["yolo_config"];
+  yolo::TrackingInfo track(jsettings["cam_target"], yoloclasses);
 
   yolo::YoloInfo yo(cv::Size(256, 256));
-  yolo::TrackingInfo track(jsettings["cam_target"], yoloclasses);
   cv::dnn::Net net = cv::dnn::Net();
   yolo::create_dnn(yo, net, yolomodel, yoloconfig);
 
-  homo::HomoTransform trans;
-  cv::Size pattern_size = cv::Size(4, 3);
-  float square_size = 21;
-  std::vector<cv::Point2f> corners;
-  cv::Mat H;
-  cv::Point2i clickpt(0, 0);
-  cv::Point3d worldpt;
+  cv::Mat frame, outframe, raw_data;
 
   cv::FileStorage fs(cv::samples::findFile(jsettings["cam_intrinsics"]),
                      cv::FileStorage::READ);
-  cv::Mat cameraMatrix, distCoeffs;
-  fs["camera_matrix"] >> cameraMatrix;
-  fs["distortion_coefficients"] >> distCoeffs;
+  fs["camera_matrix"] >> homographySolver.cameraMatrix;
+  fs["distortion_coefficients"] >> homographySolver.distCoeffs;
 
-  cv::Mat frame, outframe, raw_data;
-  bool found = false;
+  std::thread findChessboardThread(find_chessboard_thread, std::ref(frame),
+                                   std::ref(homographySolver));
+
   while (AppState::get().run && AppState::get().conn_accepted) {
     if (cam_pic.size == 0) {
       time_sleep(0.5);
@@ -279,70 +213,12 @@ void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
     if (frame.empty())
       continue;
 
-    // rotate 180 degrees
-    // cv::Point2f frame_cen(frame.cols * 0.5f, frame.rows * 0.5f);
-    // cv::Mat rot_mat = getRotationMatrix2D(frame_cen, 180, 1.0);
-    // cv::warpAffine(frame, frame, rot_mat, frame.size());
-
     outframe = frame.clone();
 
     std::vector<cv::Point2f> cornersTemp;
-    if (findChessboardCorners(frame, pattern_size, cornersTemp)) {
-      found = true;
-      corners = cornersTemp;
-      // corner points in the object frame
-      std::vector<cv::Point3f> objectPoints;
-      for (int i = 0; i < pattern_size.height; i++)
-        for (int j = 0; j < pattern_size.width; j++)
-          objectPoints.push_back(
-              cv::Point3f(float(j * square_size), float(i * square_size), 0));
-
-      std::vector<cv::Point2f> objectPointsPlanar;
-      for (size_t i = 0; i < objectPoints.size(); i++)
-        objectPointsPlanar.push_back(
-            cv::Point2f(objectPoints[i].x, objectPoints[i].y));
-
-      std::vector<cv::Point2f> imagePoints;
-      undistortPoints(corners, imagePoints, cameraMatrix, distCoeffs);
-
-      // estimate homography matrix
-      H = findHomography(objectPointsPlanar, imagePoints);
-
-      // estimate camera pose
-      homo::GetHomoTransform(H, trans);
-      trans.tvec.at<double>(1) += 40;
-      // trans.tvec.at<double>(0) -= 20;
-      std::vector<cv::Point3f> axes;
-      float ax_len = square_size * 2;
-      axes.push_back(objectPoints[0]);
-      axes.push_back(objectPoints[0] + cv::Point3f(ax_len, 0, 0));
-      axes.push_back(objectPoints[0] + cv::Point3f(0, ax_len, 0));
-      axes.push_back(objectPoints[0] + cv::Point3f(0, 0, ax_len));
-
-      std::vector<cv::Point2f> axesProjected;
-      std::vector<cv::Point2f> cornersProjected;
-      projectPoints(objectPoints, trans.rotation, trans.tvec, cameraMatrix,
-                    distCoeffs, cornersProjected);
-      projectPoints(axes, trans.rotation, trans.tvec, cameraMatrix, distCoeffs,
-                    axesProjected);
-
-      cv::Point2f obj_cen(0, 0);
-      for (cv::Point2f &p : cornersProjected) {
-        obj_cen += p;
-      }
-      obj_cen.x /= objectPoints.size();
-      obj_cen.y /= objectPoints.size();
-
-      cv::Scalar axcolors[] = {cv::Scalar(255, 0, 0), cv::Scalar(0, 255, 0),
-                               cv::Scalar(0, 0, 255)};
-
-      for (int i = 1; i < axesProjected.size(); i++) {
-        line(outframe, axesProjected[0], axesProjected[i], axcolors[i - 1], 2);
-      }
-
-      for (cv::Point2f &c : corners) {
-        circle(outframe, c, 5, cv::Scalar(0, 0, 255));
-      }
+    if (AppState::get().found_chessboard) {
+      homographySolver.drawAxes(outframe);
+      homographySolver.drawCorners(outframe);
     }
 
     yolo::preprocess(frame, yo, net);
@@ -357,8 +233,10 @@ void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
                 0.4, cv::Scalar(0, 255, 0));
 
     if (track.in_frame) {
-      if (found)
-        homo::inverseProjectPoint(track.base, worldpt, cameraMatrix, trans);
+      if (AppState::get().found_chessboard)
+        homo::inverseProjectPoint(track.base, worldpt,
+                                  homographySolver.cameraMatrix,
+                                  homographySolver.T);
       circle(outframe, track.base, 5, cv::Scalar(0, 0, 255), 2);
       putText(outframe,
               cv::format("(%.3f, %.3f, %.3f)", worldpt.x, worldpt.y, worldpt.z),
@@ -399,64 +277,61 @@ void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
 
     AppState::get().frame_mut.lock();
     AppState::get().yolo_completed = true;
-    // AppState::get().ocv_buf.clear();
     cam_outframe.clear();
     std::vector<int> param(2);
     param[0] = cv::IMWRITE_JPEG_QUALITY;
     param[1] = 95; // default(95) 0-100
     cv::imencode(".jpg", outframe, cam_outframe, param);
-    // cam_outframe = outframe.clone();
     AppState::get().pic_needs_update = true;
     AppState::get().frame_mut.unlock();
-    // waitKey(1);
   }
 
   // return NULL;
 }
 
-void arm_ctl_thread(ArmInfo &armInfo) {
-  bool first = true;
-  while (AppState::get().run) {
-    // vec3 v_target = AppState::get().arm_target;
-    // read_vec3(arm_ctl_sock, v_target);
-    if (!AppState::get().grab_trigger) {
-      time_sleep(0.1);
-      return;
-    }
-    AppState::get().grab_trigger = false;
+// void arm_ctl_thread(RobotArm &arm) {
+//   bool first = true;
+//   while (AppState::get().run) {
+//     // vec3 v_target = AppState::get().arm_target;
+//     // read_vec3(arm_ctl_sock, v_target);
+//     if (!AppState::get().grab_trigger) {
+//       time_sleep(0.1);
+//       return;
+//     }
+//     AppState::get().grab_trigger = false;
 
-    if (first) {
-      // set_claw_target(claw_ctl, CLAW_OPEN);
-      armInfo.joints.straighten();
-      arm_wait_action_complete(armInfo);
-      first = false;
-    }
+//     if (first) {
+//       // set_claw_target(claw_ctl, CLAW_OPEN);
+//       armInfo.joints.straighten();
+//       arm_wait_action_complete(armInfo);
+//       first = false;
+//     }
 
-    // align arm to target
-    // AppState::get().arm_target = {-v_target.x + 90, -8, -v_target.y};
-    DUMP(armInfo.target);
-    armInfo.wristlen = 30;
-    AppState::get().move_to_target = true;
-    arm_wait_action_complete(armInfo);
+//     // align arm to target
+//     // AppState::get().arm_target = {-v_target.x + 90, -8, -v_target.y};
+//     DUMP(armInfo.target);
+//     armInfo.wristlen = 30;
+//     AppState::get().move_to_target = true;
+//     arm_wait_action_complete(armInfo);
 
-    // move to target
-    armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max * 1.5f;
-    armInfo.wristlen = -50;
-    arm_wait_action_complete(armInfo);
+//     // move to target
+//     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max * 1.5f;
+//     armInfo.wristlen = -50;
+//     arm_wait_action_complete(armInfo);
 
-    // grab
-    // set_claw_target(claw_ctl, CLAW_CLOSE);
+//     // grab
+//     // set_claw_target(claw_ctl, CLAW_CLOSE);
 
-    // move to neutral position
-    AppState::get().move_to_target = false;
-    armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
-    armInfo.joints.straighten();
-    arm_wait_action_complete(armInfo);
+//     // move to neutral position
+//     AppState::get().move_to_target = false;
+//     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
+//     armInfo.joints.straighten();
+//     arm_wait_action_complete(armInfo);
 
-    // release
-    // set_claw_target(claw_ctl, CLAW_OPEN);
-  }
-}
+//     // release
+//     // set_claw_target(claw_ctl, CLAW_OPEN);
+//   }
+// }
 
 void rover_ctl_thread(Rover &rover, GridGraph &navgraph) {
   std::vector<std::vector<glm::vec3>> nav_verts;

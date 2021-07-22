@@ -3,7 +3,7 @@
     "cam_intrinsics": "./out_camera_data.xml",
     "cam_servo_width": [
         1510,
-        1300
+        1340
     ],
     "cam_target": "bottle",
     "debug_file": "validation_layers.txt",
@@ -44,8 +44,8 @@
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        -1565,
-        -430
+        -1492,
+        -399
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",

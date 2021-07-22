@@ -3,11 +3,13 @@
 #include "../app/app_state.hpp"
 #include "../util/xn_math.hpp"
 #include "../util/xn_vec.hpp"
-#include "xn_gpio.hpp"
+// #include "xn_gpio.hpp"
 #include "xn_ik.hpp"
 #include "xn_log.hpp"
 #include "xn_pointcloud.hpp"
 #include "xn_search.hpp"
+#include <arm/xn_gpio.hpp>
+
 
 #ifndef XN_LIT
 #define XN_LIT 1

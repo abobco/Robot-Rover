@@ -50,13 +50,14 @@
 #include <cstring>
 // #include <netdb.h>
 #include "../util/xn_vec.hpp"
-#include "xn_gpio.hpp"
 #include "xn_log.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <type_traits>
+
 // #include <unistd.h>
+#include <arm/xn_gpio.hpp>
 #include <esp32/rover/robot_instructions.h>
 #include <esp32/rover/robot_ipconfig.h>
 

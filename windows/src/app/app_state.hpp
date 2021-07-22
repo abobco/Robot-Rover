@@ -49,6 +49,7 @@ public:
   bool move_to_target = false;
   bool grab_trigger = false;
   bool update_sim_grab_target = false;
+  bool found_chessboard = false;
   bool gui_windows_need_update = true;
 };
 
