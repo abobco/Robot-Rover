@@ -535,7 +535,7 @@ class SmoothServo {
     SmoothServo() {}
 
     SmoothServo(ServoAngular servo, vec3 axis = {1, 0, 0}, vec3 position = {0, 0, 0},
-                int mid_width = 0, float t_max = 10) {
+                int mid_width = 0, float t_max = 6) {
         this->servo = ServoAngular(servo.ctl_pin, servo.min_width, servo.max_width);
         if (mid_width == 0)
             this->mid_offset = 0;

@@ -96,10 +96,10 @@ void cam_io_thread() {
 
         cv::imencode(".jpg", image, buff, param);
 
-        int32_t size = buff.size();
-        int32_t tmp = htonl(size);
+        int64_t size = buff.size();
+        int64_t tmp = htonl(size);
         send_buf(cam_sock, (char *)&tmp, sizeof(tmp));
-        DUMP(tmp);
+        // DUMP(tmp);
 
         send_buf(cam_sock, (char *)&buff.front(), size);
     }
@@ -244,7 +244,7 @@ void arm_ctl_thread() {
 
         // align arm to target
         // offset = {60, 0, -22}
-        target = {-v_target.x + 30, -8, -v_target.y};
+        target = {-v_target.x, -8, -v_target.y};
         // DUMP(target);
         wristlen = 30;
         // move_to_target = true;
