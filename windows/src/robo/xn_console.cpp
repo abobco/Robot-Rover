@@ -138,23 +138,23 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
                                  std::ref(ostream), std::ref(istream),
                                  std::ref(AppState::get().conn_accepted)));
 
-      std::thread connection_jobs[SOCKET_COUNT];
+      // std::thread connection_jobs[SOCKET_COUNT];
       for (unsigned i = 0; i < SOCKET_COUNT; i++) {
         if (i == SOCKET_ESP_DATA)
           continue;
-        connection_jobs[i] = std::thread([&]() {
-          closesocket(sockets[i]);
-          sockets[i] = accept_connection_blocking(BASE_PORT + i);
-          if (sockets[i] < 0)
-            error("ERROR on accept");
-        });
+        // connection_jobs[i] = std::thread([&]() {
+        closesocket(sockets[i]);
+        sockets[i] = accept_connection_blocking(BASE_PORT + i);
+        if (sockets[i] < 0)
+          error("ERROR on accept");
+        // });
       }
 
-      for (unsigned i = 0; i < SOCKET_COUNT; i++) {
-        if (i == SOCKET_ESP_DATA)
-          continue;
-        connection_jobs[i].join();
-      }
+      // for (unsigned i = 0; i < SOCKET_COUNT; i++) {
+      //   if (i == SOCKET_ESP_DATA)
+      //     continue;
+      //   connection_jobs[i].join();
+      // }
 
       jobs.push_back(
           std::thread(esp_log_thread, std::ref(sockets[SOCKET_ESP_LOG])));
@@ -167,7 +167,7 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
                                  std::ref(robot)));
       jobs.push_back(
           std::thread(yolo_thread, settings, std::ref(sockets[SOCKET_RPI_ARM]),
-                      std::ref(robot.armInfo.target), std::ref(robot.cam_pic),
+                      std::ref(robot.arm.target), std::ref(robot.cam_pic),
                       std::ref(robot.cam_outframe)));
       int i = 0;
       for (auto &j : jobs) {
@@ -187,8 +187,9 @@ void SshConsole::Draw(const char *title, bool *p_open, RobotController &robot,
       sockets[SOCKET_ESP_DATA] =
           accept_connection_blocking(BASE_PORT + SOCKET_ESP_DATA);
       robot.rover.esp32 = sockets[SOCKET_ESP_DATA];
-      robot.rover.wheelDiameter = 200 * (float)settings["wheel_diameter"];
-      robot.rover.wheelSeparation = 200 * (float)settings["wheel_separation"];
+      const float conv = settings["unit_conversion_factor"];
+      robot.rover.wheelDiameter = conv * (float)settings["wheel_diameter"];
+      robot.rover.wheelSeparation = conv * (float)settings["wheel_separation"];
       robot.rover.motorCpr = settings["motor_cpr"];
       rover_ctl_thread(robot.rover, navgraph);
     }));

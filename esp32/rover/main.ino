@@ -162,7 +162,7 @@ void setup() {
   // delay(2000);
   // mpu.setup(0x68);
   // mpu.calibrateAccelGyro();
-  // SerialTF.begin(115200);
+  SerialTF.begin(115200);
 
   while (!client.connected()) {
     client.connect(laptop_ip, laptop_port);

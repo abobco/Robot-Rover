@@ -31,6 +31,7 @@ public:
   std::mutex mut, frame_mut, rpi_log_mut, path_mut, arm_mut;
 
   bool run = 1;
+  bool sim_rover = true;
   bool pic_needs_update = false;
   bool conn_accepted = false;
   bool should_scan = false;
@@ -48,6 +49,7 @@ public:
   bool move_to_target = false;
   bool grab_trigger = false;
   bool update_sim_grab_target = false;
+  bool found_chessboard = false;
   bool gui_windows_need_update = true;
 };
 

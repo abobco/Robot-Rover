@@ -44,7 +44,8 @@
 
 */
 #pragma once
-#include "xn_gpio.hpp"
+// #include "xn_gpio.hpp"
+#include <arm/xn_gpio.hpp>
 #include <queue>
 #include <unordered_map>
 #include <vector>

@@ -1,12 +1,14 @@
 #pragma once
 #include "../robo/xn_car_virtual.hpp"
 #include "../robo/xn_homo.hpp"
-#include "../robo/xn_ik.hpp"
 #include "../robo/xn_rover.hpp"
 #include "../robo/xn_yolo.hpp"
 #include "app_state.hpp"
+#include <arm/xn_ik.hpp>
 #include <opencv2/opencv.hpp>
 #include <util/xn_json.hpp>
+
+#include <arm/xn_arm.hpp>
 
 namespace xn {
 
@@ -33,7 +35,8 @@ struct RobotController {
   Jpeg cam_pic_processed;
   std::vector<uint8_t> cam_outframe;
 
-  ArmInfo armInfo;
+  // ArmInfo armInfo;
+  RobotArm arm;
 
   Rover rover;
 };
@@ -96,13 +99,11 @@ void esp_log_thread(SOCKET &esp_log);
 
 void arm_wait_action_complete(ArmInfo &arm, double timeout = 10);
 
-void arm_update(ArmInfo &arm);
+// void arm_update(ArmInfo &arm);
 
-void arm_update_thread(ArmInfo &arm);
+// void arm_update_thread(ArmInfo &arm);
 
-void arm_ctl_thread(ArmInfo &arm);
-
-void ik_sim_thread(ArmInfo &armInfo);
+void ik_sim_thread(RobotArm &arm);
 
 void rover_ctl_thread(Rover &rover, GridGraph &navgraph);
 

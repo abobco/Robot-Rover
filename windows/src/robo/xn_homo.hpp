@@ -19,6 +19,30 @@ void inverseProjectPoint(const cv::Point2i &uv, cv::Point3d &out,
                          const cv::Mat &cam_mat,
                          const HomoTransform &transform);
 
+struct ChessBoardSolver {
+  cv::Mat cameraMatrix;
+  cv::Mat distCoeffs;
+  cv::Mat H;
+  homo::HomoTransform T;
+  std::vector<cv::Point2f> corners;
+  std::vector<cv::Point3f> objectPoints;
+  std::vector<cv::Point2f> objectPointsPlanar;
+  const float square_size = 21;
+  const cv::Size pattern_size = cv::Size(4, 3);
+
+  ChessBoardSolver() {
+    const size_t pointCount = pattern_size.width * pattern_size.height;
+    objectPoints.resize(pointCount);
+    objectPointsPlanar.resize(pointCount);
+  }
+
+  bool getTransform(const cv::Mat &frame);
+
+  void drawAxes(cv::Mat &frame);
+
+  void drawCorners(cv::Mat &frame);
+};
+
 static std::vector<cv::Point3d> Face3D({
     cv::Point3d(6.825897, 6.760612, 4.402142),
     cv::Point3d(1.330353, 7.122144, 6.903745),   //#29 left brow right corner

@@ -15,32 +15,35 @@ using namespace xn;
 
 static const std::string DEFAULT_SETTINGS_FILE_PATH =
     "C:/Code/opengl-es/robot-host-app/windows/assets/config/vk_config.json";
-
 std::string settings_filepath = DEFAULT_SETTINGS_FILE_PATH;
 json settings;
+
 std::vector<PointCloud> PointCloud::all;
 bool mouse_held = false;
 
-void console_update_thread(SshConsole *console) {
-  StreamHook cout_hook(std::cout), cerr_hook(std::cerr);
-  while (AppState::get().run) {
-    std::string contents;
-    if (console->istream.tellp() > 0) {
-      contents = console->istream.str();
-      console->AddLog("%s", contents.c_str());
-      console->istream.str(std::string());
-    }
-    while (cout_hook.bytesAvailable()) {
-      cout_hook.dump(contents);
-      console->AddLog("# %s", contents.c_str());
-    }
-    while (cerr_hook.bytesAvailable()) {
-      cerr_hook.dump(contents);
-      console->AddLog("[error] %s", contents.c_str());
-    }
-    time_sleep(0.1);
+void console_update_thread(SshConsole *console);
+
+// graphics mesh data for navigation area
+struct NavMesh : public vulkan::Mesh {
+  NavMesh(vulkan::Context &ctx, const PointCloud &pc) {
+    std::vector<glm::vec3> nv;
+    std::vector<vulkan::Vertex> verts;
+    std::vector<uint16_t> indices;
+    size_t i;
+    pc.toNavmesh(nv, glm::vec3(0, 1, 0));
+    indices.resize(nv.size());
+    verts.resize(nv.size());
+    for (i = 0; i < nv.size(); i++)
+      verts[i] = {nv[i], glm::vec3(1), glm::vec2(1), glm::vec3(0, 1, 0)};
+    for (i = 0; i < nv.size(); i++)
+      indices[i] = i;
+
+    vertexBuffer.create(ctx.commandPool.handle, ctx.device, ctx.physicalDevice,
+                        verts);
+    indexBuffer.create(ctx.commandPool.handle, ctx.device, ctx.physicalDevice,
+                       indices);
   }
-}
+};
 
 class App {
 public:
@@ -92,7 +95,7 @@ public:
     console = new SshConsole(settings);
     robot = new RobotController();
     threads.push_back(std::thread(console_update_thread, console));
-    threads.push_back(std::thread(ik_sim_thread, std::ref(robot->armInfo)));
+    threads.push_back(std::thread(ik_sim_thread, std::ref(robot->arm)));
     threads.push_back(
         std::thread(car_sim_thread, std::ref(navgraph), std::ref(*robot)));
 
@@ -107,8 +110,8 @@ public:
       navgraph.graph = preprocess_graph(navgraph.cells);
     }
 
-    cubeMesh = vulkan::Mesh(ctx, vulkan::cube_separated_corners_verts,
-                            vulkan::cube_separated_corners_indices);
+    cubeMesh = vulkan::Mesh(ctx, vulkan::getCubeFaceVerts(),
+                            vulkan::getCubeFaceIndices());
     gridMesh = vulkan::Mesh::gen_grid(ctx, navgraph.boxSize, 100, 100);
 
     createScene();
@@ -131,13 +134,24 @@ private:
       if (AppState::get().path_needs_update) {
         AppState::get().path_needs_update = false;
         recreatePath();
-      } else if (navgraph.path.size() == 0 &&
-                 scene.drawMap.find("path") != scene.drawMap.end()) {
-        scene.root.popChild(scene.drawMap["path"]->id);
+      } else if (navgraph.path.size() == 0) {
+        scene.popChild("path");
+        // scene.root.popChild(scene.drawMap["path"]->id);
       }
 
       drawFrame();
     }
+  }
+
+  void updatePointCloudMesh() {
+    scene.popChild("scan");
+    std::vector<glm::vec3> all_points;
+    for (auto &p : PointCloud::all)
+      all_points.insert(all_points.begin(), p.points.begin(), p.points.end());
+    scene.addChild(
+        "color_lit",
+        vulkan::Mesh::gen_box_batch(ctx, all_points, glm::vec3(0.1f)),
+        PushConstColor(vulkan::sample_colors[0]));
   }
 
   void createScene() {
@@ -145,15 +159,7 @@ private:
     scene.addChild("lightSource", "textured", &cubeMesh);
     scene.addChild("cube", "lit", &cubeMesh);
 
-    { // create lidar scan batch drawnode
-      std::vector<glm::vec3> all_points;
-      for (auto &p : PointCloud::all)
-        all_points.insert(all_points.begin(), p.points.begin(), p.points.end());
-      scene.addChild(
-          "color_lit",
-          vulkan::Mesh::gen_box_batch(ctx, all_points, glm::vec3(0.1f)),
-          PushConstColor(vulkan::sample_colors[0]));
-    }
+    updatePointCloudMesh();
 
     { // add gridbox batch drawnode
       std::vector<glm::vec3> gridverts;
@@ -186,23 +192,24 @@ private:
     scene.drawMap["arm"] = scene.root.addChild(new DrawNode());
     vulkan::GraphicsPipeline &gp = scene.pipelineMap["color_lit"];
     AppState::get().arm_mut.lock();
-    for (int i = 0; i < robot->armInfo.joints.numJoints; i++)
+    for (int i = 0; i < robot->arm.joints.numJoints; i++)
       scene.drawMap["arm"]->addChild(
           new DrawNode(&gp, &cubeMesh),
-          PushConstColor(robot->armInfo.joints.positions[i].toGLM(),
+          PushConstColor(robot->arm.joints.positions[i].toGLM(),
                          glm::vec3(0.1f), vulkan::sample_colors[2]));
     AppState::get().arm_mut.unlock();
 
     scene.drawMap["target"] = scene.drawMap["arm"]->addChild(
         new DrawNode(&gp, &cubeMesh),
-        PushConstColor(robot->armInfo.target.toGLM(), glm::vec3(0.1f),
+        PushConstColor(robot->arm.target.toGLM(), glm::vec3(0.1f),
                        glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
     // create car mesh
-    scene.addChild("car", "color_lit",
-                   new vulkan::Mesh(ctx, vulkan::triverts, vulkan::tri_indices),
-                   PushConstColor(glm::vec3(0, 0.1f, 0), glm::vec3(0.25f),
-                                  glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)));
+    scene.addChild(
+        "car", "color_lit",
+        new vulkan::Mesh(ctx, vulkan::getTriVerts(), vulkan::getTriIndices()),
+        PushConstColor(glm::vec3(0, 0.1f, 0), glm::vec3(0.25f),
+                       glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)));
 
     // create grid
     float half_ext = navgraph.boxSize * 0.5f;
@@ -357,15 +364,14 @@ private:
     scene.drawMap["car"]->setPushConstant(pcc);
     model = transform_model(car_pos_3d);
     model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-    model =
-        transform_model(robot->armInfo.target.toGLM(), glm::vec3(0.1f), model);
+    model = transform_model(robot->arm.target.toGLM(), glm::vec3(0.1f), model);
     scene.drawMap["target"]->setPushConstant(
         PushConstColor(model, glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
-    for (auto i = 0; i < robot->armInfo.joints.numJoints; i++) {
+    for (auto i = 0; i < robot->arm.joints.numJoints; i++) {
       model = transform_model(car_pos_3d);
       model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-      model = transform_model(robot->armInfo.joints.positions[i].toGLM(),
+      model = transform_model(robot->arm.joints.positions[i].toGLM(),
                               glm::vec3(0.1f), model);
       scene.drawMap["arm"]->children[i]->setPushConstant(
           PushConstColor(model, vulkan::sample_colors[2]));
@@ -424,7 +430,7 @@ private:
                             robot->rover.position.y);
       glm::ivec2 start =
           world_to_grid(start_world, navgraph.boxSize, navgraph.offset);
-      Plane p{0, vulkan::axes.y};
+      Plane p{0, {0, 1, 0}};
       glm::vec3 ray_a, ray_b, q;
       scene.mainCamera.get_pixelray(cursor, winsize, ray_a, ray_b);
       float t = 0;
@@ -489,43 +495,49 @@ private:
   }
 
   void recreatePath() {
-    if (scene.drawMap.find("path") != scene.drawMap.end()) {
-      delete scene.root.popChild(scene.drawMap["path"]->id);
-    }
-    scene.drawMap["path"] = scene.root.addChild(new DrawNode());
+    if (AppState::get().path_mut.try_lock()) {
+      if (scene.drawMap.find("path") != scene.drawMap.end()) {
+        delete scene.popChild("path");
+      }
+      scene.drawMap["path"] = scene.root.addChild(new DrawNode());
 
-    vulkan::GraphicsPipeline &gp = scene.pipelineMap["color_lit"];
-    for (auto i = 0; i < navgraph.path.size(); i++) {
-      DrawNode *n =
-          scene.drawMap["path"]->addChild(new DrawNode(&gp, &cubeMesh));
-      glm::mat4 model =
-          transform_model(navgraph.offset, glm::vec3(navgraph.boxSize));
-      model = glm::translate(
-          model, glm::vec3(navgraph.path[i].x, -0.25, navgraph.path[i].y));
+      vulkan::GraphicsPipeline &gp = scene.pipelineMap["color_lit"];
+      for (auto i = 0; i < navgraph.path.size(); i++) {
+        DrawNode *n =
+            scene.drawMap["path"]->addChild(new DrawNode(&gp, &cubeMesh));
+        glm::mat4 model =
+            transform_model(navgraph.offset, glm::vec3(navgraph.boxSize));
+        model = glm::translate(
+            model, glm::vec3(navgraph.path[i].x, -0.25, navgraph.path[i].y));
 
-      glm::vec4 color;
-      if (i == 0)
-        color = glm::vec4(0, 0, 0.8, 1.0);
-      else if (i == navgraph.path.size() - 1)
-        color = glm::vec4(0.8, 0, 0, 1.0);
-      else
-        color = glm::vec4(0, 0.8, 0, 1.0);
-      n->setPushConstant(PushConstColor{model, color});
+        glm::vec4 color;
+        if (i == 0)
+          color = glm::vec4(0, 0, 0.8, 1.0);
+        else if (i == navgraph.path.size() - 1)
+          color = glm::vec4(0.8, 0, 0, 1.0);
+        else
+          color = glm::vec4(0, 0.8, 0, 1.0);
+        n->setPushConstant(PushConstColor{model, color});
+      }
+
+      AppState::get().path_mut.unlock();
+    } else {
+      // AppState::get().path_needs_update = true;
     }
   }
 
   void createArmMesh() {
-    int n = robot->armInfo.joints.numJoints;
+    int n = robot->arm.joints.numJoints;
     glm::vec3 arm_color(0.2, 0.2, 0.9);
     std::vector<vulkan::Vertex> arm_verts(n);
     std::vector<uint16_t> arm_indices;
     glm::vec3 car_pos_3d(robot->rover.position.x, 0.1, robot->rover.position.y);
     float car_ang_corrected = (float)-M_PI_2 + robot->rover.rotation;
     for (auto i = 0; i < n; i++) {
-      glm::vec3 pos = robot->armInfo.joints.positions[i].toGLM();
+      glm::vec3 pos = robot->arm.joints.positions[i].toGLM();
       glm::mat4 model = transform_model(car_pos_3d);
       model = rotate_eulers(glm::vec3(0, car_ang_corrected, 0), model);
-      model = transform_model(robot->armInfo.joints.positions[i].toGLM(),
+      model = transform_model(robot->arm.joints.positions[i].toGLM(),
                               glm::vec3(1), model);
       arm_verts[i] = {model * glm::vec4(0, 0, 0, 1), arm_color, glm::vec2(1),
                       glm::vec3(0, 1, 0)};
@@ -597,4 +609,25 @@ int main(int argc, char **argv) {
   }
 
   return EXIT_SUCCESS;
+}
+
+void console_update_thread(SshConsole *console) {
+  StreamHook cout_hook(std::cout), cerr_hook(std::cerr);
+  while (AppState::get().run) {
+    std::string contents;
+    if (console->istream.tellp() > 0) {
+      contents = console->istream.str();
+      console->AddLog("%s", contents.c_str());
+      console->istream.str(std::string());
+    }
+    while (cout_hook.bytesAvailable()) {
+      cout_hook.dump(contents);
+      console->AddLog("# %s", contents.c_str());
+    }
+    while (cerr_hook.bytesAvailable()) {
+      cerr_hook.dump(contents);
+      console->AddLog("[error] %s", contents.c_str());
+    }
+    time_sleep(0.1);
+  }
 }

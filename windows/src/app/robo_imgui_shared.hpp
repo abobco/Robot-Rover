@@ -46,7 +46,7 @@ public:
 
     if (ImGui::TreeNode("Servo Arm")) {
 
-      ImGui::SliderFloat3("target", (float *)&robot.armInfo.target, -4.0, 4.0,
+      ImGui::SliderFloat3("target", (float *)&robot.arm.target, -4.0, 4.0,
                           "%.2f", 0);
 
       ImGui::TreePop();
@@ -103,8 +103,7 @@ struct TextureWindow {
         AppState::get().grab_trigger = true;
     }
 
-    ImGui::SliderFloat3("arm_target", (float *)&robot.armInfo.target, -1.0,
-                        1.0);
+    ImGui::SliderFloat3("arm_target", (float *)&robot.arm.target, -1.0, 1.0);
     ImGui::End();
   }
 };

@@ -20,6 +20,29 @@
 namespace xn {
 template <class T> using std_vec2d = std::vector<std::vector<T>>;
 
+class BezierCurve {
+public:
+  vec2 points[4];
+
+  BezierCurve() {
+    points[0] = {0, 0};
+    points[1] = {0.5, 0};
+    points[2] = {0.5, 1};
+    points[3] = {1, 1};
+  }
+
+  BezierCurve(vec2 points[]) {
+    for (int i = 0; i < 4; i++)
+      this->points[i] = points[i];
+  }
+
+  inline vec2 solve(float t) {
+    return points[0] * (1 - t) * (1 - t) * (1 - t) +
+           points[1] * (1 - t) * (1 - t) * t * 3 +
+           points[2] * (1 - t) * t * t * 3 + points[3] * t * t * t;
+  }
+};
+
 struct Eigen {
   float val;
   glm::vec3 vec;
