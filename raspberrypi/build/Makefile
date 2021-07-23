@@ -67,17 +67,6 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target package_source
-package_source:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CPackSourceConfig.cmake
-.PHONY : package_source
-
-# Special rule for the target package_source
-package_source/fast: package_source
-
-.PHONY : package_source/fast
-
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
@@ -88,6 +77,17 @@ package: preinstall
 package/fast: package
 
 .PHONY : package/fast
+
+# Special rule for the target package_source
+package_source:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
+	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build/CPackSourceConfig.cmake
+.PHONY : package_source
+
+# Special rule for the target package_source
+package_source/fast: package_source
+
+.PHONY : package_source/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -133,95 +133,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named led_pwm
+# Target rules for targets named arm_controller_main
 
 # Build rule for target.
-led_pwm: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 led_pwm
-.PHONY : led_pwm
+arm_controller_main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arm_controller_main
+.PHONY : arm_controller_main
 
 # fast build rule for target.
-led_pwm/fast:
-	$(MAKE) -f CMakeFiles/led_pwm.dir/build.make CMakeFiles/led_pwm.dir/build
-.PHONY : led_pwm/fast
-
-#=============================================================================
-# Target rules for targets named pano
-
-# Build rule for target.
-pano: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pano
-.PHONY : pano
-
-# fast build rule for target.
-pano/fast:
-	$(MAKE) -f CMakeFiles/pano.dir/build.make CMakeFiles/pano.dir/build
-.PHONY : pano/fast
-
-#=============================================================================
-# Target rules for targets named arducam_sock
-
-# Build rule for target.
-arducam_sock: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 arducam_sock
-.PHONY : arducam_sock
-
-# fast build rule for target.
-arducam_sock/fast:
-	$(MAKE) -f CMakeFiles/arducam_sock.dir/build.make CMakeFiles/arducam_sock.dir/build
-.PHONY : arducam_sock/fast
-
-#=============================================================================
-# Target rules for targets named picam_stream
-
-# Build rule for target.
-picam_stream: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picam_stream
-.PHONY : picam_stream
-
-# fast build rule for target.
-picam_stream/fast:
-	$(MAKE) -f CMakeFiles/picam_stream.dir/build.make CMakeFiles/picam_stream.dir/build
-.PHONY : picam_stream/fast
-
-#=============================================================================
-# Target rules for targets named stepper
-
-# Build rule for target.
-stepper: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 stepper
-.PHONY : stepper
-
-# fast build rule for target.
-stepper/fast:
-	$(MAKE) -f CMakeFiles/stepper.dir/build.make CMakeFiles/stepper.dir/build
-.PHONY : stepper/fast
-
-#=============================================================================
-# Target rules for targets named picam_minimal
-
-# Build rule for target.
-picam_minimal: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picam_minimal
-.PHONY : picam_minimal
-
-# fast build rule for target.
-picam_minimal/fast:
-	$(MAKE) -f CMakeFiles/picam_minimal.dir/build.make CMakeFiles/picam_minimal.dir/build
-.PHONY : picam_minimal/fast
-
-#=============================================================================
-# Target rules for targets named servo
-
-# Build rule for target.
-servo: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 servo
-.PHONY : servo
-
-# fast build rule for target.
-servo/fast:
-	$(MAKE) -f CMakeFiles/servo.dir/build.make CMakeFiles/servo.dir/build
-.PHONY : servo/fast
+arm_controller_main/fast:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/build
+.PHONY : arm_controller_main/fast
 
 #=============================================================================
 # Target rules for targets named robolib
@@ -237,147 +159,17 @@ robolib/fast:
 .PHONY : robolib/fast
 
 #=============================================================================
-# Target rules for targets named arm_controller_main
+# Target rules for targets named arm_controller_main_old
 
 # Build rule for target.
-arm_controller_main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 arm_controller_main
-.PHONY : arm_controller_main
+arm_controller_main_old: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arm_controller_main_old
+.PHONY : arm_controller_main_old
 
 # fast build rule for target.
-arm_controller_main/fast:
-	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/build
-.PHONY : arm_controller_main/fast
-
-#=============================================================================
-# Target rules for targets named i2c_ctl
-
-# Build rule for target.
-i2c_ctl: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 i2c_ctl
-.PHONY : i2c_ctl
-
-# fast build rule for target.
-i2c_ctl/fast:
-	$(MAKE) -f CMakeFiles/i2c_ctl.dir/build.make CMakeFiles/i2c_ctl.dir/build
-.PHONY : i2c_ctl/fast
-
-#=============================================================================
-# Target rules for targets named red
-
-# Build rule for target.
-red: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 red
-.PHONY : red
-
-# fast build rule for target.
-red/fast:
-	$(MAKE) -f CMakeFiles/red.dir/build.make CMakeFiles/red.dir/build
-.PHONY : red/fast
-
-#=============================================================================
-# Target rules for targets named wavetimer
-
-# Build rule for target.
-wavetimer: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 wavetimer
-.PHONY : wavetimer
-
-# fast build rule for target.
-wavetimer/fast:
-	$(MAKE) -f CMakeFiles/wavetimer.dir/build.make CMakeFiles/wavetimer.dir/build
-.PHONY : wavetimer/fast
-
-#=============================================================================
-# Target rules for targets named picam_cv_stream
-
-# Build rule for target.
-picam_cv_stream: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picam_cv_stream
-.PHONY : picam_cv_stream
-
-# fast build rule for target.
-picam_cv_stream/fast:
-	$(MAKE) -f CMakeFiles/picam_cv_stream.dir/build.make CMakeFiles/picam_cv_stream.dir/build
-.PHONY : picam_cv_stream/fast
-
-#=============================================================================
-# Target rules for targets named serial_read
-
-# Build rule for target.
-serial_read: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 serial_read
-.PHONY : serial_read
-
-# fast build rule for target.
-serial_read/fast:
-	$(MAKE) -f CMakeFiles/serial_read.dir/build.make CMakeFiles/serial_read.dir/build
-.PHONY : serial_read/fast
-
-#=============================================================================
-# Target rules for targets named sock_client
-
-# Build rule for target.
-sock_client: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sock_client
-.PHONY : sock_client
-
-# fast build rule for target.
-sock_client/fast:
-	$(MAKE) -f CMakeFiles/sock_client.dir/build.make CMakeFiles/sock_client.dir/build
-.PHONY : sock_client/fast
-
-#=============================================================================
-# Target rules for targets named picam_cv_stream_lossless
-
-# Build rule for target.
-picam_cv_stream_lossless: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picam_cv_stream_lossless
-.PHONY : picam_cv_stream_lossless
-
-# fast build rule for target.
-picam_cv_stream_lossless/fast:
-	$(MAKE) -f CMakeFiles/picam_cv_stream_lossless.dir/build.make CMakeFiles/picam_cv_stream_lossless.dir/build
-.PHONY : picam_cv_stream_lossless/fast
-
-#=============================================================================
-# Target rules for targets named arducam_minimal
-
-# Build rule for target.
-arducam_minimal: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 arducam_minimal
-.PHONY : arducam_minimal
-
-# fast build rule for target.
-arducam_minimal/fast:
-	$(MAKE) -f CMakeFiles/arducam_minimal.dir/build.make CMakeFiles/arducam_minimal.dir/build
-.PHONY : arducam_minimal/fast
-
-#=============================================================================
-# Target rules for targets named sonar
-
-# Build rule for target.
-sonar: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sonar
-.PHONY : sonar
-
-# fast build rule for target.
-sonar/fast:
-	$(MAKE) -f CMakeFiles/sonar.dir/build.make CMakeFiles/sonar.dir/build
-.PHONY : sonar/fast
-
-#=============================================================================
-# Target rules for targets named picam_cv_minimal
-
-# Build rule for target.
-picam_cv_minimal: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picam_cv_minimal
-.PHONY : picam_cv_minimal
-
-# fast build rule for target.
-picam_cv_minimal/fast:
-	$(MAKE) -f CMakeFiles/picam_cv_minimal.dir/build.make CMakeFiles/picam_cv_minimal.dir/build
-.PHONY : picam_cv_minimal/fast
+arm_controller_main_old/fast:
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/build
+.PHONY : arm_controller_main_old/fast
 
 home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o: home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.c.o
 
@@ -487,59 +279,215 @@ home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s:
 	$(MAKE) -f CMakeFiles/robolib.dir/build.make CMakeFiles/robolib.dir/home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s
 .PHONY : home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.c.s
 
-src/arducam_minimal.o: src/arducam_minimal.cpp.o
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.o
 
-.PHONY : src/arducam_minimal.o
-
-# target to build an object file
-src/arducam_minimal.cpp.o:
-	$(MAKE) -f CMakeFiles/arducam_minimal.dir/build.make CMakeFiles/arducam_minimal.dir/src/arducam_minimal.cpp.o
-.PHONY : src/arducam_minimal.cpp.o
-
-src/arducam_minimal.i: src/arducam_minimal.cpp.i
-
-.PHONY : src/arducam_minimal.i
-
-# target to preprocess a source file
-src/arducam_minimal.cpp.i:
-	$(MAKE) -f CMakeFiles/arducam_minimal.dir/build.make CMakeFiles/arducam_minimal.dir/src/arducam_minimal.cpp.i
-.PHONY : src/arducam_minimal.cpp.i
-
-src/arducam_minimal.s: src/arducam_minimal.cpp.s
-
-.PHONY : src/arducam_minimal.s
-
-# target to generate assembly for a file
-src/arducam_minimal.cpp.s:
-	$(MAKE) -f CMakeFiles/arducam_minimal.dir/build.make CMakeFiles/arducam_minimal.dir/src/arducam_minimal.cpp.s
-.PHONY : src/arducam_minimal.cpp.s
-
-src/arducam_sock.o: src/arducam_sock.cpp.o
-
-.PHONY : src/arducam_sock.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.o
 
 # target to build an object file
-src/arducam_sock.cpp.o:
-	$(MAKE) -f CMakeFiles/arducam_sock.dir/build.make CMakeFiles/arducam_sock.dir/src/arducam_sock.cpp.o
-.PHONY : src/arducam_sock.cpp.o
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.o
 
-src/arducam_sock.i: src/arducam_sock.cpp.i
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.i
 
-.PHONY : src/arducam_sock.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.i
 
 # target to preprocess a source file
-src/arducam_sock.cpp.i:
-	$(MAKE) -f CMakeFiles/arducam_sock.dir/build.make CMakeFiles/arducam_sock.dir/src/arducam_sock.cpp.i
-.PHONY : src/arducam_sock.cpp.i
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.i
 
-src/arducam_sock.s: src/arducam_sock.cpp.s
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.s
 
-.PHONY : src/arducam_sock.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.s
 
 # target to generate assembly for a file
-src/arducam_sock.cpp.s:
-	$(MAKE) -f CMakeFiles/arducam_sock.dir/build.make CMakeFiles/arducam_sock.dir/src/arducam_sock.cpp.s
-.PHONY : src/arducam_sock.cpp.s
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.cpp.s
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.o
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.o
+
+# target to build an object file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.o
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.i
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.i
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.s
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.cpp.s
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.o
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.o
+
+# target to build an object file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.o
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.i
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.i
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.s
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.cpp.s
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.o
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.o
+
+# target to build an object file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.o
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.i
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.i
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.s
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.cpp.s
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.o
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.o
+
+# target to build an object file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.o
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.i
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.i
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.s
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.cpp.s
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.o: home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.o
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.o
+
+# target to build an object file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.o
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.o
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.i: home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.i
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.i
+
+# target to preprocess a source file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.i
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.i
+
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.s: home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.s
+
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.s
+
+# target to generate assembly for a file
+home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.s
+.PHONY : home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.cpp.s
+
+src/XNlib/xn_net.o: src/XNlib/xn_net.cpp.o
+
+.PHONY : src/XNlib/xn_net.o
+
+# target to build an object file
+src/XNlib/xn_net.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/src/XNlib/xn_net.cpp.o
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/XNlib/xn_net.cpp.o
+.PHONY : src/XNlib/xn_net.cpp.o
+
+src/XNlib/xn_net.i: src/XNlib/xn_net.cpp.i
+
+.PHONY : src/XNlib/xn_net.i
+
+# target to preprocess a source file
+src/XNlib/xn_net.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/src/XNlib/xn_net.cpp.i
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/XNlib/xn_net.cpp.i
+.PHONY : src/XNlib/xn_net.cpp.i
+
+src/XNlib/xn_net.s: src/XNlib/xn_net.cpp.s
+
+.PHONY : src/XNlib/xn_net.s
+
+# target to generate assembly for a file
+src/XNlib/xn_net.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/src/XNlib/xn_net.cpp.s
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/XNlib/xn_net.cpp.s
+.PHONY : src/XNlib/xn_net.cpp.s
 
 src/arm_controller_main.o: src/arm_controller_main.cpp.o
 
@@ -568,410 +516,32 @@ src/arm_controller_main.cpp.s:
 	$(MAKE) -f CMakeFiles/arm_controller_main.dir/build.make CMakeFiles/arm_controller_main.dir/src/arm_controller_main.cpp.s
 .PHONY : src/arm_controller_main.cpp.s
 
-src/i2c_controller.o: src/i2c_controller.cpp.o
+src/arm_controller_main_old.o: src/arm_controller_main_old.cpp.o
 
-.PHONY : src/i2c_controller.o
-
-# target to build an object file
-src/i2c_controller.cpp.o:
-	$(MAKE) -f CMakeFiles/i2c_ctl.dir/build.make CMakeFiles/i2c_ctl.dir/src/i2c_controller.cpp.o
-.PHONY : src/i2c_controller.cpp.o
-
-src/i2c_controller.i: src/i2c_controller.cpp.i
-
-.PHONY : src/i2c_controller.i
-
-# target to preprocess a source file
-src/i2c_controller.cpp.i:
-	$(MAKE) -f CMakeFiles/i2c_ctl.dir/build.make CMakeFiles/i2c_ctl.dir/src/i2c_controller.cpp.i
-.PHONY : src/i2c_controller.cpp.i
-
-src/i2c_controller.s: src/i2c_controller.cpp.s
-
-.PHONY : src/i2c_controller.s
-
-# target to generate assembly for a file
-src/i2c_controller.cpp.s:
-	$(MAKE) -f CMakeFiles/i2c_ctl.dir/build.make CMakeFiles/i2c_ctl.dir/src/i2c_controller.cpp.s
-.PHONY : src/i2c_controller.cpp.s
-
-src/led_pwm.o: src/led_pwm.cpp.o
-
-.PHONY : src/led_pwm.o
+.PHONY : src/arm_controller_main_old.o
 
 # target to build an object file
-src/led_pwm.cpp.o:
-	$(MAKE) -f CMakeFiles/led_pwm.dir/build.make CMakeFiles/led_pwm.dir/src/led_pwm.cpp.o
-.PHONY : src/led_pwm.cpp.o
+src/arm_controller_main_old.cpp.o:
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/arm_controller_main_old.cpp.o
+.PHONY : src/arm_controller_main_old.cpp.o
 
-src/led_pwm.i: src/led_pwm.cpp.i
+src/arm_controller_main_old.i: src/arm_controller_main_old.cpp.i
 
-.PHONY : src/led_pwm.i
-
-# target to preprocess a source file
-src/led_pwm.cpp.i:
-	$(MAKE) -f CMakeFiles/led_pwm.dir/build.make CMakeFiles/led_pwm.dir/src/led_pwm.cpp.i
-.PHONY : src/led_pwm.cpp.i
-
-src/led_pwm.s: src/led_pwm.cpp.s
-
-.PHONY : src/led_pwm.s
-
-# target to generate assembly for a file
-src/led_pwm.cpp.s:
-	$(MAKE) -f CMakeFiles/led_pwm.dir/build.make CMakeFiles/led_pwm.dir/src/led_pwm.cpp.s
-.PHONY : src/led_pwm.cpp.s
-
-src/pano_controller.o: src/pano_controller.cpp.o
-
-.PHONY : src/pano_controller.o
-
-# target to build an object file
-src/pano_controller.cpp.o:
-	$(MAKE) -f CMakeFiles/pano.dir/build.make CMakeFiles/pano.dir/src/pano_controller.cpp.o
-.PHONY : src/pano_controller.cpp.o
-
-src/pano_controller.i: src/pano_controller.cpp.i
-
-.PHONY : src/pano_controller.i
+.PHONY : src/arm_controller_main_old.i
 
 # target to preprocess a source file
-src/pano_controller.cpp.i:
-	$(MAKE) -f CMakeFiles/pano.dir/build.make CMakeFiles/pano.dir/src/pano_controller.cpp.i
-.PHONY : src/pano_controller.cpp.i
+src/arm_controller_main_old.cpp.i:
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/arm_controller_main_old.cpp.i
+.PHONY : src/arm_controller_main_old.cpp.i
 
-src/pano_controller.s: src/pano_controller.cpp.s
+src/arm_controller_main_old.s: src/arm_controller_main_old.cpp.s
 
-.PHONY : src/pano_controller.s
-
-# target to generate assembly for a file
-src/pano_controller.cpp.s:
-	$(MAKE) -f CMakeFiles/pano.dir/build.make CMakeFiles/pano.dir/src/pano_controller.cpp.s
-.PHONY : src/pano_controller.cpp.s
-
-src/picam_cv_minimal.o: src/picam_cv_minimal.cpp.o
-
-.PHONY : src/picam_cv_minimal.o
-
-# target to build an object file
-src/picam_cv_minimal.cpp.o:
-	$(MAKE) -f CMakeFiles/picam_cv_minimal.dir/build.make CMakeFiles/picam_cv_minimal.dir/src/picam_cv_minimal.cpp.o
-.PHONY : src/picam_cv_minimal.cpp.o
-
-src/picam_cv_minimal.i: src/picam_cv_minimal.cpp.i
-
-.PHONY : src/picam_cv_minimal.i
-
-# target to preprocess a source file
-src/picam_cv_minimal.cpp.i:
-	$(MAKE) -f CMakeFiles/picam_cv_minimal.dir/build.make CMakeFiles/picam_cv_minimal.dir/src/picam_cv_minimal.cpp.i
-.PHONY : src/picam_cv_minimal.cpp.i
-
-src/picam_cv_minimal.s: src/picam_cv_minimal.cpp.s
-
-.PHONY : src/picam_cv_minimal.s
+.PHONY : src/arm_controller_main_old.s
 
 # target to generate assembly for a file
-src/picam_cv_minimal.cpp.s:
-	$(MAKE) -f CMakeFiles/picam_cv_minimal.dir/build.make CMakeFiles/picam_cv_minimal.dir/src/picam_cv_minimal.cpp.s
-.PHONY : src/picam_cv_minimal.cpp.s
-
-src/picam_cv_stream.o: src/picam_cv_stream.cpp.o
-
-.PHONY : src/picam_cv_stream.o
-
-# target to build an object file
-src/picam_cv_stream.cpp.o:
-	$(MAKE) -f CMakeFiles/picam_cv_stream.dir/build.make CMakeFiles/picam_cv_stream.dir/src/picam_cv_stream.cpp.o
-.PHONY : src/picam_cv_stream.cpp.o
-
-src/picam_cv_stream.i: src/picam_cv_stream.cpp.i
-
-.PHONY : src/picam_cv_stream.i
-
-# target to preprocess a source file
-src/picam_cv_stream.cpp.i:
-	$(MAKE) -f CMakeFiles/picam_cv_stream.dir/build.make CMakeFiles/picam_cv_stream.dir/src/picam_cv_stream.cpp.i
-.PHONY : src/picam_cv_stream.cpp.i
-
-src/picam_cv_stream.s: src/picam_cv_stream.cpp.s
-
-.PHONY : src/picam_cv_stream.s
-
-# target to generate assembly for a file
-src/picam_cv_stream.cpp.s:
-	$(MAKE) -f CMakeFiles/picam_cv_stream.dir/build.make CMakeFiles/picam_cv_stream.dir/src/picam_cv_stream.cpp.s
-.PHONY : src/picam_cv_stream.cpp.s
-
-src/picam_cv_stream_lossless.o: src/picam_cv_stream_lossless.cpp.o
-
-.PHONY : src/picam_cv_stream_lossless.o
-
-# target to build an object file
-src/picam_cv_stream_lossless.cpp.o:
-	$(MAKE) -f CMakeFiles/picam_cv_stream_lossless.dir/build.make CMakeFiles/picam_cv_stream_lossless.dir/src/picam_cv_stream_lossless.cpp.o
-.PHONY : src/picam_cv_stream_lossless.cpp.o
-
-src/picam_cv_stream_lossless.i: src/picam_cv_stream_lossless.cpp.i
-
-.PHONY : src/picam_cv_stream_lossless.i
-
-# target to preprocess a source file
-src/picam_cv_stream_lossless.cpp.i:
-	$(MAKE) -f CMakeFiles/picam_cv_stream_lossless.dir/build.make CMakeFiles/picam_cv_stream_lossless.dir/src/picam_cv_stream_lossless.cpp.i
-.PHONY : src/picam_cv_stream_lossless.cpp.i
-
-src/picam_cv_stream_lossless.s: src/picam_cv_stream_lossless.cpp.s
-
-.PHONY : src/picam_cv_stream_lossless.s
-
-# target to generate assembly for a file
-src/picam_cv_stream_lossless.cpp.s:
-	$(MAKE) -f CMakeFiles/picam_cv_stream_lossless.dir/build.make CMakeFiles/picam_cv_stream_lossless.dir/src/picam_cv_stream_lossless.cpp.s
-.PHONY : src/picam_cv_stream_lossless.cpp.s
-
-src/picam_minimal.o: src/picam_minimal.cpp.o
-
-.PHONY : src/picam_minimal.o
-
-# target to build an object file
-src/picam_minimal.cpp.o:
-	$(MAKE) -f CMakeFiles/picam_minimal.dir/build.make CMakeFiles/picam_minimal.dir/src/picam_minimal.cpp.o
-.PHONY : src/picam_minimal.cpp.o
-
-src/picam_minimal.i: src/picam_minimal.cpp.i
-
-.PHONY : src/picam_minimal.i
-
-# target to preprocess a source file
-src/picam_minimal.cpp.i:
-	$(MAKE) -f CMakeFiles/picam_minimal.dir/build.make CMakeFiles/picam_minimal.dir/src/picam_minimal.cpp.i
-.PHONY : src/picam_minimal.cpp.i
-
-src/picam_minimal.s: src/picam_minimal.cpp.s
-
-.PHONY : src/picam_minimal.s
-
-# target to generate assembly for a file
-src/picam_minimal.cpp.s:
-	$(MAKE) -f CMakeFiles/picam_minimal.dir/build.make CMakeFiles/picam_minimal.dir/src/picam_minimal.cpp.s
-.PHONY : src/picam_minimal.cpp.s
-
-src/picam_stream.o: src/picam_stream.cpp.o
-
-.PHONY : src/picam_stream.o
-
-# target to build an object file
-src/picam_stream.cpp.o:
-	$(MAKE) -f CMakeFiles/picam_stream.dir/build.make CMakeFiles/picam_stream.dir/src/picam_stream.cpp.o
-.PHONY : src/picam_stream.cpp.o
-
-src/picam_stream.i: src/picam_stream.cpp.i
-
-.PHONY : src/picam_stream.i
-
-# target to preprocess a source file
-src/picam_stream.cpp.i:
-	$(MAKE) -f CMakeFiles/picam_stream.dir/build.make CMakeFiles/picam_stream.dir/src/picam_stream.cpp.i
-.PHONY : src/picam_stream.cpp.i
-
-src/picam_stream.s: src/picam_stream.cpp.s
-
-.PHONY : src/picam_stream.s
-
-# target to generate assembly for a file
-src/picam_stream.cpp.s:
-	$(MAKE) -f CMakeFiles/picam_stream.dir/build.make CMakeFiles/picam_stream.dir/src/picam_stream.cpp.s
-.PHONY : src/picam_stream.cpp.s
-
-src/rot_enc.o: src/rot_enc.cpp.o
-
-.PHONY : src/rot_enc.o
-
-# target to build an object file
-src/rot_enc.cpp.o:
-	$(MAKE) -f CMakeFiles/red.dir/build.make CMakeFiles/red.dir/src/rot_enc.cpp.o
-.PHONY : src/rot_enc.cpp.o
-
-src/rot_enc.i: src/rot_enc.cpp.i
-
-.PHONY : src/rot_enc.i
-
-# target to preprocess a source file
-src/rot_enc.cpp.i:
-	$(MAKE) -f CMakeFiles/red.dir/build.make CMakeFiles/red.dir/src/rot_enc.cpp.i
-.PHONY : src/rot_enc.cpp.i
-
-src/rot_enc.s: src/rot_enc.cpp.s
-
-.PHONY : src/rot_enc.s
-
-# target to generate assembly for a file
-src/rot_enc.cpp.s:
-	$(MAKE) -f CMakeFiles/red.dir/build.make CMakeFiles/red.dir/src/rot_enc.cpp.s
-.PHONY : src/rot_enc.cpp.s
-
-src/serial_read.o: src/serial_read.cpp.o
-
-.PHONY : src/serial_read.o
-
-# target to build an object file
-src/serial_read.cpp.o:
-	$(MAKE) -f CMakeFiles/serial_read.dir/build.make CMakeFiles/serial_read.dir/src/serial_read.cpp.o
-.PHONY : src/serial_read.cpp.o
-
-src/serial_read.i: src/serial_read.cpp.i
-
-.PHONY : src/serial_read.i
-
-# target to preprocess a source file
-src/serial_read.cpp.i:
-	$(MAKE) -f CMakeFiles/serial_read.dir/build.make CMakeFiles/serial_read.dir/src/serial_read.cpp.i
-.PHONY : src/serial_read.cpp.i
-
-src/serial_read.s: src/serial_read.cpp.s
-
-.PHONY : src/serial_read.s
-
-# target to generate assembly for a file
-src/serial_read.cpp.s:
-	$(MAKE) -f CMakeFiles/serial_read.dir/build.make CMakeFiles/serial_read.dir/src/serial_read.cpp.s
-.PHONY : src/serial_read.cpp.s
-
-src/servo_demo.o: src/servo_demo.cpp.o
-
-.PHONY : src/servo_demo.o
-
-# target to build an object file
-src/servo_demo.cpp.o:
-	$(MAKE) -f CMakeFiles/servo.dir/build.make CMakeFiles/servo.dir/src/servo_demo.cpp.o
-.PHONY : src/servo_demo.cpp.o
-
-src/servo_demo.i: src/servo_demo.cpp.i
-
-.PHONY : src/servo_demo.i
-
-# target to preprocess a source file
-src/servo_demo.cpp.i:
-	$(MAKE) -f CMakeFiles/servo.dir/build.make CMakeFiles/servo.dir/src/servo_demo.cpp.i
-.PHONY : src/servo_demo.cpp.i
-
-src/servo_demo.s: src/servo_demo.cpp.s
-
-.PHONY : src/servo_demo.s
-
-# target to generate assembly for a file
-src/servo_demo.cpp.s:
-	$(MAKE) -f CMakeFiles/servo.dir/build.make CMakeFiles/servo.dir/src/servo_demo.cpp.s
-.PHONY : src/servo_demo.cpp.s
-
-src/sock_client.o: src/sock_client.cpp.o
-
-.PHONY : src/sock_client.o
-
-# target to build an object file
-src/sock_client.cpp.o:
-	$(MAKE) -f CMakeFiles/sock_client.dir/build.make CMakeFiles/sock_client.dir/src/sock_client.cpp.o
-.PHONY : src/sock_client.cpp.o
-
-src/sock_client.i: src/sock_client.cpp.i
-
-.PHONY : src/sock_client.i
-
-# target to preprocess a source file
-src/sock_client.cpp.i:
-	$(MAKE) -f CMakeFiles/sock_client.dir/build.make CMakeFiles/sock_client.dir/src/sock_client.cpp.i
-.PHONY : src/sock_client.cpp.i
-
-src/sock_client.s: src/sock_client.cpp.s
-
-.PHONY : src/sock_client.s
-
-# target to generate assembly for a file
-src/sock_client.cpp.s:
-	$(MAKE) -f CMakeFiles/sock_client.dir/build.make CMakeFiles/sock_client.dir/src/sock_client.cpp.s
-.PHONY : src/sock_client.cpp.s
-
-src/sonar.o: src/sonar.cpp.o
-
-.PHONY : src/sonar.o
-
-# target to build an object file
-src/sonar.cpp.o:
-	$(MAKE) -f CMakeFiles/sonar.dir/build.make CMakeFiles/sonar.dir/src/sonar.cpp.o
-.PHONY : src/sonar.cpp.o
-
-src/sonar.i: src/sonar.cpp.i
-
-.PHONY : src/sonar.i
-
-# target to preprocess a source file
-src/sonar.cpp.i:
-	$(MAKE) -f CMakeFiles/sonar.dir/build.make CMakeFiles/sonar.dir/src/sonar.cpp.i
-.PHONY : src/sonar.cpp.i
-
-src/sonar.s: src/sonar.cpp.s
-
-.PHONY : src/sonar.s
-
-# target to generate assembly for a file
-src/sonar.cpp.s:
-	$(MAKE) -f CMakeFiles/sonar.dir/build.make CMakeFiles/sonar.dir/src/sonar.cpp.s
-.PHONY : src/sonar.cpp.s
-
-src/stepper.o: src/stepper.cpp.o
-
-.PHONY : src/stepper.o
-
-# target to build an object file
-src/stepper.cpp.o:
-	$(MAKE) -f CMakeFiles/stepper.dir/build.make CMakeFiles/stepper.dir/src/stepper.cpp.o
-.PHONY : src/stepper.cpp.o
-
-src/stepper.i: src/stepper.cpp.i
-
-.PHONY : src/stepper.i
-
-# target to preprocess a source file
-src/stepper.cpp.i:
-	$(MAKE) -f CMakeFiles/stepper.dir/build.make CMakeFiles/stepper.dir/src/stepper.cpp.i
-.PHONY : src/stepper.cpp.i
-
-src/stepper.s: src/stepper.cpp.s
-
-.PHONY : src/stepper.s
-
-# target to generate assembly for a file
-src/stepper.cpp.s:
-	$(MAKE) -f CMakeFiles/stepper.dir/build.make CMakeFiles/stepper.dir/src/stepper.cpp.s
-.PHONY : src/stepper.cpp.s
-
-src/wavetimer.o: src/wavetimer.cpp.o
-
-.PHONY : src/wavetimer.o
-
-# target to build an object file
-src/wavetimer.cpp.o:
-	$(MAKE) -f CMakeFiles/wavetimer.dir/build.make CMakeFiles/wavetimer.dir/src/wavetimer.cpp.o
-.PHONY : src/wavetimer.cpp.o
-
-src/wavetimer.i: src/wavetimer.cpp.i
-
-.PHONY : src/wavetimer.i
-
-# target to preprocess a source file
-src/wavetimer.cpp.i:
-	$(MAKE) -f CMakeFiles/wavetimer.dir/build.make CMakeFiles/wavetimer.dir/src/wavetimer.cpp.i
-.PHONY : src/wavetimer.cpp.i
-
-src/wavetimer.s: src/wavetimer.cpp.s
-
-.PHONY : src/wavetimer.s
-
-# target to generate assembly for a file
-src/wavetimer.cpp.s:
-	$(MAKE) -f CMakeFiles/wavetimer.dir/build.make CMakeFiles/wavetimer.dir/src/wavetimer.cpp.s
-.PHONY : src/wavetimer.cpp.s
+src/arm_controller_main_old.cpp.s:
+	$(MAKE) -f CMakeFiles/arm_controller_main_old.dir/build.make CMakeFiles/arm_controller_main_old.dir/src/arm_controller_main_old.cpp.s
+.PHONY : src/arm_controller_main_old.cpp.s
 
 src/ws/message_queue.o: src/ws/message_queue.c.o
 
@@ -1007,28 +577,12 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... package_source"
-	@echo "... led_pwm"
-	@echo "... package"
-	@echo "... pano"
-	@echo "... arducam_sock"
-	@echo "... edit_cache"
-	@echo "... picam_stream"
-	@echo "... stepper"
-	@echo "... picam_minimal"
-	@echo "... servo"
-	@echo "... robolib"
 	@echo "... arm_controller_main"
-	@echo "... i2c_ctl"
-	@echo "... red"
-	@echo "... wavetimer"
-	@echo "... picam_cv_stream"
-	@echo "... serial_read"
-	@echo "... sock_client"
-	@echo "... picam_cv_stream_lossless"
-	@echo "... arducam_minimal"
-	@echo "... sonar"
-	@echo "... picam_cv_minimal"
+	@echo "... robolib"
+	@echo "... arm_controller_main_old"
+	@echo "... package"
+	@echo "... package_source"
+	@echo "... edit_cache"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.o"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.i"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/ArduCAM.s"
@@ -1041,60 +595,33 @@ help:
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.o"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.i"
 	@echo "... home/abobco/RaspberryPi/OCV_Projects/SPI_Camera/src/sccb_bus.s"
-	@echo "... src/arducam_minimal.o"
-	@echo "... src/arducam_minimal.i"
-	@echo "... src/arducam_minimal.s"
-	@echo "... src/arducam_sock.o"
-	@echo "... src/arducam_sock.i"
-	@echo "... src/arducam_sock.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_arm.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_gpio_raspi.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_ik.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_math.s"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.o"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.i"
+	@echo "... home/abobco/RaspberryPi/Robot-Rover/arm/xn_vec.s"
+	@echo "... src/XNlib/xn_net.o"
+	@echo "... src/XNlib/xn_net.i"
+	@echo "... src/XNlib/xn_net.s"
 	@echo "... src/arm_controller_main.o"
 	@echo "... src/arm_controller_main.i"
 	@echo "... src/arm_controller_main.s"
-	@echo "... src/i2c_controller.o"
-	@echo "... src/i2c_controller.i"
-	@echo "... src/i2c_controller.s"
-	@echo "... src/led_pwm.o"
-	@echo "... src/led_pwm.i"
-	@echo "... src/led_pwm.s"
-	@echo "... src/pano_controller.o"
-	@echo "... src/pano_controller.i"
-	@echo "... src/pano_controller.s"
-	@echo "... src/picam_cv_minimal.o"
-	@echo "... src/picam_cv_minimal.i"
-	@echo "... src/picam_cv_minimal.s"
-	@echo "... src/picam_cv_stream.o"
-	@echo "... src/picam_cv_stream.i"
-	@echo "... src/picam_cv_stream.s"
-	@echo "... src/picam_cv_stream_lossless.o"
-	@echo "... src/picam_cv_stream_lossless.i"
-	@echo "... src/picam_cv_stream_lossless.s"
-	@echo "... src/picam_minimal.o"
-	@echo "... src/picam_minimal.i"
-	@echo "... src/picam_minimal.s"
-	@echo "... src/picam_stream.o"
-	@echo "... src/picam_stream.i"
-	@echo "... src/picam_stream.s"
-	@echo "... src/rot_enc.o"
-	@echo "... src/rot_enc.i"
-	@echo "... src/rot_enc.s"
-	@echo "... src/serial_read.o"
-	@echo "... src/serial_read.i"
-	@echo "... src/serial_read.s"
-	@echo "... src/servo_demo.o"
-	@echo "... src/servo_demo.i"
-	@echo "... src/servo_demo.s"
-	@echo "... src/sock_client.o"
-	@echo "... src/sock_client.i"
-	@echo "... src/sock_client.s"
-	@echo "... src/sonar.o"
-	@echo "... src/sonar.i"
-	@echo "... src/sonar.s"
-	@echo "... src/stepper.o"
-	@echo "... src/stepper.i"
-	@echo "... src/stepper.s"
-	@echo "... src/wavetimer.o"
-	@echo "... src/wavetimer.i"
-	@echo "... src/wavetimer.s"
+	@echo "... src/arm_controller_main_old.o"
+	@echo "... src/arm_controller_main_old.i"
+	@echo "... src/arm_controller_main_old.s"
 	@echo "... src/ws/message_queue.o"
 	@echo "... src/ws/message_queue.i"
 	@echo "... src/ws/message_queue.s"

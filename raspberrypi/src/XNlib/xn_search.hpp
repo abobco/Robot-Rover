@@ -95,23 +95,17 @@ struct GridHash {
 };
 
 // access underlying container of an std::priority_queue for iteration
-template <class T, class S, class C>
-S &Container(std::priority_queue<T, S, C> &q) {
+template <class T, class S, class C> S &Container(std::priority_queue<T, S, C> &q) {
     struct IterableQueue : private std::priority_queue<T, S, C> {
-        static S &Container(std::priority_queue<T, S, C> &q) {
-            return q.*&IterableQueue::c;
-        }
+        static S &Container(std::priority_queue<T, S, C> &q) { return q.*&IterableQueue::c; }
     };
     return IterableQueue::Container(q);
 };
 
-int manhattan(GridNode &a, GridNode &b) {
-    return abs(b.x - a.x) + abs(b.y - a.y);
-}
+int manhattan(GridNode &a, GridNode &b) { return abs(b.x - a.x) + abs(b.y - a.y); }
 
-std::vector<GridNode>
-trace_path(std::unordered_map<GridNode, GridNode, GridHash> came_from,
-           GridNode current) {
+std::vector<GridNode> trace_path(std::unordered_map<GridNode, GridNode, GridHash> came_from,
+                                 GridNode current) {
     std::vector<GridNode> out;
     out.push_back(current);
     while (came_from.find(current) != came_from.end()) {
@@ -133,13 +127,10 @@ std::vector<GridNode> preprocess_graph(std_vec2d<bool> graph) {
 
     //  Any 2 neighbors sharing a column will be at most graph.front().size()
     //  elements away
-    auto get_x_neighbor = [&node_graph,
-                           &graph](std::vector<GridNode>::iterator &i, int a) {
+    auto get_x_neighbor = [&node_graph, &graph](std::vector<GridNode>::iterator &i, int a) {
         if (a > 0 ? (unsigned)i->x < graph.front().size() - 1
                   : (unsigned)i->x > 0 && graph[i->x + a][i->y])
-            for (auto j = i + a;
-                 a > 0 ? (j < node_graph.end()) : (j > node_graph.begin());
-                 j += a)
+            for (auto j = i + a; a > 0 ? (j < node_graph.end()) : (j > node_graph.begin()); j += a)
                 if (j->x == i->x + a && j->y == i->y) {
                     i->neighbors.push_back(&(*(j)));
                     break;
@@ -160,17 +151,14 @@ std::vector<GridNode> preprocess_graph(std_vec2d<bool> graph) {
     return node_graph;
 }
 
-std::vector<GridNode> A_star(std::vector<GridNode> &processed_graph,
-                             int x_start, int y_start, int goal_x, int goal_y) {
-    std::priority_queue<GridNode, std::vector<GridNode>, GridNodeCompare>
-        open_set;
+std::vector<GridNode> A_star(std::vector<GridNode> &processed_graph, int x_start, int y_start,
+                             int goal_x, int goal_y) {
+    std::priority_queue<GridNode, std::vector<GridNode>, GridNodeCompare> open_set;
     std::vector<GridNode> &open_set_contents = Container(open_set);
-    std::unordered_map<GridNode, GridNode, GridHash>
-        came_from; // came_from[n] = node immediately preceding n on the
-                   // cheapest path
-    std::unordered_map<GridNode, int, GridHash>
-        g_score; // cost of cheapest path from start to key node, default
-                 // val=infinity
+    std::unordered_map<GridNode, GridNode, GridHash> came_from; // came_from[n] = node immediately
+                                                                // preceding n on the cheapest path
+    std::unordered_map<GridNode, int, GridHash> g_score; // cost of cheapest path from start to key
+                                                         // node, default val=infinity
     GridNode *start = NULL, *goal = NULL;
 
     for (GridNode &n1 : processed_graph) {
@@ -206,8 +194,7 @@ std::vector<GridNode> A_star(std::vector<GridNode> &processed_graph,
                 n_ptr->cost = g_score[n] + manhattan(*goal, n);
 
                 bool found = false;
-                for (auto i = open_set_contents.begin();
-                     i < open_set_contents.end(); i++) {
+                for (auto i = open_set_contents.begin(); i < open_set_contents.end(); i++) {
                     if (*i == *n_ptr) {
                         found = true;
                         break;
@@ -223,8 +210,7 @@ std::vector<GridNode> A_star(std::vector<GridNode> &processed_graph,
     return std::vector<GridNode>();
 }
 
-std::vector<GridNode> A_star(std_vec2d<bool> graph, GridNode start,
-                             GridNode goal) {
+std::vector<GridNode> A_star(std_vec2d<bool> graph, GridNode start, GridNode goal) {
     auto pg = preprocess_graph(graph);
     return A_star(pg, start.x, start.y, goal.x, goal.y);
 }
@@ -238,8 +224,7 @@ glm::vec2 world_to_grid(const glm::vec3 &in, float gridbox_size = 1,
     return glm::floor(out + 0.5f);
 }
 
-glm::vec3 grid_to_world(int x, int y, float gridbox_size,
-                        const glm::vec3 &offset = glm::vec3(0)) {
+glm::vec3 grid_to_world(int x, int y, float gridbox_size, const glm::vec3 &offset = glm::vec3(0)) {
     glm::vec3 out(x, 0, y);
     out *= gridbox_size;
     out.x += offset.x;
@@ -247,9 +232,8 @@ glm::vec3 grid_to_world(int x, int y, float gridbox_size,
     return out;
 }
 
-glm::vec2 screen_to_grid(const glm::vec2 &win_size, const glm::vec2 &pixel,
-                         float proj_area, float gridbox_size = 1,
-                         const glm::vec3 &offset = glm::vec3(0)) {
+glm::vec2 screen_to_grid(const glm::vec2 &win_size, const glm::vec2 &pixel, float proj_area,
+                         float gridbox_size = 1, const glm::vec3 &offset = glm::vec3(0)) {
     glm::vec2 out = pixel;
     for (int i = 0; i < 2; i++) {
         out[i] /= (win_size[i] / 2);

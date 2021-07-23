@@ -2,8 +2,6 @@
 
 namespace xn {
 
-int PigDaemon::pi = 0;
-
 void PigDaemon::init() { pi = 0; }
 
 void PigDaemon::stop() { pi = -1; }

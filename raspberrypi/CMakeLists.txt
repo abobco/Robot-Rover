@@ -17,6 +17,7 @@ set( robolib_src
     ${arducam_dir}ArduCAM.c 
     ${arducam_dir}bcm283x_board_driver.c 
     ${arducam_dir}sccb_bus.c
+
 )
 
 # link_directories(build/_deps/raylib-build/src)
@@ -32,7 +33,15 @@ macro(Robo_Build project_name src_file)
     # build a debug symbol table for gdb
     set(CMAKE_BUILD_TYPE Debug)
 
-    add_executable(${PROJECT_NAME}  ${src_file} )
+    add_executable(${PROJECT_NAME} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio_raspi.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_math.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_vec.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_ik.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_arm.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/XNlib/xn_net.cpp 
+        ${src_file} )
 
     find_package(OpenCV REQUIRED)
     include_directories(SYSTEM /home/abobco/RaspberryPi/pigpio-master/install/include )
@@ -64,7 +73,7 @@ macro(Robo_Build project_name src_file)
     # target_link_libraries( ${PROJECT_NAME}  ${OpenCV_LIBS} ${PIG} ${PIGD} pthread rt robolib websockets dl ${l_vcos} ${l_EGL} ${l_GLES} ${l_bcm_host} ${l_vchiq_arm})
     target_link_libraries( ${PROJECT_NAME} 
                            ${OpenCV_LIBS}
-                           ${PIG} ${PIGD} 
+                            ${PIGD} 
                            pthread rt 
                            robolib 
                             dl 
@@ -94,20 +103,21 @@ endmacro()
 # Robo_Build( lidar_net src/lidar_net.cpp )
 
 Robo_Build( arm_controller_main src/arm_controller_main.cpp )
-Robo_Build( servo src/servo_demo.cpp )
-Robo_Build( sonar src/sonar.cpp )
-Robo_Build( pano src/pano_controller.cpp )
-Robo_Build( stepper src/stepper.cpp )
-Robo_Build( red src/rot_enc.cpp )
-Robo_Build( wavetimer src/wavetimer.cpp )
-Robo_Build( i2c_ctl src/i2c_controller.cpp )
-Robo_Build( sock_client src/sock_client.cpp )
-Robo_Build( arducam_sock src/arducam_sock.cpp)
-Robo_Build( arducam_minimal src/arducam_minimal.cpp)
-Robo_Build( serial_read src/serial_read.cpp)
-Robo_Build( picam_minimal src/picam_minimal.cpp)
-Robo_Build( picam_stream src/picam_stream.cpp)
-Robo_Build( picam_cv_minimal src/picam_cv_minimal.cpp)
-Robo_Build( picam_cv_stream src/picam_cv_stream.cpp)
-Robo_Build( picam_cv_stream_lossless src/picam_cv_stream_lossless.cpp)
-Robo_Build( led_pwm src/led_pwm.cpp)
+Robo_Build( arm_controller_main_old src/arm_controller_main_old.cpp )
+# Robo_Build( servo src/servo_demo.cpp )
+# Robo_Build( sonar src/sonar.cpp )
+# Robo_Build( pano src/pano_controller.cpp )
+# Robo_Build( stepper src/stepper.cpp )
+# Robo_Build( red src/rot_enc.cpp )
+# Robo_Build( wavetimer src/wavetimer.cpp )
+# Robo_Build( i2c_ctl src/i2c_controller.cpp )
+# Robo_Build( sock_client src/sock_client.cpp )
+# Robo_Build( arducam_sock src/arducam_sock.cpp)
+# Robo_Build( arducam_minimal src/arducam_minimal.cpp)
+# Robo_Build( serial_read src/serial_read.cpp)
+# Robo_Build( picam_minimal src/picam_minimal.cpp)
+# Robo_Build( picam_stream src/picam_stream.cpp)
+# Robo_Build( picam_cv_minimal src/picam_cv_minimal.cpp)
+# Robo_Build( picam_cv_stream src/picam_cv_stream.cpp)
+# Robo_Build( picam_cv_stream_lossless src/picam_cv_stream_lossless.cpp)
+# Robo_Build( led_pwm src/led_pwm.cpp)

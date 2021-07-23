@@ -133,7 +133,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=led_pwm
+CMAKE_PROJECT_NAME:STATIC=arm_controller_main_old
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/home/abobco/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-ranlib
@@ -220,16 +220,10 @@ PIG:FILEPATH=/home/abobco/RaspberryPi/pigpio-master/install/lib/libpigpio.so
 PIGD:FILEPATH=/home/abobco/RaspberryPi/pigpio-master/install/lib/libpigpiod_if2.so
 
 //Value Computed by CMake
-arducam_minimal_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
+arm_controller_main2_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
 
 //Value Computed by CMake
-arducam_minimal_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-arducam_sock_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-arducam_sock_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
+arm_controller_main2_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
 
 //Value Computed by CMake
 arm_controller_main_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
@@ -238,10 +232,10 @@ arm_controller_main_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspb
 arm_controller_main_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
 
 //Value Computed by CMake
-i2c_ctl_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
+arm_controller_main_old_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
 
 //Value Computed by CMake
-i2c_ctl_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
+arm_controller_main_old_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
 
 //Path to a library.
 l_EGL:FILEPATH=l_EGL-NOTFOUND
@@ -268,94 +262,10 @@ l_vchiq_arm:FILEPATH=/home/abobco/RaspberryPi/sysroot/opt/vc/lib/libvchiq_arm.so
 l_vcos:FILEPATH=/home/abobco/RaspberryPi/sysroot/opt/vc/lib/libvcos.so
 
 //Value Computed by CMake
-led_pwm_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-led_pwm_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-pano_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-pano_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-picam_cv_minimal_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-picam_cv_minimal_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-picam_cv_stream_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-picam_cv_stream_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-picam_cv_stream_lossless_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-picam_cv_stream_lossless_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-picam_minimal_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-picam_minimal_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-picam_stream_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-picam_stream_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-red_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-red_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
 robolib_build_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
 
 //Value Computed by CMake
 robolib_build_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-serial_read_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-serial_read_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-servo_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-servo_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-sock_client_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-sock_client_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-sonar_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-sonar_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-stepper_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-stepper_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
-
-//Value Computed by CMake
-wavetimer_BINARY_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi/build
-
-//Value Computed by CMake
-wavetimer_SOURCE_DIR:STATIC=/home/abobco/RaspberryPi/Robot-Rover/raspberrypi
 
 
 ########################
