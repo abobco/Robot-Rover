@@ -5,7 +5,8 @@
 #include <iostream>
 #include <pthread.h>
 
-#include "XNlib/xn_gpio.hpp"
+// #include "XNlib/xn_gpio.hpp"
+#include <arm/xn_gpio.hpp>
 
 /*
 sudo ./servo_demo          # Send servo pulses to GPIO 12
