@@ -289,3 +289,31 @@ sudo ./raspberrypi/build/arm_controller_main
 sudo ./raspberrypi/build/arm_controller_main
 sudo ./raspberrypi/build/arm_controller_main
 sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo gdb ./raspberrypi/build/arm_controller_main
+r
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main2
+ls
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main2
+ls
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main2
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
+sudo ./raspberrypi/build/arm_controller_main
