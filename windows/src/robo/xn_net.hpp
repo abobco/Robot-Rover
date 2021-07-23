@@ -49,7 +49,8 @@
 #include <assert.h>
 #include <cstring>
 // #include <netdb.h>
-#include "../util/xn_vec.hpp"
+#include <arm/xn_vec.hpp>
+
 #include "xn_log.hpp"
 #include <stdio.h>
 #include <stdlib.h>

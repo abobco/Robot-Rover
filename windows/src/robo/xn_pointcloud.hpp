@@ -1,5 +1,5 @@
 #pragma once
-#include "../util/xn_math.hpp"
+#include <arm/xn_math.hpp>
 #include <array>
 #include <fstream>
 #include <utility>

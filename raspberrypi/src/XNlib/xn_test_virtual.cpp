@@ -201,14 +201,14 @@ int main() {
     target = target * arm_len;
 
     phys_arm.resolve(target);
-    // cout << "pole: " << phys_arm.ideal_chain.pole << '\n';
+    // cout << "pole: " << phys_arm.ik_chain.pole << '\n';
     // cout << "bone positions\n";
-    // for ( int i = 0; i < phys_arm.ideal_chain.bone_count; i++ ) {
+    // for ( int i = 0; i < phys_arm.ik_chain.bone_count; i++ ) {
     //   cout << phys_arm.positions[i] << '\n';
     // }
 
     tot_err +=
-        vec3::dist(phys_arm.positions[2], phys_arm.ideal_chain.positions[2]);
+        vec3::dist(phys_arm.positions[2], phys_arm.ik_chain.positions[2]);
     avg_err = tot_err / (++iters);
 
     // render
@@ -228,7 +228,7 @@ int main() {
 
     vec3 joint_scale{0.1, 0.1, 0.1};
     for (int j = 0; j < arm.bone_count; j++) {
-      draw_box(cam_shader, phys_arm.ideal_chain.positions[j],
+      draw_box(cam_shader, phys_arm.ik_chain.positions[j],
                glm::vec4(1.0f, 0.5f, 0.2f, 1.0f), joint_scale, true);
     }
     for (int j = 0; j < arm.bone_count; j++) {
@@ -239,7 +239,7 @@ int main() {
     vec3 pole_scale{0.05, 0.05, 0.05};
     vec3 ntarget = target / arm_len;
     for (int j = 0; j < arm.bone_count - 2; j++)
-      draw_box(cam_shader, phys_arm.ideal_chain.poles[j],
+      draw_box(cam_shader, phys_arm.ik_chain.poles[j],
                glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), pole_scale);
     draw_box(cam_shader, ntarget, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
              pole_scale);

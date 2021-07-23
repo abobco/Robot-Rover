@@ -169,9 +169,9 @@ void move_servo_thread(pio::SmoothServo *s) {
 ServoChain::ServoChain(IkChain bonechain,
                        std::vector<pio::SmoothServo> _servos[], bool *loopvar,
                        float _arm_len) {
-  ideal_chain = bonechain;
+  ik_chain = bonechain;
   arm_len = _arm_len;
-  numJoints = ideal_chain.bone_count;
+  numJoints = ik_chain.bone_count;
 
   servos = _servos;
   for (int i = 0; i < bonechain.bone_count; i++) {
@@ -181,16 +181,16 @@ ServoChain::ServoChain(IkChain bonechain,
     }
   }
 
-  positions = new vec3[ideal_chain.bone_count];
-  positions_orig = new vec3[ideal_chain.bone_count];
-  for (int i = 0; i < ideal_chain.bone_count; i++) {
+  positions = new vec3[ik_chain.bone_count];
+  positions_orig = new vec3[ik_chain.bone_count];
+  for (int i = 0; i < ik_chain.bone_count; i++) {
     positions[i] = bonechain.bones[i];
     positions_orig[i] = bonechain.bones[i];
   }
 }
 
 // ~ServoChain() {
-//   for (int i = 0; i < ideal_chain.bone_count; i++) {
+//   for (int i = 0; i < ik_chain.bone_count; i++) {
 //     for (pio::SmoothServo &s : servos[i]) {
 //       s.tid.join();
 //     }
@@ -198,7 +198,7 @@ ServoChain::ServoChain(IkChain bonechain,
 // }
 
 void ServoChain::create_threads(std::vector<std::thread> &threadpool) {
-  for (int i = 0; i < ideal_chain.bone_count; i++) {
+  for (int i = 0; i < ik_chain.bone_count; i++) {
     for (pio::SmoothServo &s : servos[i]) {
       threadpool.push_back(std::thread(move_servo_thread, &s));
     }
@@ -216,13 +216,13 @@ void ServoChain::resolve(vec3 &target) {
     pole = pole * -5;
   }
 
-  ideal_chain.pole_main = pole;
-  ideal_chain.resolve(target_normalized);
+  ik_chain.pole_main = pole;
+  ik_chain.resolve(target_normalized);
   // printf("ideal chain:\n");
-  // ideal_chain.print();
-  for (int i = 0; i < ideal_chain.bone_count - 1; i++) {
+  // ik_chain.print();
+  for (int i = 0; i < ik_chain.bone_count - 1; i++) {
     for (int j = 0; j < servos[i].size(); j++) {
-      vec3 next_target = ideal_chain.bones[i + 1] - positions[i];
+      vec3 next_target = ik_chain.bones[i + 1] - positions[i];
       vec3 pos = positions[i + 1] - positions[i];
       vec3 &ax = servos[i][j].axis;
       vec3 proj_pos = pos - (ax * vec3::dot(pos, ax));
@@ -255,7 +255,7 @@ void ServoChain::resolve(vec3 &target) {
       // servos[i][j].servo.setAngle(s_ang);
 
       // rotate servos in child joints
-      for (int k = i + 1; k < ideal_chain.bone_count; k++) {
+      for (int k = i + 1; k < ik_chain.bone_count; k++) {
         vec3 relpos = positions[k] - positions[i];
         positions[k] = positions[i] + vec3::rotate_axis(relpos, ax, ang);
         for (int l = 0; l < servos[k].size(); l++) {
@@ -283,14 +283,14 @@ void ServoChain::curl() {
 void ServoChain::straighten() {
   curl();
   // time_sleep(servos[0][0].t_max / 2);
-  for (int i = 0; i < ideal_chain.bone_count; i++) {
+  for (int i = 0; i < ik_chain.bone_count; i++) {
     for (pio::SmoothServo &s : servos[i]) {
       s.target_angle = (float)M_PI_2;
     }
   }
   // time_sleep(servos[0][0].t_max / 2);
   reset();
-  ideal_chain.reset();
+  ik_chain.reset();
 }
 
 // solve for a point on the line from arm to target, wristlen away from the
@@ -312,7 +312,7 @@ void ServoChain::grab_safe(double wristlen, vec3 &target, const vec3 &arm_pos
 
 void ServoChain::move_wrist(pio::SmoothServo &wrist) {
   float ac = 0;
-  for (int i = 0; i < ideal_chain.bone_count; i++) {
+  for (int i = 0; i < ik_chain.bone_count; i++) {
     for (xn::pio::SmoothServo &s : servos[i]) {
       if (s.axis.y > 0.5)
         continue;
@@ -336,7 +336,7 @@ void ServoChain::reset() {
     }
   }
 
-  for (auto i = 0; i < ideal_chain.bone_count; i++) {
+  for (auto i = 0; i < ik_chain.bone_count; i++) {
     positions[i] = positions_orig[i];
   }
 }

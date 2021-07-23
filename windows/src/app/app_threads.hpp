@@ -283,7 +283,7 @@ void robot_io_thread(SOCKET &esp_data, float wheel_diameter,
 //     // vec3 tar{1, 1, 0};
 //     phys_arm.resolve(tar);
 //     float ac = 0;
-//     for (int i = 0; i < phys_arm.ideal_chain.bone_count - 1; i++) {
+//     for (int i = 0; i < phys_arm.ik_chain.bone_count - 1; i++) {
 //       for (xn::pio::SmoothServo &s : phys_arm.servos[i]) {
 //         if (s.axis.y > 0)
 //           continue;
@@ -296,7 +296,7 @@ void robot_io_thread(SOCKET &esp_data, float wheel_diameter,
 //     wrist.target_angle = ac + (float)M_PI_2;
 
 //     tot_err +=
-//         vec3::dist(phys_arm.positions[2], phys_arm.ideal_chain.positions[2]);
+//         vec3::dist(phys_arm.positions[2], phys_arm.ik_chain.positions[2]);
 //     avg_err = tot_err / (++iters);
 //     time_sleep(1.0 / 60);
 //   }

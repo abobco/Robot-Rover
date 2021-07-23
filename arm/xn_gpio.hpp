@@ -12,13 +12,14 @@
 #ifdef _WIN32
 #ifndef PIO_VIRTUAL
 #define PIO_VIRTUAL
-#include "../windows/src/util/xn_math.hpp"
-#include "../windows/src/util/xn_vec.hpp"
+// #include "../windows/src/util/xn_math.hpp"
+// #include "../windows/src/util/xn_vec.hpp"
 #endif
-#else
+#endif
+// #else
 #include "xn_math.hpp"
 #include "xn_vec.hpp"
-#endif
+// #endif
 
 #ifndef PIO_VIRTUAL
 extern "C" {
@@ -33,102 +34,104 @@ namespace xn {
 
 // PigPiod Daemon wrapper
 class PigDaemon {
-  public:
-    static int pi;
+public:
+  static int pi;
 
 #ifndef PIO_VIRTUAL
-    static int error_check(int r);
+  static int error_check(int r);
 #endif
 
-    static void init();
+  static void init();
 
-    static void stop();
+  static void stop();
 
-    static int i2cOpen(unsigned bus, unsigned addr);
+  static int i2cOpen(unsigned bus, unsigned addr);
 
-    static int i2cClose(unsigned handle);
+  static int i2cClose(unsigned handle);
 
-    static char i2cReadByte(int h);
+  static char i2cReadByte(int h);
 
-    static int i2cRead(int h, char *buf, int n);
+  static int i2cRead(int h, char *buf, int n);
 
-    static int i2cWrite(int h, char *buf, int n);
+  static int i2cWrite(int h, char *buf, int n);
 
-    static int servo(unsigned gpio, unsigned pulsewidth);
+  static int servo(unsigned gpio, unsigned pulsewidth);
 
-    static int serialOpen(char *ser_tty, unsigned baud);
+  static int serialOpen(char *ser_tty, unsigned baud);
 
-    static int serialClose(int h);
+  static int serialClose(int h);
 
-    static int serialRead(int h, char *buf, unsigned count);
+  static int serialRead(int h, char *buf, unsigned count);
 
-    static int serialWrite(int h, char *buf, unsigned count);
+  static int serialWrite(int h, char *buf, unsigned count);
 
-    static int serialDataAvailable(int h);
+  static int serialDataAvailable(int h);
 };
 
 namespace pio {
 
 class ServoAngular {
 
-  protected:
-    int cur_width;
-    float cur_angle;
-    float position_normalized;
+protected:
+  int cur_width;
+  float cur_angle;
+  float position_normalized;
 
-  public:
-    int ctl_pin;
-    int min_width;
-    int max_width;
+public:
+  int ctl_pin;
+  int min_width;
+  int max_width;
 
-    float min_angle;
-    float max_angle;
-    float mid_offset;
+  float min_angle;
+  float max_angle;
+  float mid_offset;
 
-    ServoAngular() {}
+  ServoAngular() {}
 
-    ServoAngular(int ctl_pin, int min_width = 500, int max_width = 2500, float min_angle = 0,
-                 float max_angle = M_PI);
+  ServoAngular(int ctl_pin, int min_width = 500, int max_width = 2500,
+               float min_angle = 0, float max_angle = M_PI);
 
-    virtual int setWidth(int w);
+  virtual int setWidth(int w);
 
-    virtual int setPosition(float t);
+  virtual int setPosition(float t);
 
-    virtual int setAngle(float a);
+  virtual int setAngle(float a);
 
-    virtual int moveAngle(float a) { return setAngle(cur_angle + a); }
-    virtual int movePosition(float a) { return setPosition(position_normalized + a); }
-    virtual int moveWidth(int w) { return setWidth(cur_width + w); }
+  virtual int moveAngle(float a) { return setAngle(cur_angle + a); }
+  virtual int movePosition(float a) {
+    return setPosition(position_normalized + a);
+  }
+  virtual int moveWidth(int w) { return setWidth(cur_width + w); }
 
-    int getWidth() { return cur_width; }
-    float getPosition() { return position_normalized; }
-    float getAngle() { return cur_angle; }
+  int getWidth() { return cur_width; }
+  float getPosition() { return position_normalized; }
+  float getAngle() { return cur_angle; }
 };
 
 class SmoothServo {
-  public:
-    ServoAngular servo;
-    BezierCurve curve;
-    vec3 axis;
-    vec3 position;
-    float target_angle = (float)M_PI_2;
-    float target_prev = (float)M_PI_2;
-    float prev_reached_target = (float)M_PI_2;
-    int targetw = 1500;
-    int targetw_prev = 1500;
-    int prev_reached_targetw = 1500;
-    float t;
-    float t_max = 5;
-    int mid_offset;
-    // pthread_t tid;
-    // std::thread tid;
+public:
+  ServoAngular servo;
+  BezierCurve curve;
+  vec3 axis;
+  vec3 position;
+  float target_angle = (float)M_PI_2;
+  float target_prev = (float)M_PI_2;
+  float prev_reached_target = (float)M_PI_2;
+  int targetw = 1500;
+  int targetw_prev = 1500;
+  int prev_reached_targetw = 1500;
+  float t;
+  float t_max = 5;
+  int mid_offset;
+  // pthread_t tid;
+  // std::thread tid;
 
-    SmoothServo(ServoAngular servo, vec3 axis = {1, 0, 0}, vec3 position = {0, 0, 0},
-                int mid_width = 0, float t_max = 6);
+  SmoothServo(ServoAngular servo, vec3 axis = {1, 0, 0},
+              vec3 position = {0, 0, 0}, int mid_width = 0, float t_max = 6);
 
-    void update(float dt);
+  void update(float dt);
 
-    int ang_to_width_corrected(float ang);
+  int ang_to_width_corrected(float ang);
 };
 
 #ifndef PIO_VIRTUAL
@@ -156,12 +159,13 @@ int i2c_read_frame(int h, char *buf, int n, const char begin_frame_byte = '?');
 
 //     void (*callback)(int);
 
-//     RotaryEncoder(unsigned pin_a, unsigned pin_b, void (*callback)(int), int mode =
-//     RED_MODE_DETENT,
+//     RotaryEncoder(unsigned pin_a, unsigned pin_b, void (*callback)(int), int
+//     mode = RED_MODE_DETENT,
 //                   int step = 0);
 
 //   private:
-//     static void callback_internal(int gpio, int level, uint32_t tick, void *userdata);
+//     static void callback_internal(int gpio, int level, uint32_t tick, void
+//     *userdata);
 // };
 
 // const int RotaryEncoder::transits[] =;
@@ -180,8 +184,8 @@ enum StepDir { STEP_REVERSE, STEP_FORWARD };
 //     // pthread_t singlestep_tid;
 //     // static pthread_mutex_t step_lock;
 
-//     Stepper(int pin_dir, int pin_step, float dutycycle = 0.5, unsigned freq = 1, int pin_ms1 =
-//     -1,
+//     Stepper(int pin_dir, int pin_step, float dutycycle = 0.5, unsigned freq =
+//     1, int pin_ms1 = -1,
 //             int pin_ms2 = -1, int pin_ms3 = -1);
 
 //     void setDutyCycle(float ds);
@@ -234,104 +238,129 @@ enum StepDir { STEP_REVERSE, STEP_FORWARD };
 //             if (sensor_model == OV2640) {
 //                 resolution = {160, 120};
 //                 OV2640_set_JPEG_size(OV2640_160x120);
-//                 printf("Set the resolution to OV2640_160x120 successfully\r\n");
+//                 printf("Set the resolution to OV2640_160x120
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_320x240);
-//                 printf("Set the resolution to OV5640_320x240 successfully\r\n");
+//                 printf("Set the resolution to OV5640_320x240
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_320x240);
-//                 printf("Set the resolution to OV5642_320x240 successfully\r\n");
+//                 printf("Set the resolution to OV5642_320x240
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 1) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {176, 144};
 //                 OV2640_set_JPEG_size(OV2640_176x144);
-//                 printf("Set the resolution to OV2640_176x144 successfully\r\n");
+//                 printf("Set the resolution to OV2640_176x144
+//                 successfully\r\n");
 
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_352x288);
-//                 printf("Set the resolution to OV5640_352x288 successfully\r\n");
+//                 printf("Set the resolution to OV5640_352x288
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_640x480);
-//                 printf("Set the resolution to OV5642_640x480 successfully\r\n");
+//                 printf("Set the resolution to OV5642_640x480
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 2) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {320, 240};
 //                 OV2640_set_JPEG_size(OV2640_320x240);
-//                 printf("Set the resolution to OV2640_320x240 successfully\r\n");
+//                 printf("Set the resolution to OV2640_320x240
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_640x480);
-//                 printf("Set the resolution to OV5640_640x480 successfully\r\n");
+//                 printf("Set the resolution to OV5640_640x480
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_1024x768);
-//                 printf("Set the resolution to OV5642_1024x768 successfully\r\n");
+//                 printf("Set the resolution to OV5642_1024x768
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 3) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {352, 288};
 //                 OV2640_set_JPEG_size(OV2640_352x288);
-//                 printf("Set the resolution to OV2640_352x288 successfully\r\n");
+//                 printf("Set the resolution to OV2640_352x288
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_800x480);
-//                 printf("Set the resolution to OV5640_800x480 successfully\r\n");
+//                 printf("Set the resolution to OV5640_800x480
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_1280x960);
-//                 printf("Set the resolution to OV5642_1280x960 successfully\r\n");
+//                 printf("Set the resolution to OV5642_1280x960
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 4) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {640, 480};
 //                 OV2640_set_JPEG_size(OV2640_640x480);
-//                 printf("Set the resolution to OV2640_640x480 successfully\r\n");
+//                 printf("Set the resolution to OV2640_640x480
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_1024x768);
-//                 printf("Set the resolution to OV5640_1024x768 successfully\r\n");
+//                 printf("Set the resolution to OV5640_1024x768
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_1600x1200);
-//                 printf("Set the resolution to OV5642_1600x1200 successfully\r\n");
+//                 printf("Set the resolution to OV5642_1600x1200
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 5) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {800, 600};
 //                 OV2640_set_JPEG_size(OV2640_800x600);
-//                 printf("Set the resolution to OV2640_800x600 successfully\r\n");
+//                 printf("Set the resolution to OV2640_800x600
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_1280x960);
-//                 printf("Set the resolution to OV5640_1280x960 successfully\r\n");
+//                 printf("Set the resolution to OV5640_1280x960
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_2048x1536);
-//                 printf("Set the resolution to OV5642_2048x1536 successfully\r\n");
+//                 printf("Set the resolution to OV5642_2048x1536
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 6) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {1024, 768};
 //                 OV2640_set_JPEG_size(OV2640_1024x768);
-//                 printf("Set the resolution to OV2640_1024x768 successfully\r\n");
+//                 printf("Set the resolution to OV2640_1024x768
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_1600x1200);
-//                 printf("Set the resolution to OV5640_1600x1200 successfully\r\n");
+//                 printf("Set the resolution to OV5640_1600x1200
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5642) {
 //                 OV5642_set_JPEG_size(OV5642_2592x1944);
-//                 printf("Set the resolution to OV5642_2592x1944 successfully\r\n");
+//                 printf("Set the resolution to OV5642_2592x1944
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 7) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {1280, 1024};
 //                 OV2640_set_JPEG_size(OV2640_1280x1024);
-//                 printf("Set the resolution to OV2640_1280x1024 successfully\r\n");
+//                 printf("Set the resolution to OV2640_1280x1024
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_2048x1536);
-//                 printf("Set the resolution to OV5640_2048x1536 successfully\r\n");
+//                 printf("Set the resolution to OV5640_2048x1536
+//                 successfully\r\n");
 //             }
 //         } else if (quality == 8) {
 //             if (sensor_model == OV2640) {
 //                 resolution = {1600, 1200};
 //                 OV2640_set_JPEG_size(OV2640_1600x1200);
-//                 printf("Set the resolution to OV2640_1600x1200 successfully\r\n");
+//                 printf("Set the resolution to OV2640_1600x1200
+//                 successfully\r\n");
 //             } else if (sensor_model == OV5640) {
 //                 OV5640_set_JPEG_size(OV5640_2592x1944);
-//                 printf("Set the resolution to OV5640_2592x1944 successfully\r\n");
+//                 printf("Set the resolution to OV5640_2592x1944
+//                 successfully\r\n");
 //             }
 //         }
 //         return 0;

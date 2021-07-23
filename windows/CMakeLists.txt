@@ -74,8 +74,6 @@ find_package(libssh CONFIG REQUIRED)
 include_directories(${COMMON_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${libssh_DIR}/../../include)
 add_library(xnlib STATIC 
     ${XNLIB_DIR}/util/xn_json.cpp
-    src/util/xn_vec.cpp
-    src/util/xn_math.cpp
     src/robo/xn_pointcloud.cpp
     src/robo/xn_search.cpp
     src/robo/xn_yolo.cpp
@@ -90,6 +88,8 @@ add_library(xnlib STATIC
     src/robo/xn_rover.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_ik.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_vec.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_math.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_arm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio_win32.cpp

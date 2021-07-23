@@ -18,7 +18,6 @@
 #include <arm/xn_gpio.hpp>
 #include <unordered_map>
 
-
 namespace xn {
 
 std::stringstream log_buffer;
@@ -158,7 +157,7 @@ void load_scene() {
 
   draw_map["arm"] = DrawNode::scene.addChild(new DrawNode(&color_shader));
   draw_map["arm"]->addUniform("color", glm::vec4(1.0f, 1.0f, 0.2f, 0.5f));
-  for (int i = 0; i < getArm()->ideal_chain.bone_count; i++) {
+  for (int i = 0; i < getArm()->ik_chain.bone_count; i++) {
     DrawNode *n =
         draw_map["arm"]->addChild(new DrawNode(&color_shader, &boxmesh));
     n->transform(getArm()->positions[i].toGLM(), glm::vec3(0.1f));
@@ -525,7 +524,7 @@ void scene_update(const gl::Camera &cam, std::vector<BoundedPoints> &boxes) {
   draw_map["arm"]->setModelRecursive();
   draw_map["arm"]->transform(car_pos_3d, glm::vec3(0.5), car_ang_corrected,
                              gl::axes.y);
-  for (auto i = 0; i < getArm()->ideal_chain.bone_count; i++) {
+  for (auto i = 0; i < getArm()->ik_chain.bone_count; i++) {
     draw_map["arm"]->children[i]->transform(getArm()->positions[i].toGLM(),
                                             glm::vec3(0.1f));
   }

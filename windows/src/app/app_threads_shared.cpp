@@ -109,7 +109,7 @@ void esp_log_thread(SOCKET &esp_log) {
 //   time_sleep(0.5);
 //   while (pio::time_diff_seconds(t1, pio::get_time()) < timeout) {
 //     bool finished = true;
-//     for (auto i = 0; i < arm.joints.ideal_chain.bone_count; i++) {
+//     for (auto i = 0; i < arm.joints.ik_chain.bone_count; i++) {
 //       for (pio::SmoothServo &s : arm.joints.servos[i]) {
 //         if (s.servo.getWidth() != s.targetw) {
 //           finished = false;
