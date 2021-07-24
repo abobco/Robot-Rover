@@ -1,7 +1,6 @@
 #pragma once
 // #include "../util/xn_vec.hpp"
 #include "xn_log.hpp"
-#include <arm/xn_vec.hpp>
 #include <conio.h>
 #include <errno.h>
 #include <io.h>
@@ -10,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <xn_vec.hpp>
+
 
 #if defined(WIN32) || defined(WIN64)
 #define strcasecmp _stricmp

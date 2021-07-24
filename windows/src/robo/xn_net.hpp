@@ -49,7 +49,7 @@
 #include <assert.h>
 #include <cstring>
 // #include <netdb.h>
-#include <arm/xn_vec.hpp>
+#include <xn_vec.hpp>
 
 #include "xn_log.hpp"
 #include <stdio.h>
@@ -58,9 +58,9 @@
 #include <type_traits>
 
 // #include <unistd.h>
-#include <arm/xn_gpio.hpp>
 #include <esp32/rover/robot_instructions.h>
 #include <esp32/rover/robot_ipconfig.h>
+#include <xn_gpio.hpp>
 
 #ifndef bzero
 #define bzero(b, len) (memset((b), '\0', (len)), (void)0)

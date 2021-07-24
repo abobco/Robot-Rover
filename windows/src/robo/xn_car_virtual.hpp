@@ -5,10 +5,7 @@
 #include "xn_log.hpp"
 #include "xn_pointcloud.hpp"
 #include "xn_search.hpp"
-#include <arm/xn_gpio.hpp>
-#include <arm/xn_ik.hpp>
-#include <arm/xn_math.hpp>
-#include <arm/xn_vec.hpp>
+#include <xn_ik.hpp>
 
 #ifndef XN_LIT
 #define XN_LIT 1

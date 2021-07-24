@@ -7,5 +7,6 @@ windows/build/Debug
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+**/ZERO_CHECK
 windows/build/validation_layers.txt
 windows/build/Release/opencv_world451d.dll

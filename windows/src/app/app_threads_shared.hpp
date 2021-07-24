@@ -4,11 +4,9 @@
 #include "../robo/xn_rover.hpp"
 #include "../robo/xn_yolo.hpp"
 #include "app_state.hpp"
-#include <arm/xn_ik.hpp>
 #include <opencv2/opencv.hpp>
 #include <util/xn_json.hpp>
-
-#include <arm/xn_arm.hpp>
+#include <xn_arm.hpp>
 
 namespace xn {
 

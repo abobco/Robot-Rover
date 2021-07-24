@@ -229,6 +229,12 @@ Z_VCPKG_PWSH_PATH:FILEPATH=Z_VCPKG_PWSH_PATH-NOTFOUND
 _VCPKG_INSTALLED_DIR:PATH=C:/Code/vcpkg/installed
 
 //Value Computed by CMake
+armlib_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/arm/build
+
+//Value Computed by CMake
+armlib_SOURCE_DIR:STATIC=C:/Code/opengl-es/robot-host-app/arm
+
+//Value Computed by CMake
 imgui_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows/build
 
 //Value Computed by CMake
@@ -247,10 +253,22 @@ opengl_impl_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows/build
 opengl_impl_SOURCE_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows
 
 //Value Computed by CMake
+robolib_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows/build
+
+//Value Computed by CMake
+robolib_SOURCE_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows
+
+//Value Computed by CMake
 xn_vk_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows/build
 
 //Value Computed by CMake
 xn_vk_SOURCE_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows
+
+//Value Computed by CMake
+xn_vulkan_BINARY_DIR:STATIC=C:/Code/opengl-es/xnlib/graphics/vulkan/build
+
+//Value Computed by CMake
+xn_vulkan_SOURCE_DIR:STATIC=C:/Code/opengl-es/xnlib/graphics/vulkan
 
 //Value Computed by CMake
 xnlib_BINARY_DIR:STATIC=C:/Code/opengl-es/robot-host-app/windows/build
@@ -343,7 +361,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //noop for ranlib

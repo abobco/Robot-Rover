@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.3)
 set(CMAKE_BUILD_TYPE Debug)
-include(C:/Code/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi") 
 
+include(C:/Code/vcpkg/scripts/buildsystems/vcpkg.cmake)
 set(PROJ_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/../../)
 set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/Release)
 
@@ -28,7 +28,7 @@ set(COMMON_INCLUDE_DIRS
     ${IMGUI_DIR} ${IMGUI_DIR}/backends
     ${GLM_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm
+    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/src
 )
 
 set(PRECOMPILED_HEADERS
@@ -68,11 +68,15 @@ add_library(imgui STATIC
     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp 
 )
 
-project(xnlib)
+
+project(robolib)
 find_package(OpenCV REQUIRED )
 find_package(libssh CONFIG REQUIRED)
 include_directories(${COMMON_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${libssh_DIR}/../../include)
-add_library(xnlib STATIC 
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../arm ${CMAKE_CURRENT_SOURCE_DIR}/../arm/build)
+
+add_library(robolib STATIC 
     ${XNLIB_DIR}/util/xn_json.cpp
     src/robo/xn_pointcloud.cpp
     src/robo/xn_search.cpp
@@ -82,35 +86,10 @@ add_library(xnlib STATIC
     src/robo/xn_net.cpp
     src/robo/xn_homo.cpp
     src/robo/xn_car_virtual.cpp
-    src/app/app_threads_shared.cpp
-    src/app/app_state.cpp
     src/robo/xn_console.cpp
     src/robo/xn_rover.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_ik.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_vec.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_math.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_arm.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../arm/xn_gpio_win32.cpp
-)
-
-project(xn_vk)
-find_package(Vulkan REQUIRED)
-include_directories(${COMMON_INCLUDE_DIRS}  ${Vulkan_INCLUDE_DIR})
-# target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
-add_library(xn_vk STATIC 
-    ${XN_VK_DIR}/core/xn_vk_debug.cpp
-    ${XN_VK_DIR}/core/xn_vk_descriptors.cpp
-    ${XN_VK_DIR}/core/xn_vk_device.cpp
-    ${XN_VK_DIR}/core/xn_vk_image.cpp
-    ${XN_VK_DIR}/core/xn_vk_pipeline.cpp
-    ${XN_VK_DIR}/core/xn_vk_vertex.cpp
-    ${XN_VK_DIR}/window/xn_vk_swapchain.cpp
-    ${XN_VK_DIR}/window/xn_glfw.cpp
-    ${XN_VK_DIR}/xn_vulkan_renderer.cpp
-    ${XN_VK_DIR}/xn_vk_vertex_arrays.cpp
-
+    src/app/app_threads_shared.cpp
+    src/app/app_state.cpp
 )
 
 # build macros
@@ -168,6 +147,8 @@ macro(VK_Build project_name src_file)
     # find_library(SDL2_LIBRARY NAME SDL2 PATHS ${SDL_DIR}/lib/x64)
     # find_file(SDL2_INCLUDE_DIR NAME SDL.h PATHS ${SDL_DIR}/include HINTS SDL2 )
 
+    add_subdirectory(${XN_VK_DIR} ${XN_VK_DIR}/build)
+
     add_executable( ${PROJECT_NAME}  
         ${XNLIB_DIR}/external/vk_imgui/imgui_impl_vulkan.cpp
         ${XNLIB_DIR}/external/stb_image_impl.cpp
@@ -179,7 +160,10 @@ macro(VK_Build project_name src_file)
 
     target_link_directories(${PROJECT_NAME} PRIVATE ${GLFW_DIR}/lib-vc2019 ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME}
-        ${OpenCV_LIBS} xnlib Vulkan::Vulkan imgui xn_vk
+        ${OpenCV_LIBS} 
+        armlib 
+        robolib 
+        Vulkan::Vulkan xn_vulkan imgui
         ${GLFW_DIR}/lib-vc2019/glfw3.lib ssh Ws2_32.lib       
     )
 
@@ -188,9 +172,7 @@ macro(VK_Build project_name src_file)
         ${Vulkan_INCLUDE_DIR}
     )
 
-    target_precompile_headers(${PROJECT_NAME} PRIVATE 
-        ${PRECOMPILED_HEADERS}
-    )
+    target_precompile_headers(${PROJECT_NAME} PRIVATE ${PRECOMPILED_HEADERS})
 endmacro()
 
 
@@ -198,4 +180,4 @@ endmacro()
 # -----------------------------------------------------------------------------
 
 # GL_Build( lidar_gl src/lidar_gl.cpp ${src_obj_list})
-VK_Build( lidar_vk src/lidar_vk.cpp ${vk_obj_list})
+VK_Build( lidar_vk src/lidar_vk.cpp )
