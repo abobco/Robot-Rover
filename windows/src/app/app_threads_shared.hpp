@@ -19,21 +19,12 @@ struct Jpeg {
   size_t size = 0;
 };
 
-struct ArmInfo {
-  const double base_len = 170;
-  double wristlen = 150;
-  vec3 target{0, 0, 0};
-  pio::SmoothServo *wrist;
-  ik::ServoChain joints;
-};
-
 struct RobotController {
   glm::ivec2 cam_servo_width{1573, 2056};
   Jpeg cam_pic;
   Jpeg cam_pic_processed;
   std::vector<uint8_t> cam_outframe;
 
-  // ArmInfo armInfo;
   RobotArm arm;
 
   Rover rover;
@@ -83,8 +74,6 @@ private:
   std::mutex mutex;
 };
 
-// ik::ServoChain *getArm();
-
 void car_sim_thread(GridGraph &navgraph, RobotController &robot);
 
 void cam_io_thread(SOCKET &pi_cam, Jpeg &cam_pic,
@@ -94,12 +83,6 @@ void cam_servo_ctl_thread(const json &settings, SOCKET &pi_cam,
                           RobotController &robot);
 
 void esp_log_thread(SOCKET &esp_log);
-
-void arm_wait_action_complete(ArmInfo &arm, double timeout = 10);
-
-// void arm_update(ArmInfo &arm);
-
-// void arm_update_thread(ArmInfo &arm);
 
 void ik_sim_thread(RobotArm &arm);
 

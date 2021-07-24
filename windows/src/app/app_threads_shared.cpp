@@ -102,37 +102,6 @@ void esp_log_thread(SOCKET &esp_log) {
   }
 }
 
-// void arm_wait_action_complete(ArmInfo &arm, double timeout) {
-//   const float MAX_DISTANCE = 0.01f;
-//   const double wait_interval = 0.1;
-//   auto t1 = pio::get_time();
-//   time_sleep(0.5);
-//   while (pio::time_diff_seconds(t1, pio::get_time()) < timeout) {
-//     bool finished = true;
-//     for (auto i = 0; i < arm.joints.ik_chain.bone_count; i++) {
-//       for (pio::SmoothServo &s : arm.joints.servos[i]) {
-//         if (s.servo.getWidth() != s.targetw) {
-//           finished = false;
-//           break;
-//         }
-//       }
-//     }
-//     if (finished)
-//       break;
-//     time_sleep(wait_interval);
-//   }
-// }
-
-// void arm_update_thread(ArmInfo &arm) {
-//   while (AppState::get().run) {
-//     arm.joints.move_wrist(*arm.wrist);
-//   }
-// }
-
-// void arm_update(ArmInfo &arm) {
-//   arm.joints.grab_safe(arm.wristlen, arm.target);
-// }
-
 void ik_sim_thread(RobotArm &arm) {
   float tot_err = 0;
   float avg_err = 0;
@@ -288,50 +257,6 @@ void yolo_thread(const json &jsettings, SOCKET &pi_arm, vec3 &arm_target,
 
   // return NULL;
 }
-
-// void arm_ctl_thread(RobotArm &arm) {
-//   bool first = true;
-//   while (AppState::get().run) {
-//     // vec3 v_target = AppState::get().arm_target;
-//     // read_vec3(arm_ctl_sock, v_target);
-//     if (!AppState::get().grab_trigger) {
-//       time_sleep(0.1);
-//       return;
-//     }
-//     AppState::get().grab_trigger = false;
-
-//     if (first) {
-//       // set_claw_target(claw_ctl, CLAW_OPEN);
-//       armInfo.joints.straighten();
-//       arm_wait_action_complete(armInfo);
-//       first = false;
-//     }
-
-//     // align arm to target
-//     // AppState::get().arm_target = {-v_target.x + 90, -8, -v_target.y};
-//     DUMP(armInfo.target);
-//     armInfo.wristlen = 30;
-//     AppState::get().move_to_target = true;
-//     arm_wait_action_complete(armInfo);
-
-//     // move to target
-//     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max * 1.5f;
-//     armInfo.wristlen = -50;
-//     arm_wait_action_complete(armInfo);
-
-//     // grab
-//     // set_claw_target(claw_ctl, CLAW_CLOSE);
-
-//     // move to neutral position
-//     AppState::get().move_to_target = false;
-//     armInfo.wrist->t_max = armInfo.joints.servos[0][1].t_max / 2;
-//     armInfo.joints.straighten();
-//     arm_wait_action_complete(armInfo);
-
-//     // release
-//     // set_claw_target(claw_ctl, CLAW_OPEN);
-//   }
-// }
 
 void rover_ctl_thread(Rover &rover, GridGraph &navgraph) {
   std::vector<std::vector<glm::vec3>> nav_verts;

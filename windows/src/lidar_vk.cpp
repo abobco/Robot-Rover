@@ -144,14 +144,20 @@ private:
   }
 
   void updatePointCloudMesh() {
-    scene.popChild("scan");
+    static vulkan::Mesh scan_mesh;
+    static DrawNode *sd = NULL;
     std::vector<glm::vec3> all_points;
-    for (auto &p : PointCloud::all)
+    for (const auto &p : PointCloud::all)
       all_points.insert(all_points.begin(), p.points.begin(), p.points.end());
-    scene.addChild(
-        "color_lit",
-        vulkan::Mesh::gen_box_batch(ctx, all_points, glm::vec3(0.1f)),
-        PushConstColor(vulkan::sample_colors[0]));
+    scan_mesh.vertexBuffer.destroy(ctx.device.handle);
+    scan_mesh.indexBuffer.destroy(ctx.device.handle);
+    vulkan::Mesh::gen_box_batch(ctx, scan_mesh, all_points, glm::vec3(0.1f));
+
+    if (sd != NULL) {
+      delete scene.popChild(sd);
+    }
+    sd = scene.addChild("color_lit", &scan_mesh,
+                        PushConstColor(vulkan::sample_colors[0]));
   }
 
   void createScene() {
@@ -159,15 +165,16 @@ private:
     scene.addChild("lightSource", "textured", &cubeMesh);
     scene.addChild("cube", "lit", &cubeMesh);
 
-    updatePointCloudMesh();
+    // updatePointCloudMesh();
 
     { // add gridbox batch drawnode
       std::vector<glm::vec3> gridverts;
       PointCloud::gridgraph_to_verts(navgraph.cells, gridverts,
                                      navgraph.boxSize, navgraph.offset);
-      scene.addChild("color_lit",
-                     vulkan::Mesh::gen_box_batch(ctx, gridverts,
-                                                 glm::vec3(navgraph.boxSize)),
+      vulkan::Mesh *gridmesh = new vulkan::Mesh();
+      vulkan::Mesh::gen_box_batch(ctx, *gridmesh, gridverts,
+                                  glm::vec3(navgraph.boxSize));
+      scene.addChild("color_lit", gridmesh,
                      PushConstColor(vulkan::sample_colors[1]));
     }
 
@@ -277,6 +284,8 @@ private:
     }
 
     createArmMesh();
+    updatePointCloudMesh();
+
     for (auto &keyVal : scene.pipelineMap)
       keyVal.second.setClearColor(clear_color);
 

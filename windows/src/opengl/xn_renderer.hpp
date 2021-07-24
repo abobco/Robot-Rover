@@ -376,6 +376,7 @@ struct DrawNode {
       DrawNode *c = children[i];
       if (id == c->id) {
         children.erase(children.begin() + i);
+        children.resize(children.size() - 1);
         return c;
       }
     }
