@@ -110,19 +110,28 @@ void PointCloud::hillclimb_transform(const PointCloud &a, PointCloud &b,
       float min_dist = FLT_MAX;
       for (glm::vec3 &p_b : bvec) {
         float d = glm::distance2(p_a, p_b);
+        // if (d > 1000) {
+        //   DUMP(p_a);
+        //   DUMP(p_b);
+        // }
         if (d < min_dist) {
           min_dist = d;
         }
       }
+      // if (min_dist < 100) {
+      // DUMP(min_dist);
       min_distances.push_back(min_dist);
+      // }
     }
     float sm =
         std::accumulate(min_distances.begin(), min_distances.end(), 0.0f);
+    // DUMP(sm);
     sm /= min_distances.size();
+    // DUMP(sm);
     return sm;
   };
   float orig_error = get_error(a_proj, b_proj);
-  // DUMP(orig_error);
+  DUMP(orig_error);
 
   auto rotate = [](glm::vec3 &a, float x) { a = glm::rotate(a, x, {0, 1, 0}); };
   auto translate_x = [](glm::vec3 &a, float x) { a.x += x; };
@@ -159,7 +168,7 @@ void PointCloud::hillclimb_transform(const PointCloud &a, PointCloud &b,
     b.points[i].z = n_b[i].z;
   }
 
-  // DUMP(get_error(a_proj, n_b));
+  DUMP(get_error(a_proj, n_b));
   // DUMP(angle);
   // DUMP(t);
 }

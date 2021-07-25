@@ -23,8 +23,8 @@ struct Rover {
   void lidar_scan_error_correct(PointCloud &pc_new, const PointCloud &pc_prev,
                                 int iterations = 2);
 
-  void lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
-                     int step_max);
+  // void lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
+  //                   int step_max);
 
   int move_forward(float gridsquares, float gridbox_size);
 
@@ -36,6 +36,8 @@ struct Rover {
   void lidar_scan_postprocess(const PointCloud &pc,
                               std::vector<std::vector<glm::vec3>> &nav_verts,
                               GridGraph &navgraph);
+  void lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
+                     int step_max, const glm::vec2 &offset = {0, 0});
 };
 
 void wifi_car_test(SOCKET &sockfd, float t = 1);

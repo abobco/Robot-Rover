@@ -101,14 +101,14 @@ public:
 
     initVulkan();
 
-    PointCloud::read_pointclouds(buildAssetPath("pointcloud/livingroom.pc"),
-                                 PointCloud::all);
-    if (PointCloud::all.size() > 0) {
-      PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
-                                robot->rover.position, navgraph.cells,
-                                navgraph.offset);
-      navgraph.graph = preprocess_graph(navgraph.cells);
-    }
+    // PointCloud::read_pointclouds(buildAssetPath("pointcloud/livingroom.pc"),
+    //                              PointCloud::all);
+    // if (PointCloud::all.size() > 0) {
+    //   PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
+    //                             robot->rover.position, navgraph.cells,
+    //                             navgraph.offset);
+    //   navgraph.graph = preprocess_graph(navgraph.cells);
+    // }
 
     cubeMesh = vulkan::Mesh(ctx, vulkan::getCubeFaceVerts(),
                             vulkan::getCubeFaceIndices());
@@ -147,11 +147,31 @@ private:
     static vulkan::Mesh scan_mesh;
     static DrawNode *sd = NULL;
     std::vector<glm::vec3> all_points;
+    size_t buf_len = 0;
     for (const auto &p : PointCloud::all)
+      buf_len += p.points.size();
+    if (buf_len == 0)
+      return;
+    all_points.reserve(buf_len);
+
+    for (const auto &p : PointCloud::all) {
+      // for (const auto &pt : p.points)
+      //   all_points.push_back(pt);
       all_points.insert(all_points.begin(), p.points.begin(), p.points.end());
+      // DUMP(p.origin);
+    }
+    // if (all_points.size() == 0)
+    //   return;
+
+    // for (glm::vec3 &v : all_points)
+    //   v -= navgraph.offset;
+
+    // all_points = PointCloud::get_all_points(PointCloud::all,
+    // navgraph.offset);
+
     scan_mesh.vertexBuffer.destroy(ctx.device.handle);
     scan_mesh.indexBuffer.destroy(ctx.device.handle);
-    vulkan::Mesh::gen_box_batch(ctx, scan_mesh, all_points, glm::vec3(0.1f));
+    vulkan::Mesh::gen_box_batch(ctx, scan_mesh, all_points, glm::vec3(0.025f));
 
     if (sd != NULL) {
       delete scene.popChild(sd);
@@ -167,16 +187,16 @@ private:
 
     // updatePointCloudMesh();
 
-    { // add gridbox batch drawnode
-      std::vector<glm::vec3> gridverts;
-      PointCloud::gridgraph_to_verts(navgraph.cells, gridverts,
-                                     navgraph.boxSize, navgraph.offset);
-      vulkan::Mesh *gridmesh = new vulkan::Mesh();
-      vulkan::Mesh::gen_box_batch(ctx, *gridmesh, gridverts,
-                                  glm::vec3(navgraph.boxSize));
-      scene.addChild("color_lit", gridmesh,
-                     PushConstColor(vulkan::sample_colors[1]));
-    }
+    // { // add gridbox batch drawnode
+    //   std::vector<glm::vec3> gridverts;
+    //   PointCloud::gridgraph_to_verts(navgraph.cells, gridverts,
+    //                                  navgraph.boxSize, navgraph.offset);
+    //   vulkan::Mesh *gridmesh = new vulkan::Mesh();
+    //   vulkan::Mesh::gen_box_batch(ctx, *gridmesh, gridverts,
+    //                               glm::vec3(navgraph.boxSize));
+    //   scene.addChild("color_lit", gridmesh,
+    //                  PushConstColor(vulkan::sample_colors[1]));
+    // }
 
     // create navmesh
     for (auto &p : PointCloud::all) {
@@ -220,6 +240,9 @@ private:
 
     // create grid
     float half_ext = navgraph.boxSize * 0.5f;
+    if (PointCloud::all.size() == 0) {
+      navgraph.offset = {0, 0, 0};
+    }
     scene.addChild("lines", &gridMesh,
                    PushConstColor(navgraph.offset +
                                   glm::vec3(half_ext, 0.001f, half_ext)));

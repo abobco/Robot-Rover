@@ -8,15 +8,17 @@ void Rover::lidar_scan(std::vector<std::vector<glm::vec3>> &nav_verts,
                        xn::GridGraph &navgraph) {
   int servo_step = 50;
   int step_incr = 1, step_max = 100;
+  const glm::vec2 offset(6.0 / 200, 0);
+  // const glm::vec2 offset(0);
 
   PointCloud::all.push_back(PointCloud(glm::vec3(position.x, 0, position.y)));
   PointCloud &pc_new = PointCloud::all.back();
 
-  lidar_scan_ex(pc_new, servo_step, step_incr, step_max);
+  lidar_scan_ex(pc_new, servo_step, step_incr, step_max, offset);
 
   turn(180);
 
-  lidar_scan_ex(pc_new, servo_step, step_incr, step_max);
+  lidar_scan_ex(pc_new, servo_step, step_incr, step_max, offset);
 
   turn(-180);
 
@@ -56,15 +58,16 @@ void Rover::lidar_scan_postprocess(
   nav_verts.push_back(triverts);
 
   // convert to pathfinding grid
-  navgraph.cells.clear();
-  PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize, position,
-                            navgraph.cells, navgraph.offset, 10, 2);
+  // navgraph.cells.clear();
+  // PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
+  // position,
+  //                           navgraph.cells, navgraph.offset, 10, 2);
 
-  navgraph.graph = preprocess_graph(navgraph.cells);
+  // navgraph.graph = preprocess_graph(navgraph.cells);
 }
 
 void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
-                          int step_max) {
+                          int step_max, const glm::vec2 &offset) {
   int step = 0;
 
   const LidarReadInstruction l_read;
@@ -129,13 +132,13 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
       double ang = -(step * (1.0 / 100) * M_PI);
 
       vec3 v = {(float)d * 0.01f, 0, 0};
-      v = vec3::rotate_axis(v, {0, 1, 0}, ang + rotation);
+      v = vec3::rotate_axis(v, {0, 1, 0}, ang);
+      v = vec3::rotate_axis(v, {0, 1, 0}, rotation);
       vec3 rot_ax2 = vec3::rotate_axis({0, 0, 1}, {0, 1, 0}, ang);
       v = vec3::rotate_axis(v, rot_ax2, servo_ang_f);
-
-      // DUMP(v);
-      pc_new.points.push_back(
-          glm::vec3(v.x + position.x, v.y, v.z + position.y));
+      vec3 ro = vec3::rotate_axis({offset.x, 0, offset.y}, {0, 1, 0}, rotation);
+      pc_new.points.push_back(glm::vec3(v.x + position.x + ro.x, fabsf(v.y),
+                                        v.z + position.y + ro.z));
     }
   }
   printf("scan done\n");
