@@ -51,6 +51,7 @@ public:
   bool update_sim_grab_target = false;
   bool found_chessboard = false;
   bool gui_windows_need_update = true;
+  bool dirty_points;
 };
 
 } // namespace xn

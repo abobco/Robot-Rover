@@ -76,7 +76,11 @@ void PointCloud::read_pointclouds(const std::string filename,
 void PointCloud::combine_points(const std::vector<PointCloud> &inp,
                                 std::vector<glm::vec3> &out) {
   std::vector<glm::vec3> o;
-
+  size_t buf_len = 0;
+  for (const PointCloud &p : inp)
+    buf_len += p.points.size();
+  if (buf_len != 0)
+    o.reserve(buf_len);
   for (const PointCloud &p : inp) {
     o.insert(o.end(), p.points.begin(), p.points.end());
   }

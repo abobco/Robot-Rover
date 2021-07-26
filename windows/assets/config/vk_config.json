@@ -44,8 +44,8 @@
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        -1920,
-        -513
+        -1902,
+        -441
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",

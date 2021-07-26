@@ -30,6 +30,7 @@ void Rover::lidar_scan(std::vector<std::vector<glm::vec3>> &nav_verts,
 
   // update_graph_boxes();
   AppState::get().graph_needs_update = true;
+  AppState::get().dirty_points = true;
 }
 
 void Rover::lidar_scan_error_correct(PointCloud &pc_new,
@@ -40,6 +41,7 @@ void Rover::lidar_scan_error_correct(PointCloud &pc_new,
     float orig_ang = rotation;
     PointCloud::hillclimb_transform(pc_prev, pc_new, tx, rotation);
     AppState::get().scan_needs_update = true;
+    AppState::get().dirty_points = true;
     DUMP(tx);
     DUMP(rotation);
 
@@ -58,12 +60,11 @@ void Rover::lidar_scan_postprocess(
   nav_verts.push_back(triverts);
 
   // convert to pathfinding grid
-  // navgraph.cells.clear();
-  // PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
-  // position,
-  //                           navgraph.cells, navgraph.offset, 10, 2);
-
-  // navgraph.graph = preprocess_graph(navgraph.cells);
+  navgraph.cells.clear();
+  PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize, position,
+                            navgraph.cells, navgraph.offset, 10, 2);
+  navgraph.graph = preprocess_graph(navgraph.cells);
+  AppState::get().scan_needs_update = true;
 }
 
 void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
@@ -139,6 +140,7 @@ void Rover::lidar_scan_ex(PointCloud &pc_new, int servo_step, int step_incr,
       vec3 ro = vec3::rotate_axis({offset.x, 0, offset.y}, {0, 1, 0}, rotation);
       pc_new.points.push_back(glm::vec3(v.x + position.x + ro.x, fabsf(v.y),
                                         v.z + position.y + ro.z));
+      AppState::get().dirty_points = true;
     }
   }
   printf("scan done\n");
@@ -148,7 +150,7 @@ int Rover::move_forward(float gridsquares, float gridbox_size) {
   float c = M_PI * wheelDiameter;
   MotorInstruction cmd_m_forward;
   cmd_m_forward.length_pulses =
-      (100 * gridsquares * gridbox_size) / (c / motorCpr);
+      (192 * 100 * gridsquares * gridbox_size) / (c / motorCpr);
   cmd_m_forward.dir_left = 0;
   cmd_m_forward.dir_right = 0;
 
