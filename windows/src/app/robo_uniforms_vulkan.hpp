@@ -23,7 +23,7 @@ struct PushConstColor{
 	PushConstColor(glm::mat4 model, glm::vec4 color)
 		: model(model), color(color){}
 
-	PushConstColor(ModelMatrix model, glm::vec4 color)
+	PushConstColor(ModelMatrix model, glm::vec4 color = glm::vec4(1))
 		: model(model.mat), color(color){}
 
 	PushConstColor(glm::vec3 translation, glm::vec3 scale = glm::vec3(1),

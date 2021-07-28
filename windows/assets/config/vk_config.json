@@ -44,7 +44,7 @@
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        -1861,
+        -1724,
         -448
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",

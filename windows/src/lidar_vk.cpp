@@ -18,68 +18,28 @@ static const std::string DEFAULT_SETTINGS_FILE_PATH =
 std::string settings_filepath = DEFAULT_SETTINGS_FILE_PATH;
 json settings;
 
-std::vector<PointCloud> PointCloud::all;
-bool mouse_held = false;
-
 void console_update_thread(SshConsole* console);
-
-// graphics mesh data for navigation area
-// struct NavMesh : public vulkan::Mesh{
-//	NavMesh(vulkan::Context& ctx, const PointCloud& pc){
-//		std::vector<glm::vec3> nv;
-//		std::vector<vulkan::Vertex> verts;
-//		std::vector<uint16_t> indices;
-//		size_t i;
-//		pc.toNavmesh(nv, glm::vec3(0, 1, 0));
-//		indices.resize(nv.size());
-//		verts.resize(nv.size());
-//		for (i = 0; i < nv.size(); i++)
-//			verts[i] = {nv[i], glm::vec3(1), glm::vec2(1),
-// glm::vec3(0,
-// 1, 0)}; 		for (i = 0; i < nv.size(); i++)
-// indices[i] = i;
-//
-//		vertexBuffer.create(ctx.commandPool.handle, ctx.device,
-// ctx.physicalDevice, 			verts);
-// indexBuffer.create(ctx.commandPool.handle, ctx.device, ctx.physicalDevice,
-// indices);
-//	}
-//};
 
 class App{
 public:
 	glfw::Window window;
 	glm::vec4 clear_color{0.02f, 0.02f, 0.02f, 1.00f};
 	vulkan::Context ctx;
-	std::ofstream debug_file;
 	vulkan::SwapChain swapChain;
-
-	vulkan::DevicePair& gpu = ctx.gpu;
-
-	std::vector<std::thread> threads;
-	SshConsole* console;
-	RobotSettingsWindow settingsWindow;
 	vulkan::Image camImage;
-	ImTextureID camImageId;
 
 	RobotController* robot;
+	SshConsole* console;
+	GridGraph navgraph;
+	RobotSettingsWindow settingsWindow;
+	CamWindow camWindow;
 
 	Scene scene;
-	std::vector<std::vector<glm::vec3>> nav_verts;
-	vulkan::Mesh cubeMesh, gridMesh;
-	GridGraph navgraph;
+	vulkan::Mesh cubeMesh, gridMesh, triMesh;
 
-	std::map<std::string, vulkan::Image> imageMap;
 	std::map<std::string, std::vector<vulkan::UniformCreateInfo>> uniformInfo;
-	UniformLight light{glm::vec3(1), glm::vec3(0), glm::vec3(0.0, -2.0, 1.5)};
 
-	float deltaTime = 0.0f;
-	float lastFrame = 0.0f;
-	bool orth = false, orbit = true;
-
-	glm::dvec2 cursor = glm::dvec2(0);
-
-	static std::string buildAssetPath(const json& relpath){
+	static std::string assetPath(const json& relpath){
 		return (std::string)settings["asset_path"] + "/" + (std::string)relpath;
 	}
 
@@ -87,43 +47,108 @@ public:
 
 	App(const std::string& settings_file){
 		settings = load_json_file(settings_file);
-		debug_file = std::ofstream((std::string)settings["debug_file"]);
 		settingsWindow.setUserCallback(vulkan::drawRenderTreeGui);
+
+		console = new SshConsole(settings);
+		robot = new RobotController();
 	}
 
 	void run(){
-		console = new SshConsole(settings);
-		robot = new RobotController();
-		threads.push_back(std::thread(console_update_thread, console));
-		threads.push_back(std::thread(ik_sim_thread, std::ref(robot->arm)));
-		threads.push_back(
-			std::thread(car_sim_thread, std::ref(navgraph), std::ref(*robot)));
-
 		initVulkan();
-
-		PointCloud::read_pointclouds(buildAssetPath("pointcloud/livingroom.pc"),
-			PointCloud::all);
-		AppState::get().dirty_points = true;
-
-		if (PointCloud::all.size() > 0){
-			PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
-				robot->rover.position, navgraph.cells,
-				navgraph.offset);
-			navgraph.graph = preprocess_graph(navgraph.cells);
-		}
-		AppState::get().scan_needs_update = true;
-
-		cubeMesh = vulkan::Mesh(ctx, vulkan::getCubeFaceVerts(),
-			vulkan::getCubeFaceIndices());
-		gridMesh = vulkan::Mesh::gen_grid(ctx, navgraph.boxSize, 100, 100);
-
 		createScene();
 
+		std::vector<std::thread> threads;
+		threads.push_back(std::thread(console_update_thread, console));
+		threads.push_back(std::thread(ik_sim_thread, std::ref(robot->arm)));
+		threads.push_back(std::thread(car_sim_thread, std::ref(navgraph), std::ref(*robot)));
+
 		mainLoop();
+
 		cleanup();
+
+		AppState::get().run = false;
+		for (auto& t : threads){
+			t.join();
+		}
 	}
 
 private:
+	void createScene(){
+		ModelMatrix model;
+
+		// load point cloud file
+		{
+			PointCloud::read_pointclouds(assetPath("pointcloud/livingroom.pc"),
+				PointCloud::all);
+			AppState::get().dirty_points = true;
+
+			if (PointCloud::all.size() > 0){
+				PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
+					robot->rover.position, navgraph.cells,
+					navgraph.offset);
+				navgraph.graph = preprocess_graph(navgraph.cells);
+			}
+			AppState::get().scan_needs_update = true;
+		}
+
+		// create meshes
+		{
+			cubeMesh = vulkan::Mesh(ctx, vulkan::getCubeFaceVerts(), vulkan::getCubeFaceIndices());
+			gridMesh = vulkan::Mesh::gen_grid(ctx, navgraph.boxSize, 100, 100);
+			triMesh = vulkan::Mesh(ctx, vulkan::getTriVerts(), vulkan::getTriIndices());
+			scene.addChild("lightSource", "textured", &cubeMesh);
+		}
+
+		// create arm joints
+		{
+			scene.drawMap["arm"] = scene.root.addChild(new DrawNode());
+			vulkan::GraphicsPipeline& gp = scene.pipelineMap["color_lit"];
+			for (int i = 0; i < robot->arm.joints.numJoints; i++){
+				model.toIdentity()
+					.translate(robot->arm.joints.positions[i].toGLM())
+					.scale(0.1f);
+
+				scene.drawMap["arm"]->addChild(
+					new DrawNode(&gp, &cubeMesh),
+					PushConstColor(model, vulkan::sample_colors[2]));
+			}
+
+			model.toIdentity()
+				.translate(robot->arm.target.toGLM())
+				.scale(0.1f);
+			scene.drawMap["target"] = scene.drawMap["arm"]->addChild(
+				new DrawNode(&gp, &cubeMesh),
+				PushConstColor(model, glm::vec4(0.8, 0.2, 0.2, 1.0)));
+		}
+
+		// create car mesh
+		{
+			model.toIdentity()
+				.translate(glm::vec3(0, 0.1f, 0))
+				.scale(0.25f);
+			scene.addChild("car", "color_lit", &triMesh,
+				PushConstColor(model, glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)));
+		}
+
+		// create grid
+		{
+			float half_ext = navgraph.boxSize * 0.5f;
+			if (PointCloud::all.size() == 0)
+				navgraph.offset = {0, 0, 0};
+
+			model.toIdentity()
+				.translate(navgraph.offset + glm::vec3(half_ext, 0.001f, half_ext));
+			scene.addChild("grid", "lines", &gridMesh, PushConstColor(model));
+		}
+
+		// init scene
+		{
+			scene.init(ctx, swapChain, uniformInfo);
+			vulkan::gui::init(ctx, window, scene.pipelineMap["lit"], swapChain);
+			camWindow.id = vulkan::ImGuiAddImage(scene.imageMap["brick"]);
+		}
+	}
+
 	void mainLoop(){
 		while (!glfwWindowShouldClose(window.handle)){
 			glfwPollEvents();
@@ -137,8 +162,7 @@ private:
 			if (AppState::get().path_needs_update){
 				AppState::get().path_needs_update = false;
 				recreatePath();
-			}
-			else if (navgraph.path.size() == 0){
+			} else if (navgraph.path.size() == 0){
 				scene.popChild("path");
 			}
 
@@ -184,8 +208,7 @@ private:
 
 			// create navmesh
 			for (auto& p : PointCloud::all){
-				nav_verts.push_back(std::vector<glm::vec3>());
-				std::vector<glm::vec3>& navmesh = nav_verts.back();
+				std::vector<glm::vec3> navmesh;
 				std::vector<vulkan::Vertex> verts;
 				std::vector<uint16_t> indices;
 				p.toNavmesh(navmesh, glm::vec3(0, 1, 0));
@@ -206,56 +229,9 @@ private:
 			}
 
 			float half_ext = navgraph.boxSize * 0.5f;
-			scene.drawMap["grid"]->setPushConstant(PushConstColor(
+			scene.drawMap["grid"]->setPushConst(PushConstColor(
 				navgraph.offset + glm::vec3(half_ext, 0.001f, half_ext)));
 		}
-	}
-
-	void createScene(){
-		// assign to drawMap keys for later reference
-		scene.addChild("lightSource", "textured", &cubeMesh);
-
-		// create arm joints
-		{
-			scene.drawMap["arm"] = scene.root.addChild(new DrawNode());
-			vulkan::GraphicsPipeline& gp = scene.pipelineMap["color_lit"];
-			AppState::get().arm_mut.lock();
-			for (int i = 0; i < robot->arm.joints.numJoints; i++)
-				scene.drawMap["arm"]->addChild(
-					new DrawNode(&gp, &cubeMesh),
-					PushConstColor(robot->arm.joints.positions[i].toGLM(),
-						glm::vec3(0.1f), vulkan::sample_colors[2]));
-			AppState::get().arm_mut.unlock();
-
-			scene.drawMap["target"] = scene.drawMap["arm"]->addChild(
-				new DrawNode(&gp, &cubeMesh),
-				PushConstColor(robot->arm.target.toGLM(), glm::vec3(0.1f),
-					glm::vec4(0.8, 0.2, 0.2, 1.0)));
-		}
-
-		// create car mesh
-		{
-			scene.addChild(
-				"car", "color_lit",
-				new vulkan::Mesh(ctx, vulkan::getTriVerts(), vulkan::getTriIndices()),
-				PushConstColor(glm::vec3(0, 0.1f, 0), glm::vec3(0.25f),
-					glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)));
-		}
-
-		// create grid
-		{
-			float half_ext = navgraph.boxSize * 0.5f;
-			if (PointCloud::all.size() == 0)
-				navgraph.offset = {0, 0, 0};
-
-			scene.addChild("grid", "lines", &gridMesh,
-				PushConstColor(navgraph.offset +
-					glm::vec3(half_ext, 0.001f, half_ext)));
-		}
-
-		scene.init(ctx, swapChain, uniformInfo);
-		vulkan::gui::init(ctx, window, scene.pipelineMap["lit"], swapChain);
-		camImageId = vulkan::ImGuiAddImage(imageMap["brick"]);
 	}
 
 	ImDrawData* drawImgui(){
@@ -270,32 +246,30 @@ private:
 
 			if (AppState::get().received_pic){
 				// robot->cam_pic_processed.buffer
-				res = newImage.fromBuffer(gpu, ctx.commandPool.handle,
+				res = newImage.fromBuffer(ctx.gpu, ctx.commandPool.handle,
 					robot->cam_outframe);
 				// cv::Mat cvtImage;
 				// cv::cvtColor(robot->cam_outframe, cvtImage, cv::COLOR_RGB2BGR);
-				// res = newImage.fromBufferRaw(gpu, ctx.commandPool.handle,
+				// res = newImage.fromBufferRaw(ctx.gpu, ctx.commandPool.handle,
 				//                              cvtImage.ptr(), cvtImage.rows,
 				//                              cvtImage.cols, 3,
 				//                              VK_FORMAT_R8G8B8_SINT);
-			}
-			else
-				newImage = imageMap["brick"];
+			} else
+				newImage = scene.imageMap["brick"];
 			// frame_mut.unlock();
 			if (res == 0){
-				camImage.destroy(gpu.device);
+				camImage.destroy(ctx.gpu.device);
 				camImage = newImage;
-				camImage.createTextureView(gpu.device);
-				camImage.createSampler(gpu);
-				camImageId = vulkan::ImGuiAddImage(camImage);
-			}
-			else{
-				newImage.destroy(gpu.device);
+				camImage.createTextureView(ctx.gpu.device);
+				camImage.createSampler(ctx.gpu);
+				camWindow.id = vulkan::ImGuiAddImage(camImage);
+			} else{
+				newImage.destroy(ctx.gpu.device);
 			}
 
 			AppState::get().frame_mut.unlock();
 		}
-		TextureWindow::draw(camImageId, ImVec2(640, 480), *robot);
+		camWindow.draw(ImVec2(640, 480), *robot);
 
 		settingsWindow.draw(*robot, (void*)&scene);
 		bool t = true;
@@ -308,7 +282,7 @@ private:
 
 	void drawFrame(){
 		ImDrawData* data = drawImgui();
-		uint32_t imageIndex = swapChain.getNextFrame(gpu.device);
+		uint32_t imageIndex = swapChain.getNextFrame(ctx.gpu.device);
 		if (imageIndex == -1){
 			recreateSwapChain();
 			return;
@@ -340,38 +314,37 @@ private:
 		window.setPositionCallback(window_pos_callback);
 		window.setResizeCallback(framebufferResizeCallback, &swapChain);
 
-		ctx.createInstance(debugWriteToFileCallback, (void*)&debug_file);
+		ctx.createInstance(settings["debug_file"]);
 		ctx.createDevices(window);
 		ctx.createCommandPool();
-		gpu.physicalDevice.print();
+		ctx.gpu.physicalDevice.print();
 
-		swapChain.create(gpu, window);
-		swapChain.createImageViews(gpu.device);
+		swapChain.create(ctx.gpu, window);
+		swapChain.createImageViews(ctx.gpu.device);
 
 		// load images
 		for (const auto& [key, value] : settings["textures"].items()){
-			imageMap[key] =
-				vulkan::Image(gpu, ctx.commandPool.handle, buildAssetPath(value))
-				.createTextureView(gpu.device)
-				.createSampler(gpu);
+			scene.imageMap[key] =
+				vulkan::Image(ctx.gpu, ctx.commandPool.handle, assetPath(value))
+				.createTextureView(ctx.gpu.device)
+				.createSampler(ctx.gpu);
 		}
 
 		// create grapihcs pipelines
-		auto shaderMap =
-			AssetLoader::load_shaders(settings["asset_path"], settings["shaders"]);
+		ShaderMap shaderMap = AssetLoader::load_shaders(settings["asset_path"], settings["shaders"]);
 		shaderMap["lines"] = shaderMap["color"];
 		for (auto& [key, val] : shaderMap)
-			scene.addPipeline(key, val.first, val.second);
+			scene.addPipeline(key, val.vert, val.frag);
 		scene.pipelineMap["lines"].polygonMode = VK_POLYGON_MODE_LINE;
 		scene.pipelineMap["lines"].topologyType = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-		for (auto& [key, val] : scene.pipelineMap)
-			val.createPushConstantBuffer(gpu.physicalDevice);
-		std::vector<std::string> colorPipelines = {"lines", "color", "color_lit"};
-		scene.setPushConstants(colorPipelines, PushConstColor());
+
+		// create push constants
+		scene.createPushConstBuffers(ctx);
+		scene.setPushConstants({"lines", "color", "color_lit"}, PushConstColor());
 
 		// create uniforms
 		vulkan::UniformCreateInfo mvpInfo("mvp", sizeof(UniformMvp), 0);
-		vulkan::UniformCreateInfo imageInfo(&imageMap["brick"], 1);
+		vulkan::UniformCreateInfo imageInfo(&scene.imageMap["brick"], 1);
 		vulkan::UniformCreateInfo lightInfo("light", sizeof(UniformLight), 2,
 			VK_SHADER_STAGE_FRAGMENT_BIT);
 		uniformInfo["textured"] = {mvpInfo, imageInfo};
@@ -383,13 +356,17 @@ private:
 	}
 
 	void updateUniforms(uint32_t imageIndex){
-		light.viewPos = scene.mainCamera.pos;
-		light.color = glm::vec3(1.0f);
-		scene.setUniform("lit", "light", light, imageIndex, gpu.device);
-		scene.setUniform("color_lit", "light", light, imageIndex, gpu.device);
-
 		ModelMatrix model;
-		model.translate(light.pos)
+		UniformLight light;
+
+		light.color = glm::vec3(1);
+		light.pos = glm::vec3(0.0f, -2.0f, 1.5f);
+		light.viewPos = scene.mainCamera.pos;
+		scene.setUniform("lit", "light", light, imageIndex, ctx.gpu.device);
+		scene.setUniform("color_lit", "light", light, imageIndex, ctx.gpu.device);
+
+		model.toIdentity()
+			.translate(light.pos)
 			.scale(0.1f);
 		scene.drawMap["lightSource"]->setModel(model);
 
@@ -400,7 +377,7 @@ private:
 			.translate(car_pos_3d)
 			.scale(0.25f)
 			.rotateEulers(glm::vec3(0, car_ang_corrected, 0));
-		scene.drawMap["car"]->setPushConstant(
+		scene.drawMap["car"]->setPushConst(
 			PushConstColor(model, glm::vec4(1.0f, 1.0f, 0.2f, 1.0f)));
 
 		model.toIdentity()
@@ -408,7 +385,7 @@ private:
 			.rotateEulers(glm::vec3(0, car_ang_corrected, 0))
 			.translate(robot->arm.target.toGLM())
 			.scale(0.1f);
-		scene.drawMap["target"]->setPushConstant(
+		scene.drawMap["target"]->setPushConst(
 			PushConstColor(model, glm::vec4(0.8, 0.2, 0.2, 1.0)));
 
 		for (auto i = 0; i < robot->arm.joints.numJoints; i++){
@@ -417,7 +394,7 @@ private:
 				.rotateEulers(glm::vec3(0, car_ang_corrected, 0))
 				.translate(robot->arm.joints.positions[i].toGLM())
 				.scale(0.1f);
-			scene.drawMap["arm"]->children[i]->setPushConstant(
+			scene.drawMap["arm"]->children[i]->setPushConst(
 				PushConstColor(model, vulkan::sample_colors[2]));
 		}
 	}
@@ -425,12 +402,12 @@ private:
 	void recreateSwapChain(){
 		while (window.isMinimized())
 			glfwWaitEvents();
-		vkDeviceWaitIdle(gpu.device.handle);
+		vkDeviceWaitIdle(ctx.gpu.device.handle);
 
-		ctx.commandPool.destroy(gpu.device);
-		swapChain.recreate(gpu, window);
+		ctx.commandPool.destroy(ctx.gpu.device);
+		swapChain.recreate(ctx.gpu, window);
 		scene.recreatePipelines(ctx, swapChain, uniformInfo);
-		swapChain.createFrameResources(gpu, ctx.commandPool,
+		swapChain.createFrameResources(ctx.gpu, ctx.commandPool,
 			scene.pipelineMap["textured"].renderPass);
 		ctx.createCommandBuffers(swapChain);
 		swapChain.imagesInFlight.resize(swapChain.images.size(), VK_NULL_HANDLE);
@@ -438,7 +415,7 @@ private:
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 		vulkan::gui::init(ctx, window, scene.pipelineMap["textured"], swapChain);
-		camImageId = vulkan::ImGuiAddImage(imageMap["brick"]);
+		camWindow.id = vulkan::ImGuiAddImage(scene.imageMap["brick"]);
 
 		scene.mainCamera.projection = swapChain.getProjectionMatrix();
 	}
@@ -447,52 +424,48 @@ private:
 		cubeMesh.destroy(ctx);
 
 		// ctx.cleanupSwapChain(swapChain);
-		swapChain.destroy(gpu.device);
+		swapChain.destroy(ctx.gpu.device);
 		ctx.cleanup(swapChain);
 
 		vkDestroySurfaceKHR(ctx.instance, window.surface, nullptr);
 		vkDestroyInstance(ctx.instance, nullptr);
 		glfwDestroyWindow(window.handle);
 		glfwTerminate();
-		debug_file.close();
+		ctx.debug_file.close();
 
-		AppState::get().run = false;
-		for (auto& t : threads){
-			t.join();
-		}
 	}
 
 	void update_path(GLFWwindow* window){
-		glfwGetCursorPos(window, &cursor.x, &cursor.y);
+		glm::dvec2 cursor;
 		glm::ivec2 winsize;
+		glfwGetCursorPos(window, &cursor.x, &cursor.y);
 		glfwGetWindowSize(window, &winsize.x, &winsize.y);
-		// xn_printf("cursor: (%.3f, %.3f)\n", cursor.x, cursor.y);
 
 		if (navgraph.graph.size() > 0 && AppState::get().path_mut.try_lock()){
-			glm::ivec2 target;
-			glm::vec3 start_world(robot->rover.position.x, 0,
-				robot->rover.position.y);
-			glm::ivec2 start =
-				world_to_grid(start_world, navgraph.boxSize, navgraph.offset);
 			Plane p{0, {0, 1, 0}};
 			glm::vec3 ray_a, ray_b, q;
 			scene.mainCamera.get_pixelray(cursor, winsize, ray_a, ray_b);
 			float t = 0;
 			if (collision_segment_plane(ray_a, ray_b, p, t, q)){
+				glm::ivec2 graph_dims(navgraph.colCount(), navgraph.rowCount());
+				glm::vec3 start_world(robot->rover.position.x, 0, robot->rover.position.y);
+				glm::ivec2 start = world_to_grid(start_world, navgraph.boxSize, navgraph.offset);
+				glm::ivec2 target = world_to_grid(q, navgraph.boxSize, navgraph.offset);
+				target = clamp_vec2(target, glm::ivec2(0), graph_dims);
+				start = clamp_vec2(start, glm::ivec2(0), graph_dims);
+				navgraph.path = A_star(navgraph.graph, start.x, start.y, target.x, target.y);
 				robot->rover.target = q;
-				target = world_to_grid(q, navgraph.boxSize, navgraph.offset);
 			}
-			target.x = clamp(target.x, 0, (int)navgraph.cells.size());
-			target.y = clamp(target.y, 0, (int)navgraph.cells.front().size());
-			start.x = clamp(start.x, 0, (int)navgraph.cells.size());
-			start.y = clamp(start.y, 0, (int)navgraph.cells.front().size());
-			navgraph.path =
-				A_star(navgraph.graph, start.x, start.y, target.x, target.y);
 			AppState::get().path_mut.unlock();
 		}
 	}
 
 	void processInput(){
+		static float deltaTime = 0.0f;
+		static float lastFrame = 0.0f;
+		static bool orth = false;
+		static bool orbit = true;
+
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -528,8 +501,7 @@ private:
 			}
 			scene.mainCamera.type = CAMERA_ORBIT;
 			scene.mainCamera.target = glm::vec3(0);
-		}
-		else{
+		} else{
 			if (orbit_prev){
 				glfwSetInputMode(window.handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				if (glfwRawMouseMotionSupported())
@@ -562,12 +534,11 @@ private:
 					color = glm::vec4(0.8, 0, 0, 1.0);
 				else
 					color = glm::vec4(0, 0.8, 0, 1.0);
-				n->setPushConstant(PushConstColor(model, color));
+				n->setPushConst(PushConstColor(model, color));
 			}
 
 			AppState::get().path_mut.unlock();
-		}
-		else{
+		} else{
 			// AppState::get().path_needs_update = true;
 		}
 	}
@@ -609,18 +580,6 @@ private:
 			scene.drawMap["arm"]->addChild(&d,
 				PushConstColor(glm::vec4(arm_color, 1.0)));
 		}
-	}
-
-	static VkBool32 debugWriteToFileCallback(
-		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-		VkDebugUtilsMessageTypeFlagsEXT messageType,
-		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-		void* pUserData){
-		// write validation errors to debug file
-		std::ofstream* debug_file = (std::ofstream*)pUserData;
-		*debug_file << "[validation layer] " << pCallbackData->pMessage
-			<< std::endl;
-		return VK_FALSE;
 	}
 
 	static void framebufferResizeCallback(GLFWwindow* window, int width,
