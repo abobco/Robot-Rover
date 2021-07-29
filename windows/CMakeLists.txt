@@ -68,7 +68,6 @@ add_library(imgui STATIC
     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp 
 )
 
-
 project(robolib)
 find_package(OpenCV REQUIRED )
 find_package(libssh CONFIG REQUIRED)
@@ -152,6 +151,8 @@ macro(VK_Build project_name src_file)
     add_executable( ${PROJECT_NAME}  
         ${XNLIB_DIR}/external/vk_imgui/imgui_impl_vulkan.cpp
         ${XNLIB_DIR}/external/stb_image_impl.cpp
+        ${XN_VK_DIR}/xn_vk_imgui.cpp
+        src/App.cpp
         ${ARGN}
         ${src_file} 
     )
