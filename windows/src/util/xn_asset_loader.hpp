@@ -9,13 +9,24 @@
 using json = nlohmann::json;
 
 namespace xn{
+//pipelineMap[key].polygonMode = VK_POLYGON_MODE_LINE;
+//pipelineMap[key].topologyType = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
 
 struct ShaderSpirV{
 	std::vector<char> vert;
 	std::vector<char> frag;
-};
+	int64_t polygonMode;
+	int64_t topologyType;
 
-typedef std::map<std::string, ShaderSpirV> ShaderMap;
+
+	static int64_t getTypeFromString(const std::string& type){
+#define vk_str_case(var, val) if (var == #val) return (int64_t)val;
+		vk_str_case(type, VK_POLYGON_MODE_LINE);
+		vk_str_case(type, VK_POLYGON_MODE_FILL);
+		vk_str_case(type, VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
+		vk_str_case(type, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+	}
+};
 
 struct AssetLoader{
 	template <typename T, typename Y> using pair = std::pair<T, Y>;
@@ -53,13 +64,23 @@ struct AssetLoader{
 		return (std::string)asset_path + "/" + (std::string)relpath;
 	}
 
-	static ShaderMap load_shaders(const json& asset_path, const json& shaders){
-		ShaderMap shaderMap;
+	static std::map<std::string, ShaderSpirV> load_shaders(const json& asset_path, const json& shaders){
+		std::map<std::string, ShaderSpirV> shaderMap;
 		for (const auto& [key, shader] : shaders.items()){
 			std::string vertexPath = build_asset_path(asset_path, shader["vert"]);
 			std::string fragmentPath = build_asset_path(asset_path, shader["frag"]);
-			shaderMap[key] = {read_file(vertexPath + "_vert.spv"),
-							  read_file(fragmentPath + "_frag.spv")};
+			int64_t polygonMode = VK_POLYGON_MODE_FILL, topologyType = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+
+			if (shader.find("polygon_mode") != shader.end())
+				polygonMode = ShaderSpirV::getTypeFromString(shader["polygon_mode"]);
+
+			if (shader.find("topology_type") != shader.end())
+				topologyType = ShaderSpirV::getTypeFromString(shader["topology_type"]);
+
+			shaderMap[key] = {
+				read_file(vertexPath + "_vert.spv"),
+				read_file(fragmentPath + "_frag.spv"),
+				polygonMode, topologyType};
 		}
 		return shaderMap;
 	}

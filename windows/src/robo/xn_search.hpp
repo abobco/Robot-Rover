@@ -72,6 +72,17 @@ struct GridGraph{
 
 	size_t colCount(){ return cells.size(); }
 	size_t rowCount(){ return cells.front().size(); }
+
+	void toVerts(std::vector<glm::vec3>& out_verts){
+		for (unsigned i = 0; i < cells.size(); i++)
+			for (unsigned j = 0; j < cells[i].size(); j++)
+				if (!cells[i][j]){
+					glm::vec3 v(i * boxSize, 0, j * boxSize);
+					v += offset;
+					v.y = -boxSize * 0.5f - 0.01f;
+					out_verts.push_back(v);
+				}
+	}
 };
 
 struct GridNodeCompare{

@@ -9,8 +9,8 @@
     "debug_file": "validation_layers.txt",
     "motor_cpr": 4320,
     "resolution": [
-        1920,
-        1017
+        1209,
+        866
     ],
     "shaders": {
         "color": {
@@ -20,6 +20,12 @@
         "color_lit": {
             "frag": "shaders/spv/color_lit",
             "vert": "shaders/spv/color_lit"
+        },
+        "lines": {
+            "frag": "shaders/spv/basic",
+            "polygon_mode": "VK_POLYGON_MODE_LINE",
+            "topology_type": "VK_PRIMITIVE_TOPOLOGY_LINE_LIST",
+            "vert": "shaders/spv/basic"
         },
         "lit": {
             "frag": "shaders/spv/lit",
@@ -44,10 +50,11 @@
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        -1724,
-        -448
+        -1523,
+        -459
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",
     "yolo_model": "C:/Code/opengl-es/darknet/yolov4.weights"
 }
+

@@ -179,20 +179,6 @@ void PointCloud::hillclimb_transform(const PointCloud& a, PointCloud& b,
 	// DUMP(t);
 }
 
-void PointCloud::gridgraph_to_verts(const std_vec2d<bool>& gridgraph,
-	std::vector<glm::vec3>& out_verts,
-	float gridbox_size,
-	const glm::vec3& grid_offset){
-	for (unsigned i = 0; i < gridgraph.size(); i++)
-		for (unsigned j = 0; j < gridgraph[i].size(); j++)
-			if (!gridgraph[i][j]){
-				glm::vec3 v(i * gridbox_size, 0, j * gridbox_size);
-				v += grid_offset;
-				v.y = -gridbox_size * 0.5f - 0.01f;
-				out_verts.push_back(v);
-			}
-}
-
 std::vector<glm::vec3>
 PointCloud::get_all_points(const std::vector<PointCloud>& pcs,
 	glm::vec3& offset_out, const float distance_cutoff){
