@@ -40,25 +40,25 @@ void App::run(){
 void App::createScene(){
 	ModelMatrix model;
 
-	// load point cloud file
-	{
-		PointCloud::read_pointclouds(assetPath("pointcloud/livingroom.pc"),
-			PointCloud::all);
-		AppState::get().dirty_points = true;
+	//// load point cloud file
+	//{
+	//	PointCloud::read_pointclouds(assetPath("pointcloud/livingroom.pc"),
+	//		PointCloud::all);
+	//	AppState::get().dirty_points = true;
 
-		if (PointCloud::all.size() > 0){
-			PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
-				robot->rover.position, navgraph.cells,
-				navgraph.offset);
-			navgraph.graph = preprocess_graph(navgraph.cells);
-		}
-		AppState::get().scan_needs_update = true;
-	}
+	//	if (PointCloud::all.size() > 0){
+	//		PointCloud::march_squares(PointCloud::all, 50, 50, navgraph.boxSize,
+	//			robot->rover.position, navgraph.cells,
+	//			navgraph.offset);
+	//		navgraph.graph = preprocess_graph(navgraph.cells);
+	//	}
+	//	AppState::get().scan_needs_update = true;
+	//}
 
 	// create meshes
 	{
 		cubeMesh = vulkan::Mesh(ctx, vulkan::getCubeFaceVerts(), vulkan::getCubeFaceIndices());
-		gridMesh = vulkan::Mesh::gen_grid(ctx, navgraph.boxSize, 100, 100);
+		gridMesh = vulkan::Mesh::gen_grid(ctx, navgraph.boxSize, 200, 200);
 		triMesh = vulkan::Mesh(ctx, vulkan::getTriVerts(), vulkan::getTriIndices());
 		scene.addChild("lightSource", "textured", &cubeMesh);
 	}

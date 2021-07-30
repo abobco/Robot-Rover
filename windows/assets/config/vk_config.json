@@ -9,8 +9,8 @@
     "debug_file": "validation_layers.txt",
     "motor_cpr": 4320,
     "resolution": [
-        1209,
-        866
+        1920,
+        1001
     ],
     "shaders": {
         "color": {
@@ -46,14 +46,15 @@
         "xabnab": "images/xabnab.png"
     },
     "title": "Vulkan/GLFW",
-    "unit_conversion_factor": 193.0,
+    "unit_conversion_factor": 190.0,
     "wheel_diameter": 10.0,
     "wheel_separation": 24.0,
     "window_position": [
-        20,
-        20
+        0,
+        29
     ],
     "yolo_classfile": "../object_detection_classes_yolov3.txt",
     "yolo_config": "C:/Code/opengl-es/darknet/cfg/yolov4.cfg",
     "yolo_model": "C:/Code/opengl-es/darknet/yolov4.weights"
 }
+

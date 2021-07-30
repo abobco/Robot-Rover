@@ -63,6 +63,7 @@ struct CamWindow{
 	int car_angle_deg = 0;
 	int car_angle_deg_prev = 0;
 	bool needs_update = false;
+	std::vector<std::thread> threads;
 
 	void draw(ImVec2 texture_dimensions, RobotController& robot){
 		if (texture_dimensions.y <= 0 || texture_dimensions.x <= 0)
@@ -88,8 +89,14 @@ struct CamWindow{
 		ImGui::Image(id, winsize);
 
 		ImGui::SliderInt2("pan/tilt", (int*)&robot.cam_servo_width.x, 500, 2500);
-		if (ImGui::SliderInt("car angle", (int*)&car_angle_deg, -180, 180)){
-			needs_update = true;
+		ImGui::SliderInt("car angle", (int*)&car_angle_deg, -180, 180);
+		ImGui::SameLine();
+		if (ImGui::Button("send")){
+			int diff = car_angle_deg - car_angle_deg_prev;
+			car_angle_deg_prev = car_angle_deg;
+			threads.push_back(std::thread([](RobotController& robot, int diff){
+				robot.rover.turn(diff);
+				}, std::ref(robot), diff));
 		}
 
 		if (ImGui::Button("grab")){
